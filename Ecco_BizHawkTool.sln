@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecco_BizHawkTool", "BizHawkTool\Ecco_BizHawkTool.csproj", "{288D598F-1019-4EA2-802D-14D3CC73EE90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|1.x = Debug|1.x
+		Debug|2.x = Debug|2.x
+		Debug|Any CPU = Debug|Any CPU
+		Release|1.x = Release|1.x
+		Release|2.x = Release|2.x
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Debug|1.x.ActiveCfg = Debug|1.x
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Debug|1.x.Build.0 = Debug|1.x
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Debug|2.x.ActiveCfg = Debug|2.x
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Debug|2.x.Build.0 = Debug|2.x
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Release|1.x.ActiveCfg = Release|1.x
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Release|1.x.Build.0 = Release|1.x
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Release|2.x.ActiveCfg = Release|2.x
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Release|2.x.Build.0 = Release|2.x
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{288D598F-1019-4EA2-802D-14D3CC73EE90}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2472476E-3F0F-43E5-94BB-C65EE80DFC28}
+	EndGlobalSection
+EndGlobal
