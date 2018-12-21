@@ -7,11 +7,11 @@ using BizHawk.Client.ApiHawk;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BizHawkTool")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Ecco Hud Bizhawk Extenral Tool")]
+[assembly: AssemblyDescription("Provides hitbox display and vital information overlay for Ecco series games. (Currently only fully supports Tides of Time).")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BizHawkTool")]
+[assembly: AssemblyProduct("EccoHudTool")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -26,7 +26,7 @@ using BizHawk.Client.ApiHawk;
 //Here is an example for an game specific: BizHawkExternalToolUsage(BizHawkExternalToolUsage.GameSpecific, "6B47BB75D16514B6A476AA0C73A683A2A4C18765")] => Super Mario World (USA)
 //By setting this, your tool is contextualized, that mean you can't load it if emulator is in state you don't want
 //It avoid crash
-[assembly: BizHawkExternalToolUsage()]
+[assembly: BizHawkExternalToolUsage(BizHawkExternalToolUsage.GameSpecific, CoreSystem.Genesis)]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
