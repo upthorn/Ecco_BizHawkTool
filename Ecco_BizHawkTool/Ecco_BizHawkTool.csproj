@@ -120,10 +120,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>erase C:\BH\Output\ExternalTools\Ecco_BizHawkTool.dll
-erase C:\BH\Output\ExternalTools\Ecco_BizHawkTool.pdb
-copy $(TargetPath) C:\\BH\Output\ExternalTools
-copy $(TargetDir)Ecco_BizHawkTool.pdb C:\BH\Output\ExternalTools</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
