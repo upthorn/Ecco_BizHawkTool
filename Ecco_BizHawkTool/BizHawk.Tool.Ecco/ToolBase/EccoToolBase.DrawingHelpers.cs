@@ -8,7 +8,7 @@ namespace BizHawk.Tool.Ecco
     abstract partial class EccoToolBase
     {
         protected int _tickerY = 81;
-        protected void DrawEccoRhomb(int x, int y, int radius, Color color, int fillAlpha = 63)
+        protected void DrawRhomb(int x, int y, int radius, Color color, int fillAlpha = 63)
         {
             Point[] rhombus = {
                 new Point(x, y - radius),
@@ -32,7 +32,7 @@ namespace BizHawk.Tool.Ecco
             if (fillAlpha > 0) fillColor = Color.FromArgb(fillAlpha, color);
             Gui.DrawPolygon(rhombus, color, fillColor);
         }
-        protected void DrawEccoOct(int x, int y, int r, Color color, int fillAlpha = 63)
+        protected void DrawOct(int x, int y, int r, Color color, int fillAlpha = 63)
         {
             var octOff = (int)(Math.Sqrt(2) * r) >> 1;
             Point[] octagon = {

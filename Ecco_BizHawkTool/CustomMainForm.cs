@@ -26,27 +26,27 @@ namespace BizHawk.Client.EmuHawk
 		by BizHawk runtime
 		*/
         [RequiredApi]
-        private IMem Mem { get; set; }
+        public IMem Mem { get; set; }
 
         [RequiredApi]
-        private IGui Gui { get; set; }
+        public IGui Gui { get; set; }
 
         [RequiredApi]
-        private IJoypad Joy { get; set; }
+        public IJoypad Joy { get; set; }
 
         [RequiredApi]
-        private IEmu Emu { get; set; }
+        public IEmu Emu { get; set; }
 
         [RequiredApi]
-        private IGameInfo GI { get; set; }
+        public IGameInfo GI { get; set; }
 
         [RequiredApi]
-        private IMemorySaveState MemSS { get; set; }
+        public IMemorySaveState MemSS { get; set; }
 
         /*
         Name for our external tool
         */
-        public const string ToolName = "Ecco TAS Assistant Tool";
+        public const string ToolName = "Ecco TAS Assistant";
 
         /*
         Description for our external tool
@@ -147,28 +147,28 @@ namespace BizHawk.Client.EmuHawk
         {
             Mem.SetBigEndian();
             string gameName = GI.GetRomName();
-            if ((gameName == "ECCO - The Tides of Time (J) [!]") ||
-                (gameName == "ECCO - The Tides of Time (U) [!]") ||
-                (gameName == "ECCO - The Tides of Time (E) [!]"))
-            {
-                _tool = new Ecco2Tool(Mem, Gui, Joy, Emu, MemSS);
+            switch (gameName) {
+                case "ECCO - The Tides of Time (J) [!]":
+                    _tool = new Ecco2Tool(this, GameRegion.J);
+                    break;
+                case "ECCO - The Tides of Time (U) [!]":
+                    _tool = new Ecco2Tool(this, GameRegion.U);
+                    break;
+                case "ECCO - The Tides of Time (E) [!]":
+                    _tool = new Ecco2Tool(this, GameRegion.E);
+                    break;
+                case "ECCO The Dolphin (J) [!]":
+                case "ECCO The Dolphin (UE) [!]":
+                    /*_mode = Modes.Ecco1;
+                    _camXAddr = 0xFFB836;
+                    _camYAddr = 0xFFB834;
+                    _top = _bottom = 112;
+                    _left = _right = 160;
+                    ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);*/
+                default:
+                    Close();
+                    break;
             }
-            else if ((gameName == "ECCO The Dolphin (J) [!]") ||
-                     (gameName == "ECCO The Dolphin (UE) [!]"))
-
-            {
-                /*_mode = Modes.Ecco1;
-                _camXAddr = 0xFFB836;
-                _camYAddr = 0xFFB834;
-                _top = _bottom = 112;
-                _left = _right = 160;
-                ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);*/
-            }
-            else
-            {
-                Close();
-            }
-
         }
 
         /// <summary>
@@ -212,7 +212,6 @@ namespace BizHawk.Client.EmuHawk
 				//Update form
 			}
 		}
-
 		#endregion BizHawk Required methods
 	}
 }

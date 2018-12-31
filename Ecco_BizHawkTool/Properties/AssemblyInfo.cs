@@ -3,11 +3,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using BizHawk.Client.ApiHawk;
+using BizHawk.Client.EmuHawk;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ecco Hud Bizhawk Extenral Tool")]
+[assembly: AssemblyTitle("Ecco Hud Bizhawk External Tool")]
 [assembly: AssemblyDescription("Provides hitbox display and vital information overlay for Ecco series games. (Currently only fully supports Tides of Time).")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -18,7 +19,7 @@ using BizHawk.Client.ApiHawk;
 
 //As you can see this is a dedicated attribute. You can write the name of your tool, a small description
 //and give an icon. The icon should be compiled as an embedded resource and you must give the entire path
-[assembly: BizHawkExternalTool(BizHawk.Client.EmuHawk.CustomMainForm.ToolName, BizHawk.Client.EmuHawk.CustomMainForm.ToolDescription, BizHawk.Client.EmuHawk.CustomMainForm.IconPath)]
+[assembly: BizHawkExternalTool(CustomMainForm.ToolName, CustomMainForm.ToolDescription, CustomMainForm.IconPath)]
 
 //This attribute say what the is for. here, I don't anything
 //It's equivalent to [assembly: BizHawkExternalToolUsage(BizHawkExternalToolUsage.Global, string.Empty)]
@@ -47,4 +48,4 @@ using BizHawk.Client.ApiHawk;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyFileVersion(version: "1.0.*")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

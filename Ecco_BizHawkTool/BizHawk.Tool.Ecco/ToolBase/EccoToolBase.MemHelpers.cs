@@ -16,6 +16,11 @@ namespace BizHawk.Tool.Ecco
             addr += 4;
             return retval;
         }
+        protected uint ReadPtr(uint addr)
+        {
+            uint retval = Mem.ReadU24(addr + 1);
+            return retval;
+        }
         protected uint ReadPtrAndAdvance(ref uint addr)
         {
             uint retval = Mem.ReadU24(addr + 1);
@@ -24,23 +29,23 @@ namespace BizHawk.Tool.Ecco
         }
         protected wushort ReadU16AndAdvance(ref uint addr)
         {
-            wushort retval = (wushort)Mem.ReadU16(addr);
+            wushort retval = Mem.ReadU16(addr);
             addr += 2;
             return retval;
         }
         protected wshort ReadS16AndAdvance(ref uint addr)
         {
-            wshort retval = (wshort)Mem.ReadS16(addr);
+            wshort retval = Mem.ReadS16(addr);
             addr += 2;
             return retval;
         }
         protected wsbyte ReadSByteAndAdvance(ref uint addr)
         {
-            return (wsbyte)Mem.ReadS8(addr++);
+            return Mem.ReadS8(addr++);
         }
         protected wbyte ReadByteAndAdvance(ref uint addr)
         {
-            return (wbyte)Mem.ReadU8(addr++);
+            return Mem.ReadU8(addr++);
         }
     }
 }
