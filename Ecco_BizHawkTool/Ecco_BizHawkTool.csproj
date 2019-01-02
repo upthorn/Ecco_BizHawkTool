@@ -40,7 +40,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -108,6 +108,7 @@
     <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.3DGui.cs" />
     <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.cs" />
     <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.LogicHelp.cs" />
+    <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.MapDump.cs" />
     <Compile Include="BizHawk.Tool.Ecco\ToolBase\EccoToolBase.cs" />
     <Compile Include="BizHawk.Tool.Ecco\ToolBase\EccoToolBase.MemHelpers.cs" />
     <Compile Include="CustomMainForm.cs">

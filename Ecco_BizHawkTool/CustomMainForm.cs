@@ -72,7 +72,7 @@ namespace BizHawk.Client.EmuHawk
 
 		#endregion
 
-		#region Methods
+		#region Form Methods
 
 		private void button1_Click(object sender, EventArgs e)
 		{
@@ -114,6 +114,31 @@ namespace BizHawk.Client.EmuHawk
             Gui.DrawFinish();
         }
 
+        private void mapDumpCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _tool.SetMapDumping(mapDumpCheckbox.Checked);
+        }
+
+        private void mapDumpFolderBrowse_Click(object sender, EventArgs e)
+        {
+            if (mapFolderBrowseDialog.ShowDialog() == DialogResult.OK)
+            {
+                mapDumpFolder.Text = mapFolderBrowseDialog.SelectedPath;
+            }
+        }
+
+        private void mapFolderBrowseDialog_HelpRequest(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Gui.DrawNew("emu");
+            Gui.DrawFinish();
+            ClientApi.SetGameExtraPadding(0);
+            Close();
+        }
         //private void PostFrameCallback()
         #endregion
 
@@ -212,6 +237,6 @@ namespace BizHawk.Client.EmuHawk
 				//Update form
 			}
 		}
-		#endregion BizHawk Required methods
-	}
+        #endregion BizHawk Required methods
+    }
 }

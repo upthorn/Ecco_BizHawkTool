@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 
-using BizHawk.Client.ApiHawk;
 using BizHawk.Emulation.Common.WorkingTypes;
-using BizHawk.Emulation.Cores.Consoles.Sega.gpgx;
 
 namespace BizHawk.Tool.Ecco
 {
@@ -820,10 +817,11 @@ namespace BizHawk.Tool.Ecco
             public const uint LevelHeight = 0xFFA7AC;
             public const uint WaterLevel = 0xFFA7B2;
             public const uint P1ExistsFlag = 0xFFA7B5;
-            public const uint LevelTimer = 0xFFA7C8;
             public const uint EccoHeadPtr = 0xFFA9CC;
             public const uint EccoTailPtr = 0xFFA9D0;
             public const uint PlayerObj = 0xFFA9D4;
+            public const uint CamXDest = 0xFFAD8C;
+            public const uint CamYDest = 0xFFAD90;
             public const uint CamX = 0xFFAD9C;
             public const uint CamY = 0xFFAD9E;
             public const uint EventLLHead = 0xFFCFB4;
@@ -836,6 +834,8 @@ namespace BizHawk.Tool.Ecco
             public const uint MultObjLLHead = 0xFFCFD0;
             public const uint AsteriteDrop = 0xFFD424;
             public const uint AsteriteHead = 0xFFD428;
+            public const uint GlobeFlags = 0xFFD434;
+            public const uint GlobeFlags2 = 0xFFD438;
             public const uint PtrGFXFunc = 0xFFD440;
         }
         private Point GetScreenLoc(Point abs)
@@ -2107,7 +2107,6 @@ namespace BizHawk.Tool.Ecco
         private void DrawEvents()
         {
             uint addr = ReadPtr(Addr2D.EventLLHead);
-            ObjType type;
             Obj2D curObj;
             Obj2D subObj;
             Point pos = new Point();
@@ -2346,6 +2345,45 @@ namespace BizHawk.Tool.Ecco
             {
                 color = Color.FromArgb(Math.Max(0x38 - (j >> 3), 0), 0, Math.Min(j >> 1, 255));
                 Gui.DrawRectangle(_left - 16, j, 15, 7, color, color);
+            }
+        }
+        private void Update2DTickers()
+        {
+            PlayerObj player;
+            ReadPlayerObj(Addr2D.PlayerObj, out player);
+            Size totalVel = player.SwimVel + player.CurrentVel + player.ZipVel;
+            TickerText($"{Mem.ReadS16(Addr2D.CamX)}:{Mem.ReadS16(Addr2D.CamY)}");
+            TickerText($"{player.Mid.X / 65536.0:0.######}:{player.Mid.Y / 65536.0:0.######}");
+            TickerText($"{player.SwimSpeed / 65536.0:0.######}:{player.DecelTimer}:{player.AccelTimer}");
+            TickerText($"{player.SwimVel.Width / 65536.0:0.######}:{player.SwimVel.Height / 65536.0:0.######}");
+            TickerText($"{player.CurrentVel.Width / 65536.0:0.######}:{player.CurrentVel.Height / 65536.0:0.######}");
+            TickerText($"{player.ZipVel.Width / 65536.0:0.######}:{player.ZipVel.Height / 65536.0:0.######}");
+            TickerText($"{totalVel.Width / 65536.0:0.######}:{totalVel.Height / 65536.0:0.######}");
+            TickerText($"{player.MoveMode}:{player.ChargeCounter}:{player.Angle:X4}:{player.TgtAng:X4}");
+            switch (Mem.ReadU8(AddrGlobal.LevelID))
+            {
+                case 1:
+                case 2:
+                case 3:
+                case 30:
+                case 46:
+                    var globeFlags = Mem.ReadU32(Addr2D.GlobeFlags) >> 1;
+                    var globeFlags2 = Mem.ReadU32(Addr2D.GlobeFlags2) >> 1;
+                    int i, j = i = 0;
+                    while (globeFlags > 0)
+                    {
+                        globeFlags >>= 1;
+                        i++;
+                    }
+                    while (globeFlags2 > 0)
+                    {
+                        globeFlags2 >>= 1;
+                        j++;
+                    }
+                    TickerText($"{i}:{j}", Color.Blue);
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -7,7 +7,7 @@ namespace BizHawk.Tool.Ecco
 {
     abstract partial class EccoToolBase
     {
-        protected int _tickerY = 81;
+        protected int _tickerY = 48;
         protected void DrawRhomb(int x, int y, int radius, Color color, int fillAlpha = 63)
         {
             Point[] rhombus = {
@@ -196,7 +196,7 @@ namespace BizHawk.Tool.Ecco
         protected void TickerText(string message, Color? fg = null)
         {
             if (!_mapDumpingEnabled)
-                Gui.Text(1, _tickerY, message, fg);
+                Gui.Text(10, _tickerY, message, fg);
             _tickerY += 16;
         }
         protected Color BackdropColor()

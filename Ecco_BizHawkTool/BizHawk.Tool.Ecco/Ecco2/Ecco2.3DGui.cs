@@ -486,5 +486,17 @@ namespace BizHawk.Tool.Ecco
                 SpawnZ += 0x20000;
             }
         }
+        private void Update3DTickers()
+        {
+            int CamX = Mem.ReadS32(Addr3D.CamX);
+            int CamY = Mem.ReadS32(Addr3D.CamY);
+            int CamZ = Mem.ReadS32(Addr3D.CamZ);
+            Obj3D player;
+            ReadObj3D(Addr3D.PlayerObj, out player);
+            TickerText($"CamX: {CamX / 4096.0:0.######}\t CamY: {CamY / 4096.0:0.######}\t CamZ: {CamZ / 2048.0:0.######}");
+            TickerText($"Player Pos X: {player.XPos / 4096.0:0.######}\t Y: {player.YPos / 4096.0:0.######}\t Z: {player.ZPos / 2048.0:0.######}");
+            TickerText($"Player Vel X: {player.XVel / 4096.0:0.######}\t Y: {player.YVel / 4096.0:0.######}\t Z: {player.ZVel / 2048.0:0.######}");
+            TickerText($"Charge Count: {player.ChargeCtr}\t Player State: {player.State} Player Breach Count: {player.BreachCtr}");
+        }
     }
 }

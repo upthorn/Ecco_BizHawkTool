@@ -22,6 +22,9 @@ namespace BizHawk.Tool.Ecco
         protected IEmu Emu => _form.Emu;
         protected IMemorySaveState MemSS => _form.MemSS;
         protected bool _mapDumpingEnabled = false;
+        protected int _mapDumpState = 0;
+        protected bool _autofireEnabled = false;
+        protected string MapDumpFolder => _form.mapDumpFolder.Text;
         public EccoToolBase(CustomMainForm f, GameRegion r)
         {
             _form = f;
@@ -29,6 +32,10 @@ namespace BizHawk.Tool.Ecco
         public void SetMapDumping(bool on)
         {
             _mapDumpingEnabled = on;
+        }
+        public void SetAutofire(bool on)
+        {
+            _autofireEnabled = on;
         }
         public abstract void PreFrameCallback();
         public abstract void PostFrameCallback();
