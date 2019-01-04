@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace BizHawk.Tool.Ecco
 {
     abstract partial class EccoToolBase
     {
-        protected int _tickerY = 48;
+        protected int _statLine = 0;
         protected void DrawRhomb(int x, int y, int radius, Color color, int fillAlpha = 63)
         {
             Point[] rhombus = {
@@ -193,11 +194,17 @@ namespace BizHawk.Tool.Ecco
                 Print_Text(message, x + xOffset[i], y + yOffset[i], bg);
             Print_Text(message, x, y, fg);
         }
-        protected void TickerText(string message, Color? fg = null)
+        protected void ResetStatusLine()
         {
-            if (!_mapDumpingEnabled)
-                Gui.Text(10, _tickerY, message, fg);
-            _tickerY += 16;
+            while(_statLine < _form.StatusTextBox.Lines.Length)
+            {
+                _form.SetStatusLine("", _statLine++, null);
+            }
+            _statLine = 0;
+        }
+        protected void StatusText(string message, Color? fg = null)
+        {
+            _form.SetStatusLine(message, _statLine++, fg);
         }
         protected Color BackdropColor()
         {

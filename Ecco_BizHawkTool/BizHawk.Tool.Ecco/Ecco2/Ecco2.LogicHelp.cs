@@ -95,7 +95,7 @@ namespace BizHawk.Tool.Ecco
         {
             if (refresh)
             {
-                _rseed = (int)(Mem.ReadU16(0xFFE2F8));
+                _rseed = (int)(Mem.ReadU16(AddrGlobal.RandomSeed));
             }
             bool odd = (_rseed & 1) != 0;
             _rseed >>= 1;

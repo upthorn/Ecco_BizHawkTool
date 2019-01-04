@@ -16,6 +16,7 @@ namespace BizHawk.Tool.Ecco
             public const uint FrameCount = 0xFFA520;
             public const uint NonLagFrameCount = 0xFFA524;
             public const uint GameMode = 0xFFA555;
+            public const uint RandomSeed = 0xFFE2F8;
             public const uint TextYSpeed = 0xFFF342;
         }
         #endregion
@@ -24,86 +25,14 @@ namespace BizHawk.Tool.Ecco
         private int _camX = 0;
         private int _camY = 0;
         private uint _prevF = 0;
+        private uint _levelTime = 0;
+        private int _levelID = 0;
         private int _top = 0;
         private int _bottom = 0;
         private int _left = 0;
         private int _right = 0;
-        private const int _signalAlpha = 255;
-        private int _prevX = 0;
-        private int _prevY = 0;
-        private int _destX = 0;
-        private int _destY = 0;
-        private int _snapPast = 0;
-        private string _rowStateGuid = string.Empty;
-        private Color[] _turnSignalColors =
-        {
-            Color.FromArgb(_signalAlpha, 127, 127,   0),
-            Color.FromArgb(_signalAlpha, 255,   0,   0),
-            Color.FromArgb(_signalAlpha, 192,   0,  63),
-            Color.FromArgb(_signalAlpha,  63,   0, 192),
-            Color.FromArgb(_signalAlpha,   0,   0, 255),
-            Color.FromArgb(_signalAlpha,   0,  63, 192),
-            Color.FromArgb(_signalAlpha,   0, 192,  63),
-            Color.FromArgb(_signalAlpha,   0, 255,   0)
-        };
         #endregion
         #region Methods
-        void AutoFire(bool on)
-        {
-            //Modif N - ECCO HACK - make caps lock (weirdly) autofire player 1's C key
-            uint charge;
-            int frameCount = Emu.FrameCount();
-            int lagCount = Emu.LagCount();
-            Joy.Set("Start", on, 1);
-            switch (Mem.ReadU8(AddrGlobal.GameMode))
-            {
-                case 0x00:
-                    if (on)
-                    {
-                        if (Mem.ReadS16(AddrGlobal.TextYSpeed) < 0)
-                            Joy.Set("C", true, 1);
-                        else
-                            Joy.Set("C", false, 1);
-                    }
-                    break;
-                case 0xE6:
-                    if (Mem.ReadU16(0xFFD5E8) == 0x00000002)
-                    {
-                        Dictionary<string, bool> buttons = new Dictionary<string, bool>();
-                        buttons["B"] = buttons["C"] = true;
-                        Joy.Set(buttons, 1);
-                    }
-                    else
-                    {
-                        Dictionary<string, bool> buttons = new Dictionary<string, bool>();
-                        buttons["B"] = buttons["C"] = false;
-                        Joy.Set(buttons, 1);
-                    }
-                    break;
-                case 0xF6:
-                    charge = Mem.ReadU8(0xFFB19B);
-                    if (on)
-                    {
-                        if ((charge <= 1) && ((Mem.ReadU8(0xFFB1A6) == 0) || (Mem.ReadU8(0xFFB1A9) != 0)))
-                            Joy.Set("B", true, 1);
-                        else if (charge > 1)
-                            Joy.Set("B", false, 1);
-                        Joy.Set("C", (Mem.ReadU16(AddrGlobal.LevelFrameCount) % 2) == 0, 1);
-                    }
-                    break;
-                case 0x20:
-                case 0x28:
-                case 0xAC:
-                    if (on)
-                    {
-                        if ((Mem.ReadU8(0xFFAB72) & 3) == 0)
-                            Joy.Set("C", (Mem.ReadS8(0xFFAA6E) < 11), 1);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
         #endregion
 
         public Ecco2Tool(CustomMainForm f, GameRegion r) : base(f, r)
@@ -115,26 +44,55 @@ namespace BizHawk.Tool.Ecco
             {
                 case GameRegion.J:
                     _3DTypeProvider = new J3DProvider();
-                    break;
+					_2DTypeProvider = new J2DProvider();
+					break;
                 case GameRegion.U:
                     _3DTypeProvider = new U3DProvider();
                     _2DTypeProvider = new U2DProvider();
                     break;
                 case GameRegion.E:
                     _3DTypeProvider = new E3DProvider();
-                    break;
+					_2DTypeProvider = new E2DProvider();
+					break;
                 default:
                     break;
             }
         }
         public override void PreFrameCallback()
         {
-        Gui.ClearText();
-        if (!Gui.HasGUISurface)
-            Gui.DrawNew("emu");
+            Gui.ClearText();
+            if (!Gui.HasGUISurface)
+                Gui.DrawNew("emu");
             _camX = Mem.ReadS16(Addr2D.CamX) - _left;
             _camY = Mem.ReadS16(Addr2D.CamY) - _top;
-            AutoFire(_autofireEnabled);
+            switch (Mem.ReadU8(AddrGlobal.GameMode))
+            {
+                // Dialog screen
+                case 0x00:
+                    if (_autofireEnabled)
+                    {
+                        // This doesn't fully work, but gets > 50%
+                        if (Mem.ReadS16(AddrGlobal.TextYSpeed) == -3)
+                            Joy.Set("C", true, 1);
+                        else
+                            Joy.Set("C", false, 1);
+                    }
+                    break;
+                case 0xF6:
+                    UpdatePlayer3D();
+                    if (_autofireEnabled)
+                        AutoFire3D();
+                    break;
+                case 0x20:
+                case 0x28:
+                case 0xAC:
+                    UpdatePlayer2D();
+                    if (_autofireEnabled)
+                        AutoFire2D();
+                    break;
+                default:
+                    break;
+            }
             if (!_mapDumpingEnabled || (_mapDumpState == 0))
             {
                 Color bg = BackdropColor();
@@ -171,8 +129,9 @@ namespace BizHawk.Tool.Ecco
                 Emu.SetLagCount(Emu.LagCount() + 1);
             }
             uint mode = Mem.ReadByte(AddrGlobal.GameMode);
-            _tickerY = 48;
-            TickerText($"Frames: {Mem.ReadU32(AddrGlobal.FrameCount)}\tNonlag Frames: {Mem.ReadU32(AddrGlobal.NonLagFrameCount)}\tLevel Frames:{Mem.ReadU16(AddrGlobal.LevelFrameCount)}\tGameMode: {mode:X2}");
+            _levelTime = Mem.ReadU16(AddrGlobal.LevelFrameCount);
+            ResetStatusLine();
+            StatusText($"Frames: {Mem.ReadU32(AddrGlobal.FrameCount),7} Nonlag: {frame,7} Level: {_levelTime,6} GameMode: {mode:X2}");
             switch (mode)
             {
                 case 0x20:
@@ -183,11 +142,7 @@ namespace BizHawk.Tool.Ecco
                     {
                         PostProcessMapDump();
                     }
-                    _prevX = _camX;
-                    _prevY = _camY;
-                    int levelTime = Mem.ReadS16(AddrGlobal.LevelFrameCount);
-                    var color = _turnSignalColors[levelTime & 7];
-                    Gui.DrawRectangle(_left - 48, _top - 112, 15, 15, color, color);
+                    DrawTurnSignal();
                     break;
                 case 0xF6:
                     Update3DTickers();

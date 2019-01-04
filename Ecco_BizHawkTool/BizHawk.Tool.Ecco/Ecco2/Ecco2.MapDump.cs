@@ -4,17 +4,29 @@ using System.Drawing;
 using System.Globalization;
 
 using BizHawk.Client.ApiHawk;
-using BizHawk.Client.EmuHawk;
 using BizHawk.Emulation.Cores.Consoles.Sega.gpgx;
 
 namespace BizHawk.Tool.Ecco
 {
-    partial class Ecco2Tool : EccoToolBase
+    partial class Ecco2Tool
     {
-        private void PreProcessMapDump()
+        private int _prevX = 0;
+        private int _prevY = 0;
+        private int _destX = 0;
+        private int _destY = 0;
+        private int _snapPast = 0;
+        private string _rowStateGuid = string.Empty;
+		private readonly uint[] ULevelNamePtrOffsets =
+		{
+			0xECBD0, 0x106BC0, 0x10AF8C, 0x135A48,
+			0x1558E8, 0x15F700, 0x16537C, 0x180B00,
+			0x193920, 0x1B3ECC, 0x1D7A44, 0x1DBF70,
+			0x2DF2, 0x2DF6, 0x2DFA, 0x2DFE
+		};
+		private void PreProcessMapDump()
         {
-            uint levelTime = Mem.ReadU16(AddrGlobal.LevelFrameCount);
-            int levelID = Mem.ReadS8(AddrGlobal.LevelID);
+            uint _levelTime = Mem.ReadU16(AddrGlobal.LevelFrameCount);
+            int _levelID = Mem.ReadS8(AddrGlobal.LevelID);
             int[] nameGroupLengths =
             {
                 7,1,11,6,
@@ -22,20 +34,14 @@ namespace BizHawk.Tool.Ecco
                 7,1,2,1,
                 0,0,0,0
             };
-            int[] nameStringPtrOffsets =
-            {
-                0xECBD0, 0x106BC0, 0x10AF8C, 0x135A48,
-                0x1558E8, 0x15F700, 0x16537C, 0x180B00,
-                0x193920, 0x1B3ECC, 0x1D7A44, 0x1DBF70,
-                0x2DF2, 0x2DF6, 0x2DFA, 0x2DFE
-            };
+			uint[] levelNamePtrs = ULevelNamePtrOffsets;
             int nameGroup = 0;
             string name = "map";
-            int i = levelID;
+            int i = _levelID;
             switch (_mapDumpState)
             {
                 case 0:
-                    if ((levelTime > 1) && (levelTime < 4))
+                    if ((_levelTime > 1) && (_levelTime < 4))
                     {
                         _mapDumpState = 1;
                         _rowStateGuid = string.Empty;
@@ -52,7 +58,7 @@ namespace BizHawk.Tool.Ecco
                     if (i < 0)
                     {
                         i += nameGroupLengths[nameGroup];
-                        uint strOffset = Mem.ReadU32(nameStringPtrOffsets[nameGroup] + 0x2E);
+                        uint strOffset = Mem.ReadU32(levelNamePtrs[nameGroup] + 0x2E);
                         Console.WriteLine($"{i}");
                         strOffset = Mem.ReadU32(strOffset + ((i << 3) + (i << 5)) + 0x22);
                         strOffset += 0x20;
@@ -68,7 +74,7 @@ namespace BizHawk.Tool.Ecco
                         TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
                         name = textInfo.ToTitleCase(name).Replace(" ", string.Empty);
                     }
-                    ClientApi.Screenshot($"{MapDumpFolder}{levelID}_{name}_top.png");
+                    ClientApi.Screenshot($"{MapDumpFolder}{_levelID}_{name}_top.png");
                     _destX = _destY = 0;
                     ClientApi.SetGameExtraPadding(0, 0, 0, 0);
                     _mapDumpState++;
@@ -82,7 +88,7 @@ namespace BizHawk.Tool.Ecco
                     if (i < 0)
                     {
                         i += nameGroupLengths[nameGroup];
-                        uint strOffset = Mem.ReadU32(nameStringPtrOffsets[nameGroup] + 0x2E);
+                        uint strOffset = Mem.ReadU32(levelNamePtrs[nameGroup] + 0x2E);
                         Console.WriteLine($"{i}");
                         strOffset = Mem.ReadU32(strOffset + ((i << 3) + (i << 5)) + 0x22);
                         strOffset += 0x20;
@@ -98,7 +104,7 @@ namespace BizHawk.Tool.Ecco
                         TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
                         name = textInfo.ToTitleCase(name).Replace(" ", string.Empty);
                     }
-                    ClientApi.Screenshot($"{MapDumpFolder}{levelID}_{name}_bottom.png");
+                    ClientApi.Screenshot($"{MapDumpFolder}{_levelID}_{name}_bottom.png");
                     _destX = _destY = 0;
                     _left = _right = 160;
                     _top = _bottom = 112;
@@ -307,6 +313,8 @@ namespace BizHawk.Tool.Ecco
                     _mapDumpState++;
                     break;
             }
+            _prevX = _camX;
+            _prevY = _camY;
         }
     }
 }

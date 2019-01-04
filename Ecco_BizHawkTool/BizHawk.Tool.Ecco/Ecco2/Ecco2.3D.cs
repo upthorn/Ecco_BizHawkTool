@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 
-using BizHawk.Client.ApiHawk;
 using BizHawk.Emulation.Common.WorkingTypes;
-using BizHawk.Emulation.Cores.Consoles.Sega.gpgx;
 
 namespace BizHawk.Tool.Ecco
 {
@@ -35,8 +32,8 @@ namespace BizHawk.Tool.Ecco
         }
         private class J3DProvider : Obj3DTypeProvider
         {
-            private Dictionary<uint, Obj3DType> _typeMap;
-            public J3DProvider()
+            private Dictionary<uint, Obj3DType> _typeMap = new Dictionary<uint, Obj3DType>();
+			public J3DProvider()
             {
             }
             public override Obj3DType GetType(uint addr)
@@ -75,7 +72,7 @@ namespace BizHawk.Tool.Ecco
         }
         private class E3DProvider : Obj3DTypeProvider
         {
-            private Dictionary<uint, Obj3DType> _typeMap;
+            private Dictionary<uint, Obj3DType> _typeMap = new Dictionary<uint, Obj3DType>();
             public E3DProvider()
             {
             }
@@ -183,38 +180,42 @@ namespace BizHawk.Tool.Ecco
         }
         private static class Addr3D
         {
+            public const uint Level = 0xFFA79E;
+            public const uint PlayerObj = 0xFFB134;
+            public const uint ObjLLHead = 0xFFD4C0;
             public const uint CamX = 0xFFD5E0;
             public const uint CamY = 0xFFD5E8;
             public const uint CamZ = 0xFFD5E4;
             public const uint CamZ2 = 0xFFD5F0;
             public const uint RingSpawnX = 0xFFD856;
             public const uint RingSpawnY = 0xFFD85A;
-            public const uint PlayerObj = 0xFFB134;
-            public const uint AnimLLHead = 0xFFD4C0;
+        }
+        private struct Cam3D
+        {
+            public static int X;
+            public static int Y;
+            public static int Z;
         }
         #endregion
 
-        private void GetEcco3DScreenCoords(Obj3D obj, int camX, int camY, int camZ, out int X, out int Y, out int Z)
+        private Obj3D _player3D;
+
+        private void GetEcco3DScreenCoords(Obj3D obj, out int X, out int Y, out int Z)
         {
-            X = 160 + ((obj.XPos >> 0xC) - camX);
-            Y = 112 - ((obj.YPos >> 0xC) - camY);
-            Z = _top + 112 - ((obj.ZPos >> 0xC) - camZ);
+            X = 160 + ((obj.XPos >> 0xC) - Cam3D.X);
+            Y = 112 - ((obj.YPos >> 0xC) - Cam3D.Y);
+            Z = _top + 112 - ((obj.ZPos >> 0xC) - Cam3D.Z);
         }
         private void Draw3DHud()
         {
-            int CamX = (Mem.ReadS32(Addr3D.CamX) >> 0xC) - _left;
-            int CamY = (Mem.ReadS32(Addr3D.CamY) >> 0xC) + _top;
-            int CamZ = (Mem.ReadS32(Addr3D.CamZ) >> 0xC) + _top;
-            Obj3D player;
-            ReadObj3D(Addr3D.PlayerObj, out player);
             Obj3D curObj;
-            uint Addr = ReadPtr(Addr3D.AnimLLHead);
+            uint Addr = ReadPtr(Addr3D.ObjLLHead);
             while (Addr != 0)
             {
                 ReadObj3D(Addr, out curObj);
                 Obj3DType type = _3DTypeProvider.GetType(curObj.PtrMainFunc);
                 int X, Y, Z;
-                GetEcco3DScreenCoords(curObj, CamX, CamY, CamZ, out X, out Y, out Z);
+                GetEcco3DScreenCoords(curObj, out X, out Y, out Z);
                 int radius, width, height, depth = height = width = 0;
                 switch (type)
                 {
@@ -237,14 +238,14 @@ namespace BizHawk.Tool.Ecco
                         break;
                     case Obj3DType.Ring:
                         depth = 8;
-                        if (player.ZVel < 0x1800) depth = 4;
+                        if (_player3D.ZVel < 0x1800) depth = 4;
                         radius = 32;
                         width = radius;
                         DrawOct(X, Y, radius, (curObj.Mode == 0) ? Color.Orange : Color.Gray);
                         DrawBoxMWH(X, Z, width, depth, Color.Red);
                         DrawBoxMWH(X, Y, 1, 1, Color.Orange, 0);
                         DrawBoxMWH(X, Z, 1, 1, Color.Red, 0);
-                        TickerText($"{curObj.XPos / 4096.0:0.######}:{curObj.YPos / 4096.0:0.######}:{curObj.ZPos / 2048.0:0.######}:{curObj.State}", Color.Lime);
+                        StatusText($"       Ring X: {curObj.XPos / 4096.0,10:0.000000} Y: {curObj.YPos / 4096.0,10:0.000000} Z: {curObj.ZPos / 2048.0,10:0.000000} State: {curObj.State}", Color.Green);
                         break;
                     case Obj3DType.Vine: // Vine collisions are based on draw position, which is a fucking pain in the ass to calculate
                         {
@@ -254,7 +255,7 @@ namespace BizHawk.Tool.Ecco
                             int dy = Mem.ReadS32(Addr3D.CamY) - Mem.ReadS32(0xFFD5D0);
                             dy = (dy >> 4) - (dy >> 6);
                             int dz = Mem.ReadS32(Addr3D.CamZ) - Mem.ReadS32(0xFFD5CC);
-                            var chargeCount = player.ChargeCtr;
+                            var chargeCount = _player3D.ChargeCtr;
                             if (chargeCount == 0)
                             {
                                 dz >>= 2;
@@ -316,7 +317,7 @@ namespace BizHawk.Tool.Ecco
                                 dy /= rad;
                                 int Zmid = (curObj.ZPos + curObj.ZOrig) >> 1;
                                 Zmid >>= 0xC;
-                                Zmid = 112 + _top - (Zmid - CamZ);
+                                Zmid = 112 + _top - (Zmid - Cam3D.Z);
                                 do
                                 {
                                     rad--;
@@ -325,7 +326,7 @@ namespace BizHawk.Tool.Ecco
                                     Xcur += dx;
                                     Ycur += dy;
                                 } while (rad >= 0);
-                                DrawBoxMWH((Mem.ReadS32(player.ScreenX) >> 8) + _left, (player.ScreenY >> 8) + _top, 1, 1, Color.Lime, 0);
+                                DrawBoxMWH((Mem.ReadS32(_player3D.ScreenX) >> 8) + _left, (_player3D.ScreenY >> 8) + _top, 1, 1, Color.Lime, 0);
                             }
                         }
                         break;
@@ -368,23 +369,20 @@ namespace BizHawk.Tool.Ecco
         }
         private void Ecco3DPredictSpawn()
         {
-            string valueTicker;
             int SpawnZ = Mem.ReadS32(Addr3D.CamZ2) + 0x180000;
             int nextRingZ = SpawnZ;
-            ReadObj3D(Addr3D.PlayerObj, out Obj3D player);
             while (((nextRingZ >> 17) & 0xF) != 0)
             {
                 nextRingZ += 0x20000;
             }
-            valueTicker = $"{Mem.ReadS32(Addr3D.RingSpawnX) / 4096.0:0.######}:{Mem.ReadS32(Addr3D.RingSpawnY) / 4096.0:0.######}:{(nextRingZ - 0x160000) / 2048.0:0.######}:{nextRingZ / 2048.0:0.######}";
-            TickerText(valueTicker);
-            var levelId = -1 - Mem.ReadS16(0xFFA79E);
+            StatusText($" Ring Spawn X: {Mem.ReadS32(Addr3D.RingSpawnX) / 4096.0,10:0.000000} Y: {Mem.ReadS32(Addr3D.RingSpawnY) / 4096.0,10:0.000000} Z: {(nextRingZ - 0x160000) / 2048.0,10:0.000000} Min Cam Z: {nextRingZ / 2048.0,10:0.000000}");
+            var levelId = -1 - Mem.ReadS16(Addr3D.Level);
             bool spawn = false;
             bool firstRand = true;
             int SpawnX, SpawnY, z;
-            int CamX = (Mem.ReadS32(Addr3D.CamX) >> 0xC) - _left;
-            int CamY = (Mem.ReadS32(Addr3D.CamY) >> 0xC) + _top;
-            int CamZ = (Mem.ReadS32(Addr3D.CamY) >> 0xC) + _top;
+            Cam3D.X = (Cam3D.X >> 0xC) - _left;
+            Cam3D.Y = (Cam3D.Y >> 0xC) + _top;
+            Cam3D.Z = (Cam3D.Z >> 0xC) + _top;
             while (!spawn)
             {
                 var temp = (SpawnZ >> 17) & 0xFF;
@@ -405,29 +403,27 @@ namespace BizHawk.Tool.Ecco
                                 break;
                             case 2:
                                 // Jellyfish
-                                SpawnX = player.XPos + 0x40000 - (Rand(firstRand) << 3);
+                                SpawnX = _player3D.XPos + 0x40000 - (Rand(firstRand) << 3);
                                 firstRand = false;
                                 SpawnY = -0xC0000 + (Rand() << 3);
                                 z = SpawnZ + 0x20000;
-                                valueTicker = $"{SpawnX / 4096.0:0.######}:{SpawnY / 4096.0:0.######}:{(z - 0x180000) / 2048.0:0.######}:{z / 2048.0:0.######}";
-                                TickerText(valueTicker);
-                                SpawnX = 160 + ((SpawnX >> 0xC) - CamX);
-                                SpawnY = 112 - ((SpawnY >> 0xC) - CamY);
-                                z = _top + 112 - ((z >> 0xC) - CamZ);
+                                StatusText($"Jelly Spawn X: {SpawnX / 4096.0,10:0.000000} Y: {SpawnY / 4096.0,10:0.000000} Z: {(z - 0x180000) / 2048.0,10:0.000000} Min Cam Z: {z / 2048.0,10:0.000000}");
+                                SpawnX = 160 + ((SpawnX >> 0xC) - Cam3D.X);
+                                SpawnY = 112 - ((SpawnY >> 0xC) - Cam3D.Y);
+                                z = _top + 112 - ((z >> 0xC) - Cam3D.Z);
                                 DrawBoxMWH(SpawnX, SpawnY, 1, 1, Color.Gray);
                                 DrawBoxMWH(SpawnX, z, 1, 1, Color.Gray);
                                 break;
                             case 3:
                                 // Eagle
-                                SpawnX = player.XPos + 0x40000 - (Rand(firstRand) << 3);
+                                SpawnX = _player3D.XPos + 0x40000 - (Rand(firstRand) << 3);
                                 firstRand = false;
                                 SpawnY = 0x50000;
                                 z = SpawnZ - 0x40000 + 0x20000;
-                                valueTicker = $"{SpawnX / 4096.0:0.######}:{SpawnY / 4096.0:0.######}:{(z - 0x180000) / 2048.0:0.######}:{z / 2048.0:0.######}";
-                                TickerText(valueTicker);
-                                SpawnX = 160 + ((SpawnX >> 0xC) - CamX);
-                                SpawnY = 112 - ((SpawnY >> 0xC) - CamY);
-                                z = _top + 112 - ((z >> 0xC) - CamZ);
+                                StatusText($"Eagle Spawn X: {SpawnX / 4096.0,10:0.000000} Y: {SpawnY / 4096.0,10:0.000000} Z: {(z - 0x180000) / 2048.0,10:0.000000} Min Cam Z: {z / 2048.0,10:0.000000}");
+                                SpawnX = 160 + ((SpawnX >> 0xC) - Cam3D.X);
+                                SpawnY = 112 - ((SpawnY >> 0xC) - Cam3D.Y);
+                                z = _top + 112 - ((z >> 0xC) - Cam3D.Z);
                                 DrawBoxMWH(SpawnX, SpawnY, 1, 1, Color.Gray);
                                 DrawBoxMWH(SpawnX, z, 1, 1, Color.Gray);
                                 break;
@@ -436,14 +432,13 @@ namespace BizHawk.Tool.Ecco
                                 bool left = (Rand(firstRand) > 0x8000);
                                 firstRand = false;
                                 var xdiff = 0xC0000 + (Rand() << 3);
-                                SpawnX = player.XPos + (left ? -xdiff : xdiff);
-                                SpawnY = Math.Min(Mem.ReadS32(0xFFB142), -0x10000) - (Rand() + 0x10000);
+                                SpawnX = _player3D.XPos + (left ? -xdiff : xdiff);
+                                SpawnY = Math.Min(_player3D.YPos, -0x10000) - (Rand() + 0x10000);
                                 z = SpawnZ + 0x20000;
-                                valueTicker = $"{SpawnX / 4096.0:0.######}:{SpawnY / 4096.0:0.######}:{(z - 0x180000) / 2048.0:0.######}:{z / 2048.0:0.######}";
-                                TickerText(valueTicker);
-                                SpawnX = 160 + ((SpawnX >> 0xC) - CamX);
-                                SpawnY = 112 - ((SpawnY >> 0xC) - CamY);
-                                z = _top + 112 - ((z >> 0xC) - CamZ);
+                                StatusText($"Shark Spawn X: {SpawnX / 4096.0,10:0.000000} Y: {SpawnY / 4096.0,10:0.000000} Z: {(z - 0x180000) / 2048.0,10:0.000000} Min Cam Z: {z / 2048.0,10:0.000000}");
+                                SpawnX = 160 + ((SpawnX >> 0xC) - Cam3D.X);
+                                SpawnY = 112 - ((SpawnY >> 0xC) - Cam3D.Y);
+                                z = _top + 112 - ((z >> 0xC) - Cam3D.Z);
                                 DrawBoxMWH(SpawnX, SpawnY, 1, 1, Color.Gray);
                                 DrawBoxMWH(SpawnX, z, 1, 1, Color.Gray);
                                 break;
@@ -468,16 +463,15 @@ namespace BizHawk.Tool.Ecco
                                 break;
                             case 14:
                                 // Shell
-                                SpawnX = player.XPos - 0x20000 + (Rand(firstRand) << 2);
+                                SpawnX = _player3D.XPos - 0x20000 + (Rand(firstRand) << 2);
                                 firstRand = false;
                                 SpawnY = -0x80000;
                                 z = SpawnZ + 0x20000;
                                 Rand();
-                                valueTicker = $"{SpawnX / 4096.0:0.######}:{SpawnY / 4096.0:0.######}:{(z - 0x180000) / 2048.0:0.######}:{(z - 0x80000) / 2048.0:0.######}";
-                                TickerText(valueTicker);
-                                SpawnX = 160 + ((SpawnX >> 0xC) - CamX);
-                                SpawnY = 112 - ((SpawnY >> 0xC) - CamY);
-                                z = _top + 112 - ((z >> 0xC) - CamZ);
+                                StatusText($"Shell Spawn X: {SpawnX / 4096.0,10:0.000000} Y: {SpawnY / 4096.0,10:0.000000} Z: {(z - 0x180000) / 2048.0,10:0.000000} Min Cam Z: {(z - 0x80000) / 2048.0,10:0.000000}");
+                                SpawnX = 160 + ((SpawnX >> 0xC) - Cam3D.X);
+                                SpawnY = 112 - ((SpawnY >> 0xC) - Cam3D.Y);
+                                z = _top + 112 - ((z >> 0xC) - Cam3D.Z);
                                 DrawBoxMWH(SpawnX, SpawnY, 1, 1, Color.Gray);
                                 DrawBoxMWH(SpawnX, z, 1, 1, Color.Gray);
                                 break;
@@ -488,15 +482,26 @@ namespace BizHawk.Tool.Ecco
         }
         private void Update3DTickers()
         {
-            int CamX = Mem.ReadS32(Addr3D.CamX);
-            int CamY = Mem.ReadS32(Addr3D.CamY);
-            int CamZ = Mem.ReadS32(Addr3D.CamZ);
-            Obj3D player;
-            ReadObj3D(Addr3D.PlayerObj, out player);
-            TickerText($"CamX: {CamX / 4096.0:0.######}\t CamY: {CamY / 4096.0:0.######}\t CamZ: {CamZ / 2048.0:0.######}");
-            TickerText($"Player Pos X: {player.XPos / 4096.0:0.######}\t Y: {player.YPos / 4096.0:0.######}\t Z: {player.ZPos / 2048.0:0.######}");
-            TickerText($"Player Vel X: {player.XVel / 4096.0:0.######}\t Y: {player.YVel / 4096.0:0.######}\t Z: {player.ZVel / 2048.0:0.######}");
-            TickerText($"Charge Count: {player.ChargeCtr}\t Player State: {player.State} Player Breach Count: {player.BreachCtr}");
+            Cam3D.X = Mem.ReadS32(Addr3D.CamX);
+            Cam3D.Y = Mem.ReadS32(Addr3D.CamY);
+            Cam3D.Z = Mem.ReadS32(Addr3D.CamZ);
+            StatusText($"        Cam X: {Cam3D.X / 4096.0,10:0.000000} Y: {Cam3D.Y / 4096.0,10:0.000000} Z: {Cam3D.Z / 2048.0,10:0.000000}");
+            StatusText($" Player Pos X: {_player3D.XPos / 4096.0,10:0.000000} Y: {_player3D.YPos / 4096.0,10:0.000000} Z: {_player3D.ZPos / 2048.0,10:0.000000}");
+            StatusText($" Player Vel X: {_player3D.XVel / 4096.0,10:0.000000} Y: {_player3D.YVel / 4096.0,10:0.000000} Z: {_player3D.ZVel / 2048.0,10:0.000000}");
+            StatusText($"Charge Counter: {_player3D.ChargeCtr:D2} State: {_player3D.State:D2} Breach Counter: {_player3D.BreachCtr:D2}");
+            Ecco3DPredictSpawn();
+        }
+        private void UpdatePlayer3D()
+        {
+            ReadObj3D(Addr3D.PlayerObj, out _player3D);
+        }
+        private void AutoFire3D()
+        {
+            if ((_player3D.ChargeCtr <= 1) && ((_player3D.State == 0) || (_player3D.BreachCtr != 0)))
+                Joy.Set("B", true, 1);
+            else if (_player3D.ChargeCtr > 1)
+                Joy.Set("B", false, 1);
+            Joy.Set("C", (_levelTime & 1) == 0, 1);
         }
     }
 }

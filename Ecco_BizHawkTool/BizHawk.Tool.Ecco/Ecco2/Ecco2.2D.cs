@@ -8,6 +8,21 @@ namespace BizHawk.Tool.Ecco
 {
     partial class Ecco2Tool : EccoToolBase
     {
+        #region Fields
+        private const int _signalAlpha = 255;
+        private readonly Color[] _turnSignalColors =
+        {
+            Color.FromArgb(_signalAlpha, 127, 127,   0),
+            Color.FromArgb(_signalAlpha, 255,   0,   0),
+            Color.FromArgb(_signalAlpha, 192,   0,  63),
+            Color.FromArgb(_signalAlpha,  63,   0, 192),
+            Color.FromArgb(_signalAlpha,   0,   0, 255),
+            Color.FromArgb(_signalAlpha,   0,  63, 192),
+            Color.FromArgb(_signalAlpha,   0, 192,  63),
+            Color.FromArgb(_signalAlpha,   0, 255,   0)
+        };
+        #endregion
+
         #region Object Type Helpers
         private enum CollType
         {
@@ -848,6 +863,7 @@ namespace BizHawk.Tool.Ecco
             return rel;
         }
         #endregion
+        private PlayerObj _player2D;
         #region CommonDrawFunctions
         private void DrawStandardCollisionType(Point topLeft, Point bottomRight, Size dims, CollType type, Color? outline = null)
         {
@@ -1170,7 +1186,7 @@ namespace BizHawk.Tool.Ecco
                 addr = curObj.PtrNext;
             }
         }
-        private void DrawStatics(PlayerObj player)
+        private void DrawStatics()
         {
             uint addr = ReadPtr(Addr2D.StaticLLHead);
             Obj2D curObj;
@@ -1203,7 +1219,7 @@ namespace BizHawk.Tool.Ecco
                         {
                             mid = GetScreenLoc(mid);
                             DrawRhomb(mid.X, mid.Y, 96, ColorMap.Mid);
-                            PutText($"{((7 - curObj.AnimFrame) * 4) - (int)((Mem.ReadByte(0xFFA7C9) & 3) - 4)}", mid.X, mid.Y + 4, 1, 1, -1, -1, Color.Lime, Color.Blue);
+                            PutText($"{((7 - curObj.AnimFrame) * 4) - (int)((_levelTime & 3) - 4)}", mid.X, mid.Y + 4, 1, 1, -1, -1, Color.Lime, Color.Blue);
                         }
                         break;
                     case ObjType.VortexGate: // 0xC0152
@@ -1255,7 +1271,7 @@ namespace BizHawk.Tool.Ecco
                         mid = GetScreenLoc(mid);
                         topLeft = GetScreenLoc(topLeft);
                         bottomRight = GetScreenLoc(bottomRight);
-                        DrawOct(mid.X, mid.Y, Mem.ReadS16(addr + 0x4C), (Mem.ReadU16(0xFFA7C8) & 7) == 7 ? Color.Orange : Color.Gray);
+                        DrawOct(mid.X, mid.Y, Mem.ReadS16(addr + 0x4C), (_levelTime & 7) == 7 ? Color.Orange : Color.Gray);
                         DrawBox(topLeft.X, topLeft.Y, bottomRight.X, bottomRight.Y, ColorMap.Sonar);
                         DrawBox(topLeft.X, topLeft.Y, bottomRight.X, bottomRight.Y, ColorMap.HeadTail, 0);
                         topLeft.X = topLeft.Y = bottomRight.X = bottomRight.Y = _camX - 128;
@@ -1267,11 +1283,11 @@ namespace BizHawk.Tool.Ecco
                         var Yvel1 = Mem.ReadS32(addr + 0x58) / 65536.0;
                         var Xvel2 = Mem.ReadS32(addr + 0x5C) / 65536.0;
                         var Yvel2 = Mem.ReadS32(addr + 0x60) / 65536.0;
-                        TickerText($"{curObj.Mode}:{curObj.StateCtr}:{Mem.ReadS16(Addr2D.LevelHeight) - 64 - mid.Y - _camY}", Color.Red);
-                        TickerText($"{vel.Width / 65536.0:0.######}:{vel.Height / 65536.0:0.######}", Color.Red);
-                        TickerText($"{vel2.Width / 65536.0:0.######}:{vel2.Height / 65536.0:0.######}", Color.Red);
+                        StatusText($"Boss Mode: {curObj.Mode} Mode Counter: {curObj.StateCtr} Height Remaining: {Mem.ReadS16(Addr2D.LevelHeight) - 64 - mid.Y - _camY}", Color.Red);
+                        StatusText($"Boss Vel1 X: {vel.Width / 65536.0,10:0.000000} Y: {vel.Height / 65536.0,10:0.000000}", Color.Red);
+                        StatusText($"Boss Vel2 X: {vel2.Width / 65536.0,10:0.000000} Y: {vel2.Height / 65536.0,10:0.000000}", Color.Red);
                         vel += vel2;
-                        TickerText($"{vel.Width / 65536.0:0.######}:{vel.Height / 65536.0:0.######}", Color.Red);
+                        StatusText($"Boss  Vel X: {vel.Width / 65536.0,10:0.000000} Y: {vel.Height / 65536.0,10:0.000000}", Color.Red);
                         switch (curObj.Mode)
                         {
                             case 0:
@@ -1290,23 +1306,24 @@ namespace BizHawk.Tool.Ecco
                                 break;
                             case 1:
                                 DrawBoxMWH(topLeft.X, topLeft.Y, 1, 1, Color.Orange, 0);
-                                bottomRight = player.Mid - (Size)mid;
+                                bottomRight = _player2D.Mid - (Size)mid;
                                 var rad = OctRad(bottomRight.X, bottomRight.Y) / 65536.0;
                                 bottomRight.X = (int)(bottomRight.X * (256.0 / (rad + 1))) >> 20;
                                 bottomRight.Y = (int)(bottomRight.Y * (256.0 / (rad + 1))) >> 20;
                                 mid = GetScreenLoc(mid);
                                 Gui.DrawLine(mid.X, mid.Y, mid.X + bottomRight.X, mid.Y + bottomRight.Y, Color.Gray);
-                                TickerText($"{bottomRight.X / 512.0:0.######}:{bottomRight.Y / 512.0:0.######}", Color.Red);
+                                StatusText($"Boss Slam X: {bottomRight.X / 512.0,10:0.000000} Y: {bottomRight.Y / 512.0,10:0.000000}", Color.Red);
                                 break;
                             case 2:
-                                TickerText($"{curObj.Var2X / 65536.0:0.######}:{curObj.Var2Y / 65536.0:0.######}", Color.Red);
+                                StatusText($"Boss Slam X: {curObj.Var2X / 65536.0,10:0.000000} Y: {curObj.Var2Y / 65536.0,10:0.000000}", Color.Red);
                                 break;
                         }
                         topLeft = GetScreenLoc(curObj.TopLeft);
                         bottomRight = GetScreenLoc(curObj.BottomRight);
                         break;
                     default:
-                        PutText($"{curObj.PtrMainFunc:X5}:{Mem.ReadByte(addr + 0x13)}", mid.X, mid.Y - 4, 1, 1, -1, -9, Color.Lime, Color.Blue);
+						mid = GetScreenLoc(curObj.Mid);
+                        PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", mid.X, mid.Y - 4, 1, 1, -1, -9, Color.Lime, Color.Blue);
                         PutText(addr.ToString("X6"), mid.X, mid.Y + 4, 1, 9, -1, -1, Color.Lime, Color.Blue);
                         break;
                 }
@@ -1315,7 +1332,7 @@ namespace BizHawk.Tool.Ecco
                 addr = curObj.PtrNext;
             }
         }
-        private void DrawAnims(PlayerObj player)
+        private void DrawAnims()
         {
             Point topLeft = new Point();
             Point bottomRight = new Point();
@@ -1340,16 +1357,16 @@ namespace BizHawk.Tool.Ecco
                         DrawChainLinks(curObj, ColorMap.Nose, ColorMap.MidTail, ColorMap.AnyPoint);
                         pos = GetScreenLoc(curObj.Mid);
                         DrawOct(pos.X, pos.Y, 32, ColorMap.Sonar, 16);
-                        TickerText($"{curObj.unkb0}:{curObj.Mode}:{curObj.Animation}", Color.Red);
-                        TickerText($"{curObj.Vel1.Width / 65536.0:0.######}:{curObj.Vel1.Height / 65536.0:0.######}", Color.Red);
-                        TickerText($"{curObj.Var2X / 65536.0:0.######}:{curObj.Var2Y / 65536.0:0.######}", Color.Red);
+                        StatusText($"Worm State: {curObj.unkb0} Mode: {curObj.Mode} Mode Counter: {curObj.Animation}", Color.Red);
+                        StatusText($"Worm Vel X: {curObj.Vel1.Width / 65536.0,10:0.000000} Y: {curObj.Vel1.Height / 65536.0,10:0.000000}", Color.Red);
+                        StatusText($"Worm Speed: {curObj.Var2X / 65536.0,10:0.000000} Tgt Speed:{curObj.Var2Y / 65536.0,10:0.000000}", Color.Red);
                         switch (curObj.Mode)
                         {
                             case 0:
                             case 2:
                             case 4:
-                                bottomRight.X = player.Nose.X - curObj.Mid.X;
-                                bottomRight.Y = player.Nose.Y - curObj.Mid.Y;
+                                bottomRight.X = _player2D.Nose.X - curObj.Mid.X;
+                                bottomRight.Y = _player2D.Nose.Y - curObj.Mid.Y;
                                 var rad = OctRad(bottomRight.X, bottomRight.Y) / 65536.0;
                                 bottomRight.X = (int)(bottomRight.X * (256.0 / (rad + 1))) >> 20;
                                 bottomRight.Y = (int)(bottomRight.Y * (256.0 / (rad + 1))) >> 20;
@@ -1366,9 +1383,9 @@ namespace BizHawk.Tool.Ecco
                             ReadObj2D((uint)(curObj.Orig.X & 0xFFFFFF), out subObj);
                             pos = GetScreenLoc(subObj.Mid);
                             DrawOct(pos.X, pos.Y, 32, (subObj.Animation == 0) ? ColorMap.Sonar : Color.Gray, 16);
-                            TickerText($"{curObj.unkb0}:{curObj.Mode}:{curObj.StateCtr}:{subObj.Animation}", Color.Red);
-                            TickerText($"{subObj.Vel1.Width / 65536.0:0.######}:{subObj.Vel1.Height / 65536.0:0.######}", Color.Red);
-                            TickerText($"{curObj.Var2X / 65536.0:0.######}:{curObj.Var2Y / 65536.0:0.######}", Color.Red);
+                            StatusText($"Worm State: {curObj.unkb0} Mode: {curObj.Mode} State Counter: {curObj.StateCtr} Mode Counter: {subObj.Animation}", Color.Red);
+                            StatusText($"Worm Vel X: {subObj.Vel1.Width / 65536.0,10:0.000000} Y: {subObj.Vel1.Height / 65536.0,10:0.000000}", Color.Red);
+                            StatusText($"Worm Speed: {curObj.Var2X / 65536.0,10:0.000000} Tgt Speed: {curObj.Var2Y / 65536.0,10:0.000000}", Color.Red);
                         }
                         break;
                     case ObjType.AbyssEel:
@@ -1389,7 +1406,7 @@ namespace BizHawk.Tool.Ecco
                         {
                             pos = GetScreenLoc(pos);
                             DrawRhomb(pos.X, pos.Y, 96, ColorMap.Mid);
-                            PutText($"{((7 - curObj.AnimFrame) * 4) - (int)((Mem.ReadByte(0xFFA7C9) & 3) - 4)}", pos.X, pos.Y + 4, 1, 1, -1, -1, Color.Blue, Color.Red);
+                            PutText($"{((7 - curObj.AnimFrame) * 4) - (int)((_levelTime & 3) - 4)}", pos.X, pos.Y + 4, 1, 1, -1, -1, Color.Blue, Color.Red);
                         }
                         break;
                     case ObjType.StuckMagicArm:
@@ -1543,7 +1560,7 @@ namespace BizHawk.Tool.Ecco
                                 if ((curObj.Mode & 1) == 0) DrawOct(pos.X, pos.Y - 0xAE, 32, Color.Orange);
                                 if ((curObj.Mode & 2) == 0) DrawOct(pos.X, pos.Y + 0xAE, 32, Color.Orange);
                             }
-                            TickerText($"{curObj.Mode}:{curObj.SonarCtr}:{curObj.AnimFrame}:{curObj.State}", Color.Red);
+                            StatusText($"Bose Mode: {curObj.Mode} HP: {curObj.AnimFrame,2} Invuln Counter: {curObj.State}", Color.Red);
                         }
                         else if (curObj.Mode == 8)
                         {
@@ -1571,7 +1588,7 @@ namespace BizHawk.Tool.Ecco
                                 Gui.DrawPolygon(roundedRect, Color.Orange, Color.FromArgb(63, Color.Orange));
                             }
                             DrawMotionVector(curObj.Mid, curObj.Vel1);
-                            TickerText($"{curObj.State:X2}:{curObj.StateCtr}:{mode}:{modeCounter}:{curObj.Animation & 0xF}", Color.Red);
+                            StatusText($"Tongue State: {curObj.State:X2} State Counter: {curObj.StateCtr} Mode: {mode} Mode Counter: {modeCounter}:{curObj.Animation & 0xF}", Color.Red);
                             subAddr = curObj.PtrSubObj;
                             ReadObj2D(subAddr, out subObj);
                             var subModeCounter = subObj.StateCtr;
@@ -1668,7 +1685,7 @@ namespace BizHawk.Tool.Ecco
                                 DrawBoxMWH(_left + 160, temp.Y, 320, 12, ColorMap.AnyPoint, 0);
                             }
                             DrawMotionVector(new Point(subObj.Mid.X, subObj.Var1Y), vel);
-                            TickerText($"{subObj.Mode:X2}:{subModeCounter}:{curObj.HP}:{curObj.SonarCtr}", Color.Red);
+                            StatusText($"Body Mode: {subObj.Mode:X2} Mode Counter: {subModeCounter} HP: {curObj.HP} Sonar Counter: {curObj.SonarCtr}", Color.Red);
                             curObj.HP = 0;
                         }
                         break;
@@ -1697,9 +1714,9 @@ namespace BizHawk.Tool.Ecco
                         DrawOct(bottomRight.X, bottomRight.Y, 32, Color.Orange);
                         DrawMotionVector(pos, vel);
                         Gui.DrawLine(pos.X, pos.Y, bottomRight.X, bottomRight.Y, Color.Orange);
-                        TickerText($"{curObj.unkb0:X2}:{curObj.HP:X2}:{curObj.StateCtr:D2}", Color.Red);
-                        TickerText($"{curObj.State:X2}:{curObj.XChunk:D3}", Color.Red);
-                        TickerText($"{vel.Width / 65536.0:0.######}:{vel.Height / 65536.0:0.######}", Color.Red);
+                        StatusText($"Larva  Mode: {curObj.unkb0:X2}  Mode Counter: {curObj.StateCtr:D2}", Color.Red);
+                        StatusText($"Larva State: {curObj.State:X2} State Counter: {curObj.XChunk:D3}", Color.Red);
+                        StatusText($"Larva Vel X: {vel.Width / 65536.0,10:0.000000} Y: {vel.Height / 65536.0,10:0.000000}", Color.Red);
                         break;
                     case ObjType.FutureDolphin:
                         DrawDefaultBounds(curObj, ColorMap.Mid, ColorMap.Sonar);
@@ -1710,14 +1727,14 @@ namespace BizHawk.Tool.Ecco
                     case ObjType.PushableRock:
                         DrawPushableBounds(curObj);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
-                        TickerText($"{curObj.Vel1.Width / 65536.0:0.######}:{curObj.Vel1.Height / 65536.0:0.######}", Color.Lime);
+                        StatusText($"Rock Vel X: {curObj.Vel1.Width / 65536.0,10:0.000000} Y: {curObj.Vel1.Height / 65536.0,10:0.000000}", Color.Green);
                         break;
                     case ObjType.PushableShieldingRock:
                         { 
                             DrawPushableBounds(curObj);
                             DrawMotionVector(curObj.Mid, curObj.Vel1);
                             DrawShieldBounds(curObj);
-                            TickerText($"{curObj.Vel1.Width / 65536.0:0.######}:{curObj.Vel1.Height / 65536.0:0.######}", Color.Lime);
+                            StatusText($"Rock Vel X: {curObj.Vel1.Width / 65536.0,10:0.000000} Y: {curObj.Vel1.Height / 65536.0,10:0.000000}", Color.Green);
                         }
                         break;
                     case ObjType.Turtle:
@@ -1742,7 +1759,7 @@ namespace BizHawk.Tool.Ecco
                         vel.Height = 0;
                         DrawPushableBounds(curObj);
                         DrawShieldBounds(curObj);
-                        TickerText($"{curObj.Var2X / 65536.0:0.######}:{curObj.Var2Y / 65536.0:0.######}", Color.Lime);
+                        StatusText($"Turtle Vel X: {curObj.Var2X / 65536.0,10:0.000000} Y: {curObj.Var2Y / 65536.0,10:0.000000}", Color.Green);
                         DrawMotionVector(curObj.Mid, vel);
                         break;
                     case ObjType.RetractingTurtle:
@@ -1750,7 +1767,7 @@ namespace BizHawk.Tool.Ecco
                         vel.Height = curObj.Var1Y >> 1;
                         DrawPushableBounds(curObj);
                         DrawShieldBounds(curObj);
-                        TickerText($"{(curObj.Var2X >> 1) / 65536.0:0.######}:{(curObj.Var2Y >> 1) / 65536.0:0.######}", Color.Lime);
+                        StatusText($"Turtle Vel X: {(curObj.Var2X >> 1) / 65536.0,10:0.000000} Y: {(curObj.Var2Y >> 1) / 65536.0,10:0.000000}", Color.Green);
                         DrawMotionVector(curObj.Mid, vel);
                         break;
                     case ObjType.BlueWhale:
@@ -1804,7 +1821,7 @@ namespace BizHawk.Tool.Ecco
                         break;
                     case ObjType.ForceField:
                         {
-                            vel = new Size(player.Mid.X - curObj.Mid.X, player.Mid.Y - curObj.Mid.Y);
+                            vel = new Size(_player2D.Mid.X - curObj.Mid.X, _player2D.Mid.Y - curObj.Mid.Y);
                             var div = Math.Abs(vel.Width) + Math.Abs(vel.Height);
                             vel.Width /= div;
                             vel.Height /= div;
@@ -1822,9 +1839,9 @@ namespace BizHawk.Tool.Ecco
                             DrawMotionVector(curObj.Mid, vel);
                             DrawBoxMWH(dest.X, dest.Y, 64, 64, Color.Orange);
                             Gui.DrawLine(pos.X, pos.Y, dest.X, dest.Y, Color.Orange);
-                            TickerText($"{pos.X}:{pos.Y}:{curObj.CurAng}:{curObj.TrgAng}", Color.Lime);
-                            TickerText($"{vel.Width / 65536.0:0.######}:{vel.Height / 65536.0:0.######}", Color.Lime);
-                            TickerText($"{curObj.Var2X / 65536.0:0.######}:{curObj.Var2Y / 65536.0:0.######}", Color.Lime);
+                            StatusText($"Guide Pos X: {pos.X} Y: {pos.Y} Angle: {curObj.CurAng} Target Angle: {curObj.TrgAng}", Color.Green);
+                            StatusText($"Guide Vel X: {vel.Width / 65536.0,10:0.000000} Y:{vel.Height / 65536.0,10:0.000000}", Color.Green);
+                            StatusText($"Guide Speed: {curObj.Var2X / 65536.0,10:0.000000} Target: {curObj.Var2Y / 65536.0,10:0.000000}", Color.Green);
                         }
                         break;
                     case ObjType.OrcaLost:
@@ -1851,7 +1868,7 @@ namespace BizHawk.Tool.Ecco
                         pos = GetScreenLoc(curObj.Mid);
                         DrawBoxMWH(pos.X, pos.Y, 80, 32, ColorMap.Mid, 31);
                         DrawBoxMWH(pos.X, pos.Y, curObj.Dims.Width >> 16, curObj.Dims.Height >> 16, ColorMap.Sonar);
-                        if (player.PtrCarriedObj != 0)
+                        if (_player2D.PtrCarriedObj != 0)
                         {
                             DrawOct(pos.X, pos.Y, 0x50, ColorMap.Mid, 31);
                         }
@@ -1869,7 +1886,7 @@ namespace BizHawk.Tool.Ecco
                     case ObjType.GlyphTopBroken:
                         DrawPushableBounds(curObj, ColorMap.Sonar);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
-                        TickerText($"{curObj.Vel1.Width / 65536.0:0.######}:{curObj.Vel1.Height / 65536.0:0.######}", Color.Lime); Gui.DrawLine(pos.X, pos.Y, vec.X, vec.Y, Color.Orange);
+                        StatusText($"Glyph Vel X: {curObj.Vel1.Width / 65536.0,10:0.000000} Y: {curObj.Vel1.Height / 65536.0,10:0.000000}", Color.Green); Gui.DrawLine(pos.X, pos.Y, vec.X, vec.Y, Color.Orange);
                         break;
                     case ObjType.GlyphTopReparing:
                         {
@@ -1898,7 +1915,7 @@ namespace BizHawk.Tool.Ecco
                         break;
                     case ObjType.VortexLightningTrap:
                         pos = GetScreenLoc(curObj.Mid);
-                        if (player.Form != 0)
+                        if (_player2D.Form != 0)
                         {
                             pos.Y -= 8;
                         }
@@ -1942,7 +1959,7 @@ namespace BizHawk.Tool.Ecco
                     case ObjType.PushableFish:
                         DrawDefaultBounds(curObj, ColorMap.Nose, ColorMap.Sonar);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
-                        TickerText($"{curObj.Vel1.Width / 65536.0:0.######}:{curObj.Vel1.Height / 65536.0:0.######}", Color.Orange);
+                        StatusText($"Fish Vel X: {curObj.Vel1.Width / 65536.0,10:0.000000} Y: {curObj.Vel1.Height / 65536.0,10:0.000000}", Color.Orange);
                         break;
                     case ObjType.SlowKelp:
                     case ObjType.MetaSphere:
@@ -1955,7 +1972,7 @@ namespace BizHawk.Tool.Ecco
                         if ((curObj.PID & 7) == 0)
                         {
                             DrawMotionVector(curObj.Orig, new Size(curObj.Vel2X, curObj.Vel2Y), curObj.SonarCtr == 0 ? Color.Blue : Color.Black);
-                            TickerText($"{curObj.Vel2X / 65536.0:0.######}:{curObj.Vel2Y / 65536.0:0.######}:{curObj.SonarCtr}", Color.Lime);
+                            StatusText($"Wreath Vel X: {curObj.Vel2X / 65536.0,10:0.000000} Y: {curObj.Vel2Y / 65536.0,10:0.000000} Sonar Counter: {curObj.SonarCtr}", Color.Green);
                         }
                         break;
                     case ObjType.Fish:
@@ -1985,7 +2002,7 @@ namespace BizHawk.Tool.Ecco
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
                         break;
                     case ObjType.AsteriteGlobeFollowing:
-                        pos = GetScreenLoc(player.Mid);
+                        pos = GetScreenLoc(_player2D.Mid);
                         DrawOct(pos.X - 56, pos.Y, 8, Color.Orange);
                         DrawOct(pos.X + 56, pos.Y, 8, Color.Orange);
                         DrawMotionVector(curObj.Mid, new Size(0,0)-curObj.Vel1);
@@ -2094,11 +2111,10 @@ namespace BizHawk.Tool.Ecco
                     case ObjType.NoDisplay:
                         break;
                     default:
-                        topLeft = GetScreenLoc(curObj.TopLeft);
-                        bottomRight = GetScreenLoc(curObj.BottomRight);
-                        DrawBox(topLeft.X, topLeft.Y, bottomRight.X, bottomRight.Y, ColorMap.HeadTail, 0);
+						DrawDefaultBounds(curObj, ColorMap.HeadTail);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
-                        PutText(curObj.PtrMainFunc.ToString("X5"), pos.X, pos.Y + 8, 1, 9, -1, -1, Color.Blue, Color.Red);
+						pos = GetScreenLoc(curObj.Mid);
+						PutText(curObj.PtrMainFunc.ToString("X5"), pos.X, pos.Y + 8, 1, 9, -1, -1, Color.Blue, Color.Red);
                         break;
                 }
                 addr = curObj.PtrNext;
@@ -2259,13 +2275,12 @@ namespace BizHawk.Tool.Ecco
         private void Draw2DHud()
         {
             //	CamX-=8;
-            ReadPlayerObj(Addr2D.PlayerObj, out PlayerObj player);
             Color color;
             DrawAsterite();
             DrawTubes();
             DrawWalls();
-            DrawStatics(player);
-            DrawAnims(player);
+            DrawStatics();
+            DrawAnims();
             DrawEvents();
             Obj2D curObj;
             //Ecco head
@@ -2275,26 +2290,26 @@ namespace BizHawk.Tool.Ecco
             ReadObj2D(ReadPtr(Addr2D.EccoTailPtr), out curObj);
             DrawDefaultBounds(curObj, ColorMap.HeadTail);
             //Ecco body
-            Point pos = GetScreenLoc(player.Mid);
-            Point pos2 = GetScreenLoc(player.Nose);
-            Size vel = player.CurrentVel + player.SwimVel + player.ZipVel;
+            Point pos = GetScreenLoc(_player2D.Mid);
+            Point pos2 = GetScreenLoc(_player2D.Nose);
+            Size vel = _player2D.CurrentVel + _player2D.SwimVel + _player2D.ZipVel;
             Gui.DrawLine(pos.X, pos.Y, pos2.X, pos2.Y, Color.Green);
-            pos2 = GetScreenLoc(player.Tail);
+            pos2 = GetScreenLoc(_player2D.Tail);
             Gui.DrawLine(pos.X, pos.Y, pos2.X, pos2.Y, Color.Green);
-            DrawMotionVector(player.Tail, vel, ColorMap.Tail);
-            DrawMotionVector(player.Nose, vel, ColorMap.Nose);
+            DrawMotionVector(_player2D.Tail, vel, ColorMap.Tail);
+            DrawMotionVector(_player2D.Nose, vel, ColorMap.Nose);
             DrawBoxMWH(pos.X, pos.Y, 1, 1, ColorMap.Mid, 0);
-            pos = GetScreenLoc(new Point((player.Tail.X + player.Mid.X) >> 1, (player.Tail.Y + player.Mid.Y) >> 1));
-            pos2 = GetScreenLoc(new Point((player.Nose.X + player.Mid.X) >> 1, (player.Nose.Y + player.Mid.Y) >> 1));
+            pos = GetScreenLoc(new Point((_player2D.Tail.X + _player2D.Mid.X) >> 1, (_player2D.Tail.Y + _player2D.Mid.Y) >> 1));
+            pos2 = GetScreenLoc(new Point((_player2D.Nose.X + _player2D.Mid.X) >> 1, (_player2D.Nose.Y + _player2D.Mid.Y) >> 1));
             DrawBoxMWH(pos.X, pos.Y, 1, 1, ColorMap.Spine, 0);
             DrawBoxMWH(pos2.X, pos2.Y, 1, 1, ColorMap.Spine, 0);
             // sonar
-            if (player.SonarState != 0)
+            if (_player2D.SonarState != 0)
             {
-                pos = GetScreenLoc(player.SonarPos);
-                color = ((player.SonarChrgFlag != 0) ? ColorMap.Enemy : ColorMap.Sonar);
-                DrawBoxMWH(pos.X, pos.Y, player.SonarSize.Width >> 16, player.SonarSize.Height >> 16, color);
-                DrawMotionVector(player.SonarPos, player.SonarVel, color);
+                pos = GetScreenLoc(_player2D.SonarPos);
+                color = ((_player2D.SonarChrgFlag != 0) ? ColorMap.Enemy : ColorMap.Sonar);
+                DrawBoxMWH(pos.X, pos.Y, _player2D.SonarSize.Width >> 16, _player2D.SonarSize.Height >> 16, color);
+                DrawMotionVector(_player2D.SonarPos, _player2D.SonarVel, color);
             }
             //Pulsar
             // The pulsar attack uses a special multi-part object format that I don't fully understand
@@ -2330,9 +2345,9 @@ namespace BizHawk.Tool.Ecco
 
             //Ecco curObj.HP and Air
             int i = 0;
-            wshort HP = player.HP << 3;
+            wshort HP = _player2D.HP << 3;
             int off = 0;
-            for (int j = 0; j < player.Air; j++)
+            for (int j = 0; j < _player2D.Air; j++)
             {
                 if (j - off == 448)
                 {
@@ -2349,17 +2364,15 @@ namespace BizHawk.Tool.Ecco
         }
         private void Update2DTickers()
         {
-            PlayerObj player;
-            ReadPlayerObj(Addr2D.PlayerObj, out player);
-            Size totalVel = player.SwimVel + player.CurrentVel + player.ZipVel;
-            TickerText($"{Mem.ReadS16(Addr2D.CamX)}:{Mem.ReadS16(Addr2D.CamY)}");
-            TickerText($"{player.Mid.X / 65536.0:0.######}:{player.Mid.Y / 65536.0:0.######}");
-            TickerText($"{player.SwimSpeed / 65536.0:0.######}:{player.DecelTimer}:{player.AccelTimer}");
-            TickerText($"{player.SwimVel.Width / 65536.0:0.######}:{player.SwimVel.Height / 65536.0:0.######}");
-            TickerText($"{player.CurrentVel.Width / 65536.0:0.######}:{player.CurrentVel.Height / 65536.0:0.######}");
-            TickerText($"{player.ZipVel.Width / 65536.0:0.######}:{player.ZipVel.Height / 65536.0:0.######}");
-            TickerText($"{totalVel.Width / 65536.0:0.######}:{totalVel.Height / 65536.0:0.######}");
-            TickerText($"{player.MoveMode}:{player.ChargeCounter}:{player.Angle:X4}:{player.TgtAng:X4}");
+            Size totalVel = _player2D.SwimVel + _player2D.CurrentVel + _player2D.ZipVel;
+            StatusText($"           Cam X: {Mem.ReadS16(Addr2D.CamX),4}        Y: {Mem.ReadS16(Addr2D.CamY),4}");
+            StatusText($"    Player Pos X: {_player2D.Mid.X / 65536.0,11:0.000000} Y: {_player2D.Mid.Y / 65536.0,11:0.000000}");
+            StatusText($"    Player Speed: {_player2D.SwimSpeed / 65536.0,10:0.000000} Decel: {_player2D.DecelTimer} Accel: {_player2D.AccelTimer}");
+            StatusText($"Player BaseVel X: {_player2D.SwimVel.Width / 65536.0,10:0.000000} Y: {_player2D.SwimVel.Height / 65536.0,10:0.000000}");
+            StatusText($"Player FlowVel X: {_player2D.CurrentVel.Width / 65536.0,10:0.000000} Y: {_player2D.CurrentVel.Height / 65536.0,10:0.000000}");
+            StatusText($" Player ZipVel X: {_player2D.ZipVel.Width / 65536.0,10:0.000000} Y: {_player2D.ZipVel.Height / 65536.0,10:0.000000}");
+            StatusText($" Player TotVel X: {totalVel.Width / 65536.0,10:0.000000} Y: {totalVel.Height / 65536.0,10:0.000000}");
+            StatusText($"Movement Mode: {_player2D.MoveMode} Charge Counter: {_player2D.ChargeCounter,2} Current Angle: {_player2D.Angle:X4} Target Angle: {_player2D.TgtAng:X4}");
             switch (Mem.ReadU8(AddrGlobal.LevelID))
             {
                 case 1:
@@ -2368,21 +2381,34 @@ namespace BizHawk.Tool.Ecco
                 case 30:
                 case 46:
                     var globeFlags = Mem.ReadU32(Addr2D.GlobeFlags) >> 1;
-                    var globeFlags2 = Mem.ReadU32(Addr2D.GlobeFlags2) >> 1;
-                    int i, j = i = 0;
+                    int i = 0;
                     while (globeFlags > 0)
                     {
                         globeFlags >>= 1;
                         i++;
                     }
-                    while (globeFlags2 > 0)
-                    {
-                        globeFlags2 >>= 1;
-                        j++;
-                    }
-                    TickerText($"{i}:{j}", Color.Blue);
+                    StatusText($"Pairs Collected: {i}", Color.Blue);
                     break;
                 default:
+                    break;
+            }
+        }
+        private void DrawTurnSignal()
+        {
+            var color = _turnSignalColors[_levelTime & 7];
+            Gui.DrawRectangle(_left - 48, _top - 112, 15, 15, color, color);
+        }
+        private void UpdatePlayer2D()
+        {
+            ReadPlayerObj(Addr2D.PlayerObj, out _player2D);
+        }
+        private void AutoFire2D()
+        {
+            switch (_player2D.MoveMode)
+            {
+                case 0:
+                case 3:
+                    Joy.Set("C", (_player2D.AccelTimer < 11), 1);
                     break;
             }
         }

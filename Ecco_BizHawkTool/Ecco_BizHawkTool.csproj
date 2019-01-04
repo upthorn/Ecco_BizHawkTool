@@ -40,7 +40,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -104,8 +104,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.2DGui.cs" />
-    <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.3DGui.cs" />
+    <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.2D.cs" />
+    <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.3D.cs" />
     <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.cs" />
     <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.LogicHelp.cs" />
     <Compile Include="BizHawk.Tool.Ecco\Ecco2\Ecco2.MapDump.cs" />
@@ -119,11 +119,20 @@
     </Compile>
     <Compile Include="BizHawk.Tool.Ecco\ToolBase\EccoToolBase.DrawingHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CustomMainForm.resx">
       <DependentUpon>CustomMainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

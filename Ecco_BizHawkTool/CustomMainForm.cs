@@ -60,6 +60,8 @@ namespace BizHawk.Client.EmuHawk
 
         private enum Modes { disabled, Ecco1, Ecco2 }
         private EccoToolBase _tool;
+		private List<string> _statusLines = new List<string>();
+		private List<Color?> _statusColors = new List<Color?>();
         #endregion
 
         #region cTor(s)
@@ -68,22 +70,12 @@ namespace BizHawk.Client.EmuHawk
 		{
 			InitializeComponent();
             ClientApi.StateLoaded += OnStateLoaded;
+            FormClosed += CustomMainForm_FormClosed;
 		}
 
 		#endregion
 
-		#region Form Methods
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			ClientApi.DoFrameAdvance();
-		}
-
-		private void button2_Click(object sender, EventArgs e)
-		{
-			ClientApi.GetInput(1);
-		}
-
+		#region Winform Methods
 		private void button3_Click(object sender, EventArgs e)
 		{
 			for (int i = 0; i < 600; i++)
@@ -107,18 +99,14 @@ namespace BizHawk.Client.EmuHawk
 			ClientApi.SetInput(1, j);
 		}
 
-		private void OnStateLoaded(object sender, StateLoadedEventArgs e)
-		{
-            Gui.DrawNew("emu");
-            _tool.PostFrameCallback();
-            Gui.DrawFinish();
-        }
-
         private void mapDumpCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _tool.SetMapDumping(mapDumpCheckbox.Checked);
         }
-
+        private void autoFireCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            _tool.SetAutofire(autoFireCheckbox.Checked);
+        }
         private void mapDumpFolderBrowse_Click(object sender, EventArgs e)
         {
             if (mapFolderBrowseDialog.ShowDialog() == DialogResult.OK)
@@ -126,24 +114,74 @@ namespace BizHawk.Client.EmuHawk
                 mapDumpFolder.Text = mapFolderBrowseDialog.SelectedPath;
             }
         }
-
-        private void mapFolderBrowseDialog_HelpRequest(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form_FormClosing(object sender, FormClosingEventArgs e)
+		public void CustomMainForm_Resize(object sender, EventArgs e)
+		{
+			if (WindowState == FormWindowState.Minimized)
+			{
+				SuspendLayout();
+			}
+			else
+			{
+				ResumeLayout();
+			}
+		}
+		public void CustomMainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Gui.DrawNew("emu");
             Gui.DrawFinish();
             ClientApi.SetGameExtraPadding(0);
-            Close();
         }
         //private void PostFrameCallback()
         #endregion
+        #region Tool Methods
+        public void SetStatusLine(string message, int line, Color? fg)
+        {
+			if (WindowState != FormWindowState.Minimized)
+			{
+				while (StatusTextBox.Lines.Length <= line)
+				{
+					StatusTextBox.AppendText(Environment.NewLine);
+				}
+				StatusTextBox.SelectionStart = StatusTextBox.GetFirstCharIndexFromLine(line);
+				StatusTextBox.SelectionLength = StatusTextBox.Lines[line].Length;
+				StatusTextBox.SelectionColor = fg ?? StatusTextBox.ForeColor;
+				StatusTextBox.SelectedText = message;
+			}
+        }
+        private void OnStateLoaded(object sender, StateLoadedEventArgs e)
+        {
+            Gui.DrawNew("emu");
+            _tool.PreFrameCallback();
+            _tool.PostFrameCallback();
+            Gui.DrawFinish();
+        }
+
+        private void Init()
+        {
+            Mem.SetBigEndian();
+            string gameName = GI.GetRomName();
+            switch (gameName)
+            {
+                case "ECCO - The Tides of Time (J) [!]":
+                    _tool = new Ecco2Tool(this, GameRegion.J);
+                    break;
+                case "ECCO - The Tides of Time (U) [!]":
+                    _tool = new Ecco2Tool(this, GameRegion.U);
+                    break;
+                case "ECCO - The Tides of Time (E) [!]":
+                    _tool = new Ecco2Tool(this, GameRegion.E);
+                    break;
+                case "ECCO The Dolphin (J) [!]":
+                case "ECCO The Dolphin (UE) [!]":
+                /*_tool = new EccoTool(this, GameRegion.UE);*/
+                default:
+                    Close();
+                    break;
+            }
+        }
+        #endregion
 
         #region BizHawk Required methods
-
         /// <summary>
         /// Return true if you want the <see cref="UpdateValues"/> method
         /// to be called before rendering
@@ -168,34 +206,6 @@ namespace BizHawk.Client.EmuHawk
 		public void FastUpdate()
 		{ }
 
-        private void Init()
-        {
-            Mem.SetBigEndian();
-            string gameName = GI.GetRomName();
-            switch (gameName) {
-                case "ECCO - The Tides of Time (J) [!]":
-                    _tool = new Ecco2Tool(this, GameRegion.J);
-                    break;
-                case "ECCO - The Tides of Time (U) [!]":
-                    _tool = new Ecco2Tool(this, GameRegion.U);
-                    break;
-                case "ECCO - The Tides of Time (E) [!]":
-                    _tool = new Ecco2Tool(this, GameRegion.E);
-                    break;
-                case "ECCO The Dolphin (J) [!]":
-                case "ECCO The Dolphin (UE) [!]":
-                    /*_mode = Modes.Ecco1;
-                    _camXAddr = 0xFFB836;
-                    _camYAddr = 0xFFB834;
-                    _top = _bottom = 112;
-                    _left = _right = 160;
-                    ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);*/
-                default:
-                    Close();
-                    break;
-            }
-        }
-
         /// <summary>
         /// Restart is called the first time you call the form
         /// but also when you start playing a movie
@@ -216,10 +226,12 @@ namespace BizHawk.Client.EmuHawk
                     Init();
                     break;
                 case ToolFormUpdateType.PreFrame:
+                    SuspendLayout();
                     _tool.PreFrameCallback();
                     break;
                 case ToolFormUpdateType.PostFrame:
                     _tool.PostFrameCallback();
+                    ResumeLayout(false);
                     break;
                 default:
                     break;
@@ -237,6 +249,6 @@ namespace BizHawk.Client.EmuHawk
 				//Update form
 			}
 		}
-        #endregion BizHawk Required methods
-    }
+		#endregion BizHawk Required methods
+	}
 }
