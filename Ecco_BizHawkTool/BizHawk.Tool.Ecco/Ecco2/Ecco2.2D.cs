@@ -420,7 +420,6 @@ namespace BizHawk.Tool.Ecco
                 _typeMap[0x9FEB2] = ObjType.basic;
                 _typeMap[0xA5670] = ObjType.basic;
                 _typeMap[0xAEC1A] = ObjType.basic;
-                _typeMap[0xA6C4A] = ObjType.basic;
                 _typeMap[0xAB65A] = ObjType.basic; 
                 _typeMap[0x9F2EC] = ObjType.basic;
                 _typeMap[0xC0152] = ObjType.VortexGate;
@@ -1207,7 +1206,8 @@ namespace BizHawk.Tool.Ecco
                 bottomRight = GetScreenLoc(curObj.BottomRight);
                 switch (type)
                 {
-                    case ObjType.basic:
+					case ObjType.Glyph:
+					case ObjType.basic:
                     case ObjType.MovingBlock:
                     case ObjType.MovingBlock2:
                         break;
