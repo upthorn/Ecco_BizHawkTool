@@ -82,19 +82,19 @@
   <ItemGroup>
     <Reference Include="BizHawk.Client.ApiHawk, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\BH\Output\dll\BizHawk.Client.ApiHawk.dll</HintPath>
+      <HintPath>..\..\dll\BizHawk.Client.ApiHawk.dll</HintPath>
     </Reference>
     <Reference Include="BizHawk.Client.Common, Version=2.3.0.13844, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\BH\Output\dll\BizHawk.Client.Common.dll</HintPath>
+      <HintPath>..\..\dll\BizHawk.Client.Common.dll</HintPath>
     </Reference>
     <Reference Include="BizHawk.Emulation.Common, Version=2.3.0.13844, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\BH\Output\dll\BizHawk.Emulation.Common.dll</HintPath>
+      <HintPath>..\..\dll\BizHawk.Emulation.Common.dll</HintPath>
     </Reference>
     <Reference Include="BizHawk.Emulation.Cores, Version=2.3.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\BH\Output\dll\BizHawk.Emulation.Cores.dll</HintPath>
+      <HintPath>..\..\dll\BizHawk.Emulation.Cores.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -143,8 +143,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>erase "$(ProjectDir)..\..\ExternalTools\Ecco_BizHawkTool.dll"
+copy "$(TargetPath)" "$(ProjectDir)..\..\ExternalTools\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
