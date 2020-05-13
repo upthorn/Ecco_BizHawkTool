@@ -1,6 +1,4 @@
-﻿using BizHawk.Emulation.Common.WorkingTypes;
-
-namespace BizHawk.Tool.Ecco
+﻿namespace BizHawk.Tool.Ecco
 {
     abstract partial class EccoToolBase
     {
@@ -27,25 +25,25 @@ namespace BizHawk.Tool.Ecco
             addr += 4;
             return retval;
         }
-        protected wushort ReadU16AndAdvance(ref uint addr)
+        protected ushort ReadU16AndAdvance(ref uint addr)
         {
-            wushort retval = Mem.ReadU16(addr);
+            ushort retval = (ushort) Mem.ReadU16(addr);
             addr += 2;
             return retval;
         }
-        protected wshort ReadS16AndAdvance(ref uint addr)
+        protected short ReadS16AndAdvance(ref uint addr)
         {
-            wshort retval = Mem.ReadS16(addr);
+            short retval = (short)Mem.ReadS16(addr);
             addr += 2;
             return retval;
         }
-        protected wsbyte ReadSByteAndAdvance(ref uint addr)
+        protected sbyte ReadSByteAndAdvance(ref uint addr)
         {
-            return Mem.ReadS8(addr++);
+            return (sbyte) Mem.ReadS8(addr++);
         }
-        protected wbyte ReadByteAndAdvance(ref uint addr)
+        protected byte ReadByteAndAdvance(ref uint addr)
         {
-            return Mem.ReadU8(addr++);
+            return (byte) Mem.ReadU8(addr++);
         }
     }
 }

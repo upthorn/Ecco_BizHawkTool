@@ -1,4 +1,4 @@
-﻿using BizHawk.Client.ApiHawk;
+﻿using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
 
 namespace BizHawk.Tool.Ecco

@@ -100,10 +100,12 @@
 			// 
 			this.StatusTextBox.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.StatusTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.StatusTextBox.Enabled = false;
 			this.StatusTextBox.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.StatusTextBox.ForeColor = System.Drawing.Color.Black;
 			this.StatusTextBox.Location = new System.Drawing.Point(8, 46);
 			this.StatusTextBox.Name = "StatusTextBox";
+			this.StatusTextBox.ReadOnly = true;
 			this.StatusTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
 			this.StatusTextBox.Size = new System.Drawing.Size(640, 480);
 			this.StatusTextBox.TabIndex = 6;

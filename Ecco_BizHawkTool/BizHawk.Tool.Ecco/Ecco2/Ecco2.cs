@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 
-using BizHawk.Client.ApiHawk;
 using BizHawk.Client.EmuHawk;
 
 namespace BizHawk.Tool.Ecco

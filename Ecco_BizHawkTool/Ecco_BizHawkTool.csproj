@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ecco_BizHawkTool</RootNamespace>
     <AssemblyName>Ecco_BizHawkTool</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -32,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|2.x'">
     <DebugSymbols>true</DebugSymbols>
@@ -65,13 +66,14 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>obj\Release\</OutputPath>
+    <OutputPath>bin\AnyCpu\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Ecco_icon.ico</ApplicationIcon>
@@ -80,25 +82,27 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BizHawk.Client.ApiHawk, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BizHawk.Client.Common, Version=2.3.0.13917, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dll\BizHawk.Client.ApiHawk.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\BH\Output\dll\netstandard2.0\BizHawk.Client.Common.dll</HintPath>
     </Reference>
-    <Reference Include="BizHawk.Client.Common, Version=2.3.0.13844, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BizHawk.Emulation.Common, Version=2.3.0.13917, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dll\BizHawk.Client.Common.dll</HintPath>
+      <HintPath>..\..\dll\netstandard2.0\BizHawk.Emulation.Common.dll</HintPath>
     </Reference>
-    <Reference Include="BizHawk.Emulation.Common, Version=2.3.0.13844, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BizHawk.Emulation.Cores, Version=2.3.0.13917, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dll\BizHawk.Emulation.Common.dll</HintPath>
+      <HintPath>..\..\dll\netstandard2.0\BizHawk.Emulation.Cores.dll</HintPath>
     </Reference>
-    <Reference Include="BizHawk.Emulation.Cores, Version=2.3.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dll\BizHawk.Emulation.Cores.dll</HintPath>
+    <Reference Include="EmuHawk">
+      <HintPath>..\..\EmuHawk.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.4.7.0\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -140,6 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ecco_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

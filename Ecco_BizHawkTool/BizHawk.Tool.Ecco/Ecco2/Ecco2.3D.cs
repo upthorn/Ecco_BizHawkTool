@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-using BizHawk.Emulation.Common.WorkingTypes;
-
 namespace BizHawk.Tool.Ecco
 {
     partial class Ecco2Tool : EccoToolBase
@@ -90,7 +88,7 @@ namespace BizHawk.Tool.Ecco
         private unsafe struct Obj3D
         {
             public uint PtrNext;       // Ptr to next object in RAM
-            public wushort Flags;      // Bitwise bool array. Unsure what values mean but all 0s is marker for deletion
+            public ushort Flags;      // Bitwise bool array. Unsure what values mean but all 0s is marker for deletion
             public int XPos;           // Horizontal center of object
             public int ZPos;           // Depth-wise center of object
             public int YPos;           // Vertical center of object
@@ -109,28 +107,28 @@ namespace BizHawk.Tool.Ecco
             public int YUnk;
             public fixed int unkArr[5];
             public uint PLC;           // Pointer to sprite information structure
-            public wshort Sprite;       // Which frame of animation to display
-            public wshort SpriteScale;  // How big is the sprite based on zdist from camera
+            public short Sprite;       // Which frame of animation to display
+            public short SpriteScale;  // How big is the sprite based on zdist from camera
             public uint PtrMainFunc;   // Ptr to main function address. Proxy for object type, because it's the only way the game tracks 3D Object type
-            public wshort unks0;
-            public wshort unks1;
-            public wshort Mode;
-            public wbyte AccelCounter;  // Mostly just for Ecco, counts where he is in acceleration cycle. Mostly useless because the first frame is fastest
-            public wbyte PrevControls;  // Mostly just for Ecco, what buttons were pressed last frame
-            public wbyte CurControls;   // Mostly just for Ecco, what buttons are pressed now
-            public wbyte ChargeCtr;     // Mostly just for Ecco, countdown until next charge possible
-            public wbyte LastWasCharge; // Mostly just for Ecco, was charge the last button touched
-            public wbyte InvincCount;   // Mostly just for Ecco, countdown until next vulnerable
+            public short unks0;
+            public short unks1;
+            public short Mode;
+            public byte AccelCounter;  // Mostly just for Ecco, counts where he is in acceleration cycle. Mostly useless because the first frame is fastest
+            public byte PrevControls;  // Mostly just for Ecco, what buttons were pressed last frame
+            public byte CurControls;   // Mostly just for Ecco, what buttons are pressed now
+            public byte ChargeCtr;     // Mostly just for Ecco, countdown until next charge possible
+            public byte LastWasCharge; // Mostly just for Ecco, was charge the last button touched
+            public byte InvincCount;   // Mostly just for Ecco, countdown until next vulnerable
             public int unk5;
             public int Damage;
-            public wbyte State;
-            public wbyte ControlsLocked;
-            public wbyte unkb0;
-            public wbyte BreachCtr;     // Mostly just for Ecco, how long until B is charge again instead of super-breach
+            public byte State;
+            public byte ControlsLocked;
+            public byte unkb0;
+            public byte BreachCtr;     // Mostly just for Ecco, how long until B is charge again instead of super-breach
             public int ScreenX;        // Object 2d-projected horizontal coord
             public int ScreenY;        // Object 2d-projected vertical coord
-            public wbyte unkb1;
-            public wbyte unkb2;
+            public byte unkb1;
+            public byte unkb2;
         }
         private void ReadObj3D(uint addr, out Obj3D obj)
         {
@@ -309,7 +307,7 @@ namespace BizHawk.Tool.Ecco
                                 Ymax = ((Ypos << 3) / Zpos) + 0x6000;
                                 dx = Xmax - Xcur;
                                 dy = Ymax - Ycur;
-                                wshort ang = Ecco2Asin(dx,dy);
+                                short ang = Ecco2Asin(dx,dy);
                                 Xcur += Mem.ReadS8(0x2CC8 + ang) << 6;
                                 Ycur += Mem.ReadS8(0x2BC8 + ang) << 6;
                                 int rad = Math.Max(((OctRad(dx, dy) >> 8) + 0x1F) >> 5, 1);

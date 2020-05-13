@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using System.IO;
 
-using BizHawk.Client.ApiHawk;
 using BizHawk.Client.Common;
-using BizHawk.Emulation.Common;
-using BizHawk.Client.ApiHawk.Classes.Events;
+using BizHawk.Client.EmuHawk;
 using BizHawk.Tool.Ecco;
 
 namespace BizHawk.Client.EmuHawk
 {
+	//As you can see this is a dedicated attribute. You can write the name of your tool, a small description
+	[ExternalTool(CustomMainForm.ToolName, Description = CustomMainForm.ToolDescription)]
+	
+	//and give an icon. The icon should be compiled as an embedded resource and you must give the entire path
+	[ExternalToolEmbeddedIcon(CustomMainForm.IconPath)]
+
+	//This attribute says what the tool is for
+	//By setting this, your tool is contextualized, that mean you can't load it if emulator is in state you don't want
+	//It avoid crash
+	[ExternalToolApplicability.SingleSystem(CoreSystem.Genesis)]
+
 	/// <summary>
+
 	/// Here your first form
 	/// /!\ it MUST be called CustomMainForm and implements IExternalToolForm
 	/// Take also care of the namespace
@@ -76,30 +84,7 @@ namespace BizHawk.Client.EmuHawk
 		#endregion
 
 		#region Winform Methods
-		private void button3_Click(object sender, EventArgs e)
-		{
-			for (int i = 0; i < 600; i++)
-			{
-				if (i % 60 == 0)
-				{
-					Joypad j1 = ClientApi.GetInput(1);
-					j1.AddInput(JoypadButton.A);
-					ClientApi.SetInput(1, j1);
-
-					ClientApi.DoFrameAdvance();
-
-					j1.RemoveInput(JoypadButton.A);
-					ClientApi.SetInput(1, j1);
-					ClientApi.DoFrameAdvance();
-				}
-				ClientApi.DoFrameAdvance();
-			}
-			Joypad j = ClientApi.GetInput(1);
-			j.ClearInputs();
-			ClientApi.SetInput(1, j);
-		}
-
-        private void mapDumpCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void mapDumpCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _tool.SetMapDumping(mapDumpCheckbox.Checked);
         }
@@ -182,18 +167,6 @@ namespace BizHawk.Client.EmuHawk
         #endregion
 
         #region BizHawk Required methods
-        /// <summary>
-        /// Return true if you want the <see cref="UpdateValues"/> method
-        /// to be called before rendering
-        /// </summary>
-        public bool UpdateBefore
-		{
-			get
-			{
-				return true;
-			}
-		}
-
 		public bool AskSaveChanges()
 		{
 			return true;
@@ -218,37 +191,27 @@ namespace BizHawk.Client.EmuHawk
         /// <summary>
         /// New extensible update method
         /// </summary>
-        public void NewUpdate(ToolFormUpdateType type)
+        public void UpdateValues(ToolFormUpdateType type)
         {
             switch (type)
             {
-                case ToolFormUpdateType.Reset:
+                case ToolFormUpdateType.General:
                     Init();
                     break;
                 case ToolFormUpdateType.PreFrame:
-                    SuspendLayout();
-                    _tool.PreFrameCallback();
-                    break;
+					_tool.PreFrameCallback();
+					ResumeLayout(true);
+					SuspendLayout();
+					break;
                 case ToolFormUpdateType.PostFrame:
-                    _tool.PostFrameCallback();
-                    ResumeLayout(false);
+					_tool.PostFrameCallback();
+					ResumeLayout(true);
+					SuspendLayout();
                     break;
                 default:
                     break;
             }
         }
-            
-        /// <summary>
-        /// This method is called when a frame is rendered
-        /// You can comapre it the lua equivalent emu.frameadvance()
-        /// </summary>
-        public void UpdateValues()
-		{
-			if (Global.Game.Name != "Null")
-			{
-				//Update form
-			}
-		}
-		#endregion BizHawk Required methods
+        #endregion BizHawk Required methods
 	}
 }

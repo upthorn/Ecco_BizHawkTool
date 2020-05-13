@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using BizHawk.Client.ApiHawk;
+using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
 
 // General Information about an assembly is controlled through the following 
@@ -16,18 +16,6 @@ using BizHawk.Client.EmuHawk;
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
-//As you can see this is a dedicated attribute. You can write the name of your tool, a small description
-//and give an icon. The icon should be compiled as an embedded resource and you must give the entire path
-[assembly: BizHawkExternalTool(CustomMainForm.ToolName, CustomMainForm.ToolDescription, CustomMainForm.IconPath)]
-
-//This attribute say what the is for. here, I don't anything
-//It's equivalent to [assembly: BizHawkExternalToolUsage(BizHawkExternalToolUsage.Global, string.Empty)]
-//Here is an example for an emulator specific: BizHawkExternalToolUsage(BizHawkExternalToolUsage.EmulatorSpecific, EmulatedSystem.NES)]
-//Here is an example for an game specific: BizHawkExternalToolUsage(BizHawkExternalToolUsage.GameSpecific, "6B47BB75D16514B6A476AA0C73A683A2A4C18765")] => Super Mario World (USA)
-//By setting this, your tool is contextualized, that mean you can't load it if emulator is in state you don't want
-//It avoid crash
-[assembly: BizHawkExternalToolUsage(BizHawkExternalToolUsage.EmulatorSpecific, CoreSystem.Genesis)]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

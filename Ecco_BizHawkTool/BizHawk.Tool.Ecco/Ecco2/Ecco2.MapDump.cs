@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 
-using BizHawk.Client.ApiHawk;
+using BizHawk.Client.EmuHawk;
 using BizHawk.Emulation.Cores.Consoles.Sega.gpgx;
 
 namespace BizHawk.Tool.Ecco
@@ -26,7 +26,7 @@ namespace BizHawk.Tool.Ecco
 		private void PreProcessMapDump()
         {
             uint _levelTime = Mem.ReadU16(AddrGlobal.LevelFrameCount);
-            int _levelID = Mem.ReadS8(AddrGlobal.LevelID);
+            _levelID = Mem.ReadS8(AddrGlobal.LevelID);
             int[] nameGroupLengths =
             {
                 7,1,11,6,

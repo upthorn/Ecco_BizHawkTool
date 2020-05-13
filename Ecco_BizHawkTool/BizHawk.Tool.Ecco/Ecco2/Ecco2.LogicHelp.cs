@@ -1,14 +1,12 @@
 ﻿using System;
 
-using BizHawk.Emulation.Common.WorkingTypes;
-
 namespace BizHawk.Tool.Ecco
 {
     partial class Ecco2Tool
     {
-        private wshort Ecco2Asin(int dx, int dy)
+        private short Ecco2Asin(int dx, int dy)
         {
-            wshort angle;
+            short angle;
             int abs_dx = Math.Abs(dx >> 6) & 0xFFFF;
             int abs_dy = Math.Abs(dy >> 6) & 0xFFFF;
             if (abs_dx == abs_dy)
@@ -57,22 +55,22 @@ namespace BizHawk.Tool.Ecco
                 {
                     if (dy > 0)
                     {
-                        angle = abs_dy;
+                        angle = (short) abs_dy;
                     }
                     else
                     {
-                        angle = 0xff - abs_dy;
+                        angle = (short) (0xff - abs_dy);
                     }
                 }
                 else
                 {
                     if (dy > 0)
                     {
-                        angle = 0x7f - abs_dy;
+                        angle = (short) (0x7f - abs_dy);
                     }
                     else
                     {
-                        angle = 0x81 + abs_dy;
+                        angle = (short) (0x81 + abs_dy);
                     }
                 }
             }

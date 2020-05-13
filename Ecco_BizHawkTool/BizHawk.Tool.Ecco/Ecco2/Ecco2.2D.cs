@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-using BizHawk.Emulation.Common.WorkingTypes;
-
 namespace BizHawk.Tool.Ecco
 {
     partial class Ecco2Tool : EccoToolBase
@@ -545,15 +543,15 @@ namespace BizHawk.Tool.Ecco
             public uint PtrSubObj;     // Ptr to next subobj in chain
             public uint PtrSubObj2;    // Ptr to prev subobj in chain or next subobj in chain 2
             public uint PtrMainFunc;   // Ptr to main function address. Proxy for object type, because it defines obj behavior
-            public wushort Flags;       // Bitwise bool array. Unsure what values mean but all 0s is marker for deletion
-            public wbyte PID;           // Persistence ID, every obj loaded from level layouts has a unique one
-            public wbyte ObjDefIndex;   // Partial proxy for object's *original* type, but spawned objs and subobjs don't have useful info here
-            public wbyte unkb0;
-            public wbyte Mode;          // Basically an enum that controls flow through obj logic;
-            public wbyte unkb1;
-            public wbyte unkb2;
-            public wshort XChunk;       // Pos.X / 128 pixels, often used by loading/unloading logic
-            public wshort YChunk;       // Pos.Y / 128 pixels, often used by loading/unloading logic
+            public ushort Flags;       // Bitwise bool array. Unsure what values mean but all 0s is marker for deletion
+            public byte PID;           // Persistence ID, every obj loaded from level layouts has a unique one
+            public byte ObjDefIndex;   // Partial proxy for object's *original* type, but spawned objs and subobjs don't have useful info here
+            public byte unkb0;
+            public byte Mode;          // Basically an enum that controls flow through obj logic;
+            public byte unkb1;
+            public byte unkb2;
+            public short XChunk;       // Pos.X / 128 pixels, often used by loading/unloading logic
+            public short YChunk;       // Pos.Y / 128 pixels, often used by loading/unloading logic
             public Point Orig;         // Initial position on loading
             public Point Mid;          // Center point of obect. All other points calculated from this.
             public Point TopLeft;      // Top-left corner of rectangular hitbox, if any
@@ -566,28 +564,28 @@ namespace BizHawk.Tool.Ecco
             public Size Vel1;         // Object movement speed
             public int Vel2X;          // Secondary horizontal movement speed or scratch variable
             public int Vel2Y;          // Secondary vertical movement speed or scratch variable
-            public wshort ScreenX;      // X position relative to camera, pixel truncated
-            public wshort ScreenY;      // Y position relative to camera, pixel truncated
+            public short ScreenX;      // X position relative to camera, pixel truncated
+            public short ScreenY;      // Y position relative to camera, pixel truncated
             public uint PtrPLC;        // Pointer to sprite information structure
-            public wushort AnimFrame;   // Frame of current animation, sometimes used in behavior logic
-            public wushort StateCtr;    // Animation related nonlag frame counter, often used in behavior logic
-            public wbyte Animation;     // ID of current animation, somtimes used in behavior logic
-            public wbyte unkb3;
+            public ushort AnimFrame;   // Frame of current animation, sometimes used in behavior logic
+            public ushort StateCtr;    // Animation related nonlag frame counter, often used in behavior logic
+            public byte Animation;     // ID of current animation, somtimes used in behavior logic
+            public byte unkb3;
             public int Vel3X;          // Scratch variable sometimes related to horizontal movement speed
             public int Vel3Y;          // Scratch variable sometimes related to vertical movement speed
-            public wsbyte TrgAng;       // 8Bit scratch variable often related to movement angle
-            public wbyte HP;            // Hitpoints remaining. Death usually occurs on 1, not 0.
-            public wbyte State;         // Behavior control variable
-            public wsbyte CurAng;       // 8Bit scratch variable often related to movement angle
+            public sbyte TrgAng;       // 8Bit scratch variable often related to movement angle
+            public byte HP;            // Hitpoints remaining. Death usually occurs on 1, not 0.
+            public byte State;         // Behavior control variable
+            public sbyte CurAng;       // 8Bit scratch variable often related to movement angle
             public CollType CollisionType; // Enum id of collision type
-            public wsbyte SonarCtr;     // Objects will only respond to sonar when this is 0. Usually counts down every frame it isn't.
+            public sbyte SonarCtr;     // Objects will only respond to sonar when this is 0. Usually counts down every frame it isn't.
         }
         private unsafe struct PlayerObj
         {
-            public wushort Flags;       // Bitwise bool array. Unsure what values mean.
+            public ushort Flags;       // Bitwise bool array. Unsure what values mean.
             public Size CurrentVel;     // Speed and direction of air/water stream effects
-            public wbyte unkb0;
-            public wbyte unkb1;
+            public byte unkb0;
+            public byte unkb1;
             public int unk0;
             public int unk1;
             public int unk2;
@@ -596,14 +594,14 @@ namespace BizHawk.Tool.Ecco
             public int unkSnr1;
             public Size SonarSize;      // Width and Height of sonar blast hitrect
             public Size SonarVel;       // Speed and dir of sonar blast
-            public wbyte SonarChrgFlag;   // Is this a charge sonar?
-            public wbyte unkSnrb0;
-            public wshort unkSnrs0;
-            public wshort SonarAng;     // Direction sonar is moving
-            public wshort Form;         // Animal that Ecco currently is
-            public wushort SonarFlags;  // Should Sonar break rocks/dislodge barrier glyphs. Also a bunch of nonsonar stuff I guess
-            public wshort HP;           // Ecco's HP. Usually capped at 56, usually goes down by increments of 4. Game GUI only displays first 40.
-            public wshort Air;          // Ecco's air meter. Starts at 448, goes down by 1 per frame. Game GUI only displays first 320.
+            public byte SonarChrgFlag;   // Is this a charge sonar?
+            public byte unkSnrb0;
+            public short unkSnrs0;
+            public short SonarAng;     // Direction sonar is moving
+            public short Form;         // Animal that Ecco currently is
+            public ushort SonarFlags;  // Should Sonar break rocks/dislodge barrier glyphs. Also a bunch of nonsonar stuff I guess
+            public short HP;           // Ecco's HP. Usually capped at 56, usually goes down by increments of 4. Game GUI only displays first 40.
+            public short Air;          // Ecco's air meter. Starts at 448, goes down by 1 per frame. Game GUI only displays first 320.
             public Point Mid;           // Ecco's midpoint. All other Ecco positions calculated from this
             public Point Nose;          // Tip of Ecco's nose
             public Point Tail;          // Rear-most of Ecco's collision points
@@ -613,65 +611,65 @@ namespace BizHawk.Tool.Ecco
             public int TurnSpeedLoss;   // Related to how Ecco loses speed during 180s
             public int unk3;
             public int unk4;
-            public wshort Angle;        // Direction Ecco is pointing, in units of 1/65536 of a circle
-            public wshort RotSpeed;     // Ecco's basic angle rotation speed (3/256 of a circle)
+            public short Angle;        // Direction Ecco is pointing, in units of 1/65536 of a circle
+            public short RotSpeed;     // Ecco's basic angle rotation speed (3/256 of a circle)
             public int FlopSpeed;       // Related to how fast Ecco flips in air. Didn't find exact formula relating this to angle change
-            public wshort TgtAng;       // Direction Ecco wants to point.
+            public short TgtAng;       // Direction Ecco wants to point.
             public Point Focus;         // Where camera should focus. Determined from Pos and sum of Vels
-            public wshort unks0;
-            public wshort unks1;
-            public wbyte unkb2;
-            public wbyte PrevControls;  // What buttons were pressed last frame
-            public wbyte CurControls;   // What buttons are pressed now
-            public wbyte unkb3;
-            public wbyte unkb4;
-            public wbyte DecelTimer;    // Counts down from 60 after acceleration happens. Slow speedloss when <= 30, fast speed loss when 0
-            public wbyte AccelTimer;    // Where we are in accel cycle caps at 12. Slow accel from 1-6, fast accel from 7-11. No accel at 0 or 12.
-            public wbyte unkb5;
-            public wbyte InvincTimer;   // How long until next vulnerable
-            public wbyte AccelState;
+            public short unks0;
+            public short unks1;
+            public byte unkb2;
+            public byte PrevControls;  // What buttons were pressed last frame
+            public byte CurControls;   // What buttons are pressed now
+            public byte unkb3;
+            public byte unkb4;
+            public byte DecelTimer;    // Counts down from 60 after acceleration happens. Slow speedloss when <= 30, fast speed loss when 0
+            public byte AccelTimer;    // Where we are in accel cycle caps at 12. Slow accel from 1-6, fast accel from 7-11. No accel at 0 or 12.
+            public byte unkb5;
+            public byte InvincTimer;   // How long until next vulnerable
+            public byte AccelState;
             public int WaterLevel;     // Because ecco needs a local copy, I guess
             public uint PLC;           // Pointer to sprite information structure
-            public wshort unks2;
-            public wshort Animation;
-            public wshort AnimFrame;
-            public wshort unks3;
-            public wshort unks4;
+            public short unks2;
+            public short Animation;
+            public short AnimFrame;
+            public short unks3;
+            public short unks4;
             public fixed int Xhist[16];
             public fixed int YHist[16];
             public fixed short AngHist[16];
             public fixed short unkSTable[16];
             public fixed short unkSTable1[16];
-            public wshort unks5;
-            public wshort unks6;
-            public wshort XChunk;       // Pos.X / 128 pixels. Used for loading logic.
-            public wshort YChunk;       // Pos.Y / 128 pixels. Used for loading logic.
-            public wshort unks7;
-            public wshort unks8;
-            public wbyte ChargeCounter; // Where we are in a charge/countdown to when ecco is next able to charge
-            public wbyte unkb6;
-            public wbyte MoveMode;      // 0 for swimming, 1 for tailwalking, 2 for midair, 3 for plunging, 4 for 180, 5 for midair 180, 6 for null, 7 for frozen
-            public wbyte unkb7;
-            public wbyte unkb8;
-            public wbyte HistIdx;
-            public wbyte unkb9;
-            public wbyte SonarState;
-            public wshort unks9;
-            public wbyte unkba;
-            public wbyte unkbb;
-            public wshort unksa;
+            public short unks5;
+            public short unks6;
+            public short XChunk;       // Pos.X / 128 pixels. Used for loading logic.
+            public short YChunk;       // Pos.Y / 128 pixels. Used for loading logic.
+            public short unks7;
+            public short unks8;
+            public byte ChargeCounter; // Where we are in a charge/countdown to when ecco is next able to charge
+            public byte unkb6;
+            public byte MoveMode;      // 0 for swimming, 1 for tailwalking, 2 for midair, 3 for plunging, 4 for 180, 5 for midair 180, 6 for null, 7 for frozen
+            public byte unkb7;
+            public byte unkb8;
+            public byte HistIdx;
+            public byte unkb9;
+            public byte SonarState;
+            public short unks9;
+            public byte unkba;
+            public byte unkbb;
+            public short unksa;
             public uint PtrCarriedObj;
-            public wbyte unkbc;
-            public wbyte unkbd;
-            public wbyte unkbe;
-            public wbyte unkbf;
-            public wbyte unkbg;
-            public wbyte unkbh;
-            public wbyte unkbi;
-            public wbyte unkbj;
-            public wbyte GravDir;
-            public wbyte unkbk;
-            public wushort Flags2;
+            public byte unkbc;
+            public byte unkbd;
+            public byte unkbe;
+            public byte unkbf;
+            public byte unkbg;
+            public byte unkbh;
+            public byte unkbi;
+            public byte unkbj;
+            public byte GravDir;
+            public byte unkbk;
+            public ushort Flags2;
             public int unk5;
             public int unk6;
         }
@@ -825,7 +823,7 @@ namespace BizHawk.Tool.Ecco
             obj.unk5 = ReadS32AndAdvance(ref addr);
             obj.unk6 = ReadS32AndAdvance(ref addr);
         }
-        private static class Addr2D
+        private static class Addr2D	
         {
             public const uint LevelWidth = 0xFFA7A8;
             public const uint LevelHeight = 0xFFA7AC;
@@ -2345,7 +2343,7 @@ namespace BizHawk.Tool.Ecco
 
             //Ecco curObj.HP and Air
             int i = 0;
-            wshort HP = _player2D.HP << 3;
+            short HP = (short) (_player2D.HP << 3);
             int off = 0;
             for (int j = 0; j < _player2D.Air; j++)
             {
