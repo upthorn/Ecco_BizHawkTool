@@ -119,17 +119,23 @@ namespace BizHawk.Tool.Ecco
                 default:
                     break;
             }
-            _prevF = Mem.ReadU32(AddrGlobal.NonLagFrameCount);
-        }
-        public override void PostFrameCallback()
+			_prevF = Mem.ReadU32(AddrGlobal.NonLagFrameCount);
+		}
+		public override void CheckLag()
+		{
+			uint frame = Mem.ReadU32(AddrGlobal.NonLagFrameCount);
+			if ((frame <= _prevF) && !Emu.IsLagged())
+			{
+				Emu.SetIsLagged(true);
+				Emu.SetLagCount(Emu.LagCount() + 1);
+			}
+			_prevF = Mem.ReadU32(AddrGlobal.NonLagFrameCount);
+		}
+		public override void PostFrameCallback()
         {
-            uint frame = Mem.ReadU32(AddrGlobal.NonLagFrameCount);
-            if ((frame <= _prevF) && !Emu.IsLagged())
-            {
-                Emu.SetIsLagged(true);
-                Emu.SetLagCount(Emu.LagCount() + 1);
-            }
-            uint mode = Mem.ReadByte(AddrGlobal.GameMode);
+			uint frame = Mem.ReadU32(AddrGlobal.NonLagFrameCount);
+			CheckLag();
+			uint mode = Mem.ReadByte(AddrGlobal.GameMode);
             _levelTime = Mem.ReadU16(AddrGlobal.LevelFrameCount);
             ResetStatusLines();
             StatusText($"Frames: {Mem.ReadU32(AddrGlobal.FrameCount),7} Nonlag: {frame,7} Level: {_levelTime,6} GameMode: {mode:X2}");
