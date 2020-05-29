@@ -76,34 +76,14 @@ namespace BizHawk.Client.EmuHawk
 		#endregion
 
 		#region Winform Methods
-		private void button3_Click(object sender, EventArgs e)
-		{
-			for (int i = 0; i < 600; i++)
-			{
-				if (i % 60 == 0)
-				{
-					Joypad j1 = ClientApi.GetInput(1);
-					j1.AddInput(JoypadButton.A);
-					ClientApi.SetInput(1, j1);
-
-					ClientApi.DoFrameAdvance();
-
-					j1.RemoveInput(JoypadButton.A);
-					ClientApi.SetInput(1, j1);
-					ClientApi.DoFrameAdvance();
-				}
-				ClientApi.DoFrameAdvance();
-			}
-			Joypad j = ClientApi.GetInput(1);
-			j.ClearInputs();
-			ClientApi.SetInput(1, j);
-		}
-
-        private void mapDumpCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _tool.SetMapDumping(mapDumpCheckbox.Checked);
         }
-        private void autoFireCheckbox_CheckedChanged(object sender, EventArgs e)
+		private void showNumbers_CheckedChanged(object sender, EventArgs e)
+		{
+			_tool.SetShowNumbers(showNumbersCheckbox.Checked);
+		}
+		private void autoFireCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             _tool.SetAutofire(autoFireCheckbox.Checked);
         }

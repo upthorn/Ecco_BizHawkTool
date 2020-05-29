@@ -24,7 +24,8 @@ namespace BizHawk.Tool.Ecco
         protected bool _mapDumpingEnabled = false;
         protected int _mapDumpState = 0;
         protected bool _autofireEnabled = false;
-        protected string MapDumpFolder => _form.mapDumpFolder.Text;
+		protected bool _showNumbers = false;
+		protected string MapDumpFolder => _form.mapDumpFolder.Text;
         public EccoToolBase(CustomMainForm f, GameRegion r)
         {
             _form = f;
@@ -37,6 +38,10 @@ namespace BizHawk.Tool.Ecco
         {
             _autofireEnabled = on;
         }
+		public void SetShowNumbers(bool on)
+		{
+			_showNumbers = on;
+		}
         public abstract void PreFrameCallback();
         public abstract void PostFrameCallback();
     }

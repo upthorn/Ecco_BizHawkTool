@@ -104,6 +104,7 @@ namespace BizHawk.Tool.Ecco
         }
         private enum GFXFuncType
         {
+			None,
             PartialAsterite,
             FullAsterite,
             unknown
@@ -142,7 +143,7 @@ namespace BizHawk.Tool.Ecco
             VortexSoldier,
             Glyph,
             BarrierGlyph,
-            CetaceanGuide,
+			CetaceanGuide,
             OrcaLost,
             OrcaIgnorable,
             OrcaMother,
@@ -208,7 +209,7 @@ namespace BizHawk.Tool.Ecco
             BombSpawner,
             Explosion,
             PulsarBlast
-        }
+		}
         private abstract class Obj2DTypeProvider
         {
             public abstract ObjType GetType(uint addr);
@@ -220,13 +221,227 @@ namespace BizHawk.Tool.Ecco
             private Dictionary<uint, GFXFuncType> _GFXMap = new Dictionary<uint, GFXFuncType>();
             private void InitTypeMap()
             {
-
-            }
-            private void InitGFXMap()
+				_typeMap[0x0] = ObjType.NoDisplay;
+				_typeMap[0xD8E9C] = ObjType.NoDisplay;
+				_typeMap[0xD8D0A] = ObjType.NoDisplay;
+/*				_typeMap[0x9E3AA] = ObjType.NoDisplay;
+				_typeMap[0x9E5A8] = ObjType.NoDisplay;*/
+				_typeMap[0x9E786] = ObjType.NoDisplay;
+				_typeMap[0xAD1FE] = ObjType.NoDisplay;
+				_typeMap[0xD9998] = ObjType.NoDisplay;
+				_typeMap[0xD9D5C] = ObjType.NoDisplay;
+				_typeMap[0xD9560] = ObjType.NoDisplay;
+				_typeMap[0x9E6BE] = ObjType.NoDisplay;
+/*				_typeMap[0xDF86A] = ObjType.NoDisplay;
+				_typeMap[0xB159A] = ObjType.NoDisplay;
+				_typeMap[0xDA898] = ObjType.NoDisplay;
+				_typeMap[0xDA720] = ObjType.NoDisplay;
+				_typeMap[0xD9FDC] = ObjType.NoDisplay;
+				_typeMap[0xC0D4E] = ObjType.NoDisplay;
+				_typeMap[0xC0D38] = ObjType.NoDisplay;
+				_typeMap[0xDCDAC] = ObjType.NoDisplay;*/
+				_typeMap[0xC105E] = ObjType.NoDisplay;
+/*				_typeMap[0xE3CD2] = ObjType.NoDisplay;
+				_typeMap[0xE385E] = ObjType.NoDisplay;
+				_typeMap[0xC20E8] = ObjType.NoDisplay;
+				_typeMap[0xC22A6] = ObjType.NoDisplay;
+				_typeMap[0xC31B4] = ObjType.NoDisplay;
+				_typeMap[0xA9EF0] = ObjType.NoDisplay;
+				_typeMap[0xA9D90] = ObjType.NoDisplay;
+				_typeMap[0xC6304] = ObjType.NoDisplay;
+				_typeMap[0xC26E4] = ObjType.NoDisplay;
+				_typeMap[0xAEE68] = ObjType.NoDisplay;*/
+				_typeMap[0xD9E4A] = ObjType.NoDisplay;
+				_typeMap[0xD98CE] = ObjType.NoDisplay;
+				_typeMap[0x9C6DA] = ObjType.NoDisplay;
+				_typeMap[0x9CBB0] = ObjType.NoDisplay;
+				_typeMap[0x9F252] = ObjType.NoDisplay;
+/*				_typeMap[0xA57F2] = ObjType.NoDisplay;
+				_typeMap[0xC3A42] = ObjType.NoDisplay;
+				_typeMap[0xB33D8] = ObjType.NoDisplay;*/
+				_typeMap[0xB356A] = ObjType.NoDisplay;
+/*				_typeMap[0xA1676] = ObjType.NoDisplay;
+				_typeMap[0xB6822] = ObjType.NoDisplay;
+				_typeMap[0xD12E2] = ObjType.NoDisplay;*/
+				_typeMap[0xA7AC8] = ObjType.DefaultEnemy;
+				_typeMap[0x9D556] = ObjType.DefaultEnemy;
+				_typeMap[0xA7572] = ObjType.DefaultEnemy;
+				_typeMap[0xC0806] = ObjType.DefaultEnemy;
+//				_typeMap[0xA5378] = ObjType.DefaultEnemy;
+				_typeMap[0x9D76C] = ObjType.DefaultEnemy;
+				_typeMap[0xA3222] = ObjType.DefaultEnemy;
+				_typeMap[0xC02C0] = ObjType.DefaultEnemy;
+/*				_typeMap[0xAC736] = ObjType.DefaultEnemy;
+				_typeMap[0xB716E] = ObjType.DefaultEnemy;
+				_typeMap[0x9E546] = ObjType.DefaultEnemy;*/
+				_typeMap[0xC31D4] = ObjType.DefaultEnemy;
+//				_typeMap[0xA0F04] = ObjType.DefaultEnemy;
+				_typeMap[0xA6FAA] = ObjType.DefaultEnemy;
+//				_typeMap[0xAA12E] = ObjType.DefaultEnemy;
+				_typeMap[0xA96E2] = ObjType.DefaultEnemy;
+				_typeMap[0xA74BE] = ObjType.DefaultEnemy;
+				_typeMap[0xA7442] = ObjType.DefaultEnemy;
+				_typeMap[0xA793C] = ObjType.DefaultEnemy;
+/*				_typeMap[0xC3EF0] = ObjType.DefaultEnemy;
+				_typeMap[0xC3F90] = ObjType.DefaultEnemy;*/
+				_typeMap[0xC440C] = ObjType.DefaultEnemy;
+/*				_typeMap[0xC3DB8] = ObjType.DefaultEnemy;
+				_typeMap[0xAC766] = ObjType.DefaultEnemy;
+				_typeMap[0xC5F66] = ObjType.DefaultEnemy;
+				_typeMap[0xB0C7E] = ObjType.DefaultEnemy;
+				_typeMap[0xB17F2] = ObjType.DefaultEnemy;
+				_typeMap[0xB0CDC] = ObjType.DefaultEnemy;
+				_typeMap[0xC2106] = ObjType.DefaultEnemy;
+				_typeMap[0xC208C] = ObjType.DefaultEnemy;
+				_typeMap[0xC1EBA] = ObjType.DefaultEnemy;
+				_typeMap[0xC251C] = ObjType.DefaultEnemy;
+				_typeMap[0xC32C8] = ObjType.DefaultEnemy;
+				_typeMap[0xAB5E6] = ObjType.DefaultEnemy;
+				_typeMap[0xAC796] = ObjType.DefaultEnemy;*/
+				_typeMap[0xA9C3E] = ObjType.ImmobileEnemy;
+				_typeMap[0xA3FF8] = ObjType.TubeWhirlpool;
+				_typeMap[0xA44F8] = ObjType.TubeWhirlpoolInactive;
+				_typeMap[0xC099A] = ObjType.TwoTidesEventStartTrigger;
+				_typeMap[0xC0A8A] = ObjType.TwoTidesEventEndTrigger;
+				_typeMap[0xD9F2E] = ObjType.LevelEndCutsceneTrigger;
+//				_typeMap[0xDA9EA] = ObjType.LevelEndCutsceneTrigger;
+				_typeMap[0xBF720] = ObjType.PoisonBubble;
+//				_typeMap[0xDA2C0] = ObjType.LunarBayCutsceneEcco;
+				_typeMap[0xA82EC] = ObjType.FriendlyDolphin;
+				_typeMap[0xAAAA6] = ObjType.FriendlyDolphin;
+				_typeMap[0xB5614] = ObjType.FriendlyDolphin;
+/*				_typeMap[0xAF960] = ObjType.MirrorDolphinCharging1;
+				_typeMap[0xAF86B] = ObjType.MirrorDolphinCharging2;*/
+				_typeMap[0xD917C] = ObjType.TrelliaAfterCutscene;
+				_typeMap[0xAD194] = ObjType.MetaSphereInactive;
+				_typeMap[0xAD25E] = ObjType.MetaSphereInactive;
+				_typeMap[0xD90B6] = ObjType.TrelliaDuringCutscene;
+				_typeMap[0xA9A3E] = ObjType.EnemySpawner;
+/*				_typeMap[0xC2684] = ObjType.CreditsDolphin;
+				_typeMap[0xB7DF4] = ObjType.StuckMagicArm;
+				_typeMap[0xE47EE] = ObjType.VortexSunflower;*/
+				_typeMap[0xDC184] = ObjType.MedusaBoss;
+/*				_typeMap[0xDCEE0] = ObjType.GlobeHolderBoss;
+				_typeMap[0xE1BA2] = ObjType.VortexQueenBoss;*/
+				_typeMap[0xA60B2] = ObjType.FutureDolphin;
+				_typeMap[0x9FA90] = ObjType.PushableRock;
+				_typeMap[0x9F9BC] = ObjType.PushableRock;
+				_typeMap[0x9FB80] = ObjType.PushableShieldingRock;
+/*				_typeMap[0xA091E] = ObjType.BlueWhale;
+				_typeMap[0xE66D8] = ObjType.VortexLarva;
+				_typeMap[0xA997C] = ObjType.VortexSoldier;*/
+				_typeMap[0xA712A] = ObjType.Glyph;
+				_typeMap[0xC48F0] = ObjType.BarrierGlyph;
+				_typeMap[0xB4FAC] = ObjType.CetaceanGuide;
+				_typeMap[0xB5052] = ObjType.CetaceanGuide;
+				_typeMap[0xB50F7] = ObjType.CetaceanGuide;
+				_typeMap[0xB52FC] = ObjType.CetaceanGuide;
+				_typeMap[0xB5426] = ObjType.CetaceanGuide;
+				_typeMap[0xB5E18] = ObjType.OrcaLost;
+				_typeMap[0xB5A0A] = ObjType.OrcaIgnorable;
+				_typeMap[0xB5FDE] = ObjType.OrcaIgnorable;
+				_typeMap[0xB6122] = ObjType.OrcaIgnorable;
+				_typeMap[0xB672A] = ObjType.OrcaMother;
+				_typeMap[0xC4724] = ObjType.GlyphBaseBroken;
+				_typeMap[0xAC722] = ObjType.GlyphTopReparing;
+				_typeMap[0xBEEE4] = ObjType.GlyphTopBroken;
+				_typeMap[0xAFEAC] = ObjType.MirrorDolphin;
+/*				_typeMap[0xAF43E] = ObjType.VortexLightningTrap;
+				_typeMap[0xA6E24] = ObjType.ForceField;*/
+				_typeMap[0xC4F60] = ObjType.PulsarPowerUp;
+//				_typeMap[0xAA32C] = ObjType.VortexBulletSpawner;
+				_typeMap[0xC341C] = ObjType.SkyBubbles;
+				_typeMap[0x9FF5E] = ObjType.AirPocket;
+//				_typeMap[0xBFC14] = ObjType.PushableFish;
+				_typeMap[0xBEE98] = ObjType.SlowKelp;
+				_typeMap[0xAD28E] = ObjType.MetaSphere;
+				_typeMap[0xAD022] = ObjType.Turtle;
+				_typeMap[0xACF5E] = ObjType.RetractingTurtle;
+				_typeMap[0x9E366] = ObjType.StarWreath;
+				_typeMap[0x9DC54] = ObjType.Fish;
+				_typeMap[0x9DF06] = ObjType.Fish;
+/*				_typeMap[0xAD87C] = ObjType.EnemyDolphin;
+				_typeMap[0xC6128] = ObjType.DroneFightingDolphin;
+				_typeMap[0xC605A] = ObjType.DroneFightingDolphinSonarBlast;
+				_typeMap[0xB1BE0] = ObjType.AsteriteGlobe;
+				_typeMap[0xB1A10] = ObjType.AsteriteGlobeFollowing;
+				_typeMap[0xB1920] = ObjType.AsteriteGlobeOrbiting;
+				_typeMap[0xC28A0] = ObjType.FourIslandsControlPoint;*/
+				_typeMap[0xC6AB0] = ObjType.MergingGlyphBound;
+				_typeMap[0xC6D76] = ObjType.MergingGlyphFree;
+				_typeMap[0xC6F02] = ObjType.MergingGlyphPulled;
+				_typeMap[0xC6FFE] = ObjType.MergingGlyphDelivered;
+				_typeMap[0xC713A] = ObjType.MergingGlyphGoal;
+				_typeMap[0xC7514] = ObjType.MergingGlyphMerging1;
+				_typeMap[0xC7030] = ObjType.MergingGylphMerging2;
+/*				_typeMap[0xC152C] = ObjType.VortexCaptureDrone;
+				_typeMap[0xA306E] = ObjType.VortexAmeoboid;
+				_typeMap[0xA35A6] = ObjType.VortexAmeoboid2;
+				_typeMap[0xAC9F2] = ObjType.SwarmSpawner;
+				_typeMap[0xA538A] = ObjType.VortexBomb;*/
+				_typeMap[0x9D31A] = ObjType.RemnantStars;
+//				_typeMap[0x9CA10] = ObjType.MovingBlock;
+				_typeMap[0x9D0E6] = ObjType.MovingBlock2;
+				_typeMap[0x9BAB8] = ObjType.NullFunc;
+				_typeMap[0xC5D38] = ObjType.basic;
+/*				_typeMap[0xDEE3C] = ObjType.basic;
+				_typeMap[0xDF8A0] = ObjType.basic;
+				_typeMap[0xDFA98] = ObjType.basic;
+				_typeMap[0xA0BE4] = ObjType.basic;
+				_typeMap[0x9FEB2] = ObjType.basic;
+				_typeMap[0xA5670] = ObjType.basic;*/
+				_typeMap[0xAF0FA] = ObjType.basic;
+//				_typeMap[0xAB65A] = ObjType.basic;
+				_typeMap[0x9F7CC] = ObjType.basic;
+/*				_typeMap[0xC0152] = ObjType.VortexGate;
+				_typeMap[0xC3330] = ObjType.AtlantisGateHS;
+				_typeMap[0xC35B0] = ObjType.AtlantisGateHM;
+				_typeMap[0xC343A] = ObjType.AtlantisGateV;
+				_typeMap[0xA579A] = ObjType.AntiGravBall;
+				_typeMap[0xDF4E2] = ObjType.ConchBoss;
+				_typeMap[0xA1FE6] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA208E] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA2288] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA27A4] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA2BB0] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA2C50] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA18E2] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB7486] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB864E] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB8A64] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB8C1A] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB904A] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB9728] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB9B6A] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xE069A] = ObjType.ChainLinkAnyPoint;*/
+				_typeMap[0xBAB4E] = ObjType.RockWorm;
+				_typeMap[0xBAA0E] = ObjType.RetractedRockWorm;
+/*				_typeMap[0xE0988] = ObjType.AbyssEel;
+				_typeMap[0xC7052] = ObjType.SongEraser;*/
+				_typeMap[0xA49CE] = ObjType.TeleportRingFixedRad;
+				_typeMap[0xD14F2] = ObjType.TeleportRingFixedRad;
+				_typeMap[0x9F5B0] = ObjType.Current;
+//				_typeMap[0xDEF94] = ObjType.AbyssDeathEel;
+				_typeMap[0xA6A64] = ObjType.Eagle;
+				_typeMap[0x9Bf6A] = ObjType.ScrollController;
+/*				_typeMap[0xE26C2] = ObjType.ScrollController;
+				_typeMap[0xE270E] = ObjType.ScrollController;
+				_typeMap[0xE27D4] = ObjType.ScrollController;*/
+				_typeMap[0x9BE28] = ObjType.ScrollWayPoint;
+/*				_typeMap[0xA5448] = ObjType.BombSpawner;
+				_typeMap[0xA529C] = ObjType.Explosion;
+				_typeMap[0xA5236] = ObjType.Explosion;
+				_typeMap[0xA51E6] = ObjType.Explosion;
+				_typeMap[0xC9222] = ObjType.PulsarBlast;
+				_typeMap[0xC9456] = ObjType.PulsarBlast;*/
+			}
+			private void InitGFXMap()
             {
-
-            }
-            public J2DProvider()
+				_GFXMap[0x9BAB8] = GFXFuncType.None;
+//				_GFXMap[0xB119A] = GFXFuncType.PartialAsterite;
+				_GFXMap[0xB3198] = GFXFuncType.FullAsterite;
+			}
+			public J2DProvider()
             {
                 InitTypeMap();
                 InitGFXMap();
@@ -376,7 +591,7 @@ namespace BizHawk.Tool.Ecco
                 _typeMap[0xBE9C8] = ObjType.GlyphTopBroken;
                 _typeMap[0xAF9CC] = ObjType.MirrorDolphin;
                 _typeMap[0xAF43E] = ObjType.VortexLightningTrap;
-                _typeMap[0xA5E24] = ObjType.ForceField;
+                _typeMap[0xA6E24] = ObjType.ForceField;
                 _typeMap[0xC4A44] = ObjType.PulsarPowerUp;
                 _typeMap[0xAA32C] = ObjType.VortexBulletSpawner;
                 _typeMap[0xC2F00] = ObjType.SkyBubbles;
@@ -463,7 +678,7 @@ namespace BizHawk.Tool.Ecco
                 _typeMap[0xA51E6] = ObjType.Explosion;
                 _typeMap[0xC9222] = ObjType.PulsarBlast;
                 _typeMap[0xC9456] = ObjType.PulsarBlast;
-            }
+			}
             private void InitGFXMap()
             {
                 _GFXMap[0xB119A] = GFXFuncType.PartialAsterite;
@@ -728,102 +943,102 @@ namespace BizHawk.Tool.Ecco
         private void ReadPlayerObj(uint addr, out PlayerObj obj)
         {
             obj = new PlayerObj();
-            obj.Flags = ReadU16AndAdvance(ref addr);
-            obj.CurrentVel.Width = ReadS32AndAdvance(ref addr);
-            obj.CurrentVel.Height = ReadS32AndAdvance(ref addr);
-            obj.unkb0 = ReadByteAndAdvance(ref addr);
-            obj.unkb1 = ReadByteAndAdvance(ref addr);
-            obj.unk0 = ReadS32AndAdvance(ref addr);
-            obj.unk1 = ReadS32AndAdvance(ref addr);
-            obj.unk2 = ReadS32AndAdvance(ref addr);
-            obj.SonarPos.X = ReadS32AndAdvance(ref addr);
-            obj.SonarPos.Y = ReadS32AndAdvance(ref addr);
-            obj.unkSnr0 = ReadS32AndAdvance(ref addr);
-            obj.unkSnr1 = ReadS32AndAdvance(ref addr);
-            obj.SonarSize.Width = ReadS32AndAdvance(ref addr);
-            obj.SonarSize.Height = ReadS32AndAdvance(ref addr);
-            obj.SonarVel.Width = ReadS32AndAdvance(ref addr);
-            obj.SonarVel.Height = ReadS32AndAdvance(ref addr);
-            obj.SonarChrgFlag = ReadByteAndAdvance(ref addr);
-            obj.unkSnrb0 = ReadByteAndAdvance(ref addr);
-            obj.unkSnrs0 = ReadS16AndAdvance(ref addr);
-            obj.SonarAng = ReadS16AndAdvance(ref addr);
-            obj.Form = ReadS16AndAdvance(ref addr);
-            obj.SonarFlags = ReadU16AndAdvance(ref addr);
-            obj.HP = ReadS16AndAdvance(ref addr);
-            obj.Air = ReadS16AndAdvance(ref addr);
-            obj.Mid.X = ReadS32AndAdvance(ref addr);
-            obj.Mid.Y = ReadS32AndAdvance(ref addr);
-            obj.Nose.X = ReadS32AndAdvance(ref addr);
-            obj.Nose.Y = ReadS32AndAdvance(ref addr);
-            obj.Tail.X = ReadS32AndAdvance(ref addr);
-            obj.Tail.Y = ReadS32AndAdvance(ref addr);
-            obj.SwimSpeed = ReadS32AndAdvance(ref addr);
-            obj.SwimVel.Width = ReadS32AndAdvance(ref addr);
-            obj.SwimVel.Height = ReadS32AndAdvance(ref addr);
-            obj.ZipVel.Width = ReadS32AndAdvance(ref addr);
-            obj.ZipVel.Height = ReadS32AndAdvance(ref addr);
-            obj.TurnSpeedLoss = ReadS32AndAdvance(ref addr);
-            obj.unk3 = ReadS32AndAdvance(ref addr);
-            obj.unk4 = ReadS32AndAdvance(ref addr);
-            obj.Angle = ReadS16AndAdvance(ref addr);
-            obj.RotSpeed = ReadS16AndAdvance(ref addr);
-            obj.FlopSpeed = ReadS32AndAdvance(ref addr);
-            obj.TgtAng = ReadS16AndAdvance(ref addr);
-            obj.Focus.X = ReadS32AndAdvance(ref addr);
-            obj.Focus.Y = ReadS32AndAdvance(ref addr);
-            obj.unks0 = ReadS16AndAdvance(ref addr);
-            obj.unks1 = ReadS16AndAdvance(ref addr);
-            obj.unkb2 = ReadByteAndAdvance(ref addr);
-            obj.PrevControls = ReadByteAndAdvance(ref addr);
-            obj.CurControls = ReadByteAndAdvance(ref addr);
-            obj.unkb3 = ReadByteAndAdvance(ref addr);
-            obj.unkb4 = ReadByteAndAdvance(ref addr);
-            obj.DecelTimer = ReadByteAndAdvance(ref addr);
-            obj.AccelTimer = ReadByteAndAdvance(ref addr);
-            obj.unkb5 = ReadByteAndAdvance(ref addr);
-            obj.InvincTimer = ReadByteAndAdvance(ref addr);
-            obj.AccelState = ReadByteAndAdvance(ref addr);
-            obj.WaterLevel = ReadS32AndAdvance(ref addr);
-            obj.PLC = ReadPtrAndAdvance(ref addr);
-            obj.unks2 = ReadS16AndAdvance(ref addr);
-            obj.Animation = ReadS16AndAdvance(ref addr);
-            obj.AnimFrame = ReadS16AndAdvance(ref addr);
-            obj.unks3 = ReadS16AndAdvance(ref addr);
-            obj.unks4 = ReadS16AndAdvance(ref addr);
-            addr += 0xE0;
-            obj.unks5 = ReadS16AndAdvance(ref addr);
-            obj.unks6 = ReadS16AndAdvance(ref addr);
-            obj.XChunk = ReadS16AndAdvance(ref addr);
-            obj.YChunk = ReadS16AndAdvance(ref addr);
-            obj.unks7 = ReadS16AndAdvance(ref addr);
-            obj.unks8 = ReadS16AndAdvance(ref addr);
-            obj.ChargeCounter = ReadByteAndAdvance(ref addr);
-            obj.unkb6 = ReadByteAndAdvance(ref addr);
-            obj.MoveMode = ReadByteAndAdvance(ref addr);
-            obj.unkb7 = ReadByteAndAdvance(ref addr);
-            obj.unkb8 = ReadByteAndAdvance(ref addr);
-            obj.HistIdx = ReadByteAndAdvance(ref addr);
-            obj.unkb9 = ReadByteAndAdvance(ref addr);
-            obj.SonarState = ReadByteAndAdvance(ref addr);
-            obj.unks9 = ReadS16AndAdvance(ref addr);
-            obj.unkba = ReadByteAndAdvance(ref addr);
-            obj.unkbb = ReadByteAndAdvance(ref addr);
-            obj.unksa = ReadS16AndAdvance(ref addr);
-            obj.PtrCarriedObj = ReadPtrAndAdvance(ref addr);
-            obj.unkbc = ReadByteAndAdvance(ref addr);
-            obj.unkbd = ReadByteAndAdvance(ref addr);
-            obj.unkbe = ReadByteAndAdvance(ref addr);
-            obj.unkbf = ReadByteAndAdvance(ref addr);
-            obj.unkbg = ReadByteAndAdvance(ref addr);
-            obj.unkbh = ReadByteAndAdvance(ref addr);
-            obj.unkbi = ReadByteAndAdvance(ref addr);
-            obj.unkbj = ReadByteAndAdvance(ref addr);
-            obj.GravDir = ReadByteAndAdvance(ref addr);
-            obj.unkbk = ReadByteAndAdvance(ref addr);
-            obj.Flags2 = ReadU16AndAdvance(ref addr);
-            obj.unk5 = ReadS32AndAdvance(ref addr);
-            obj.unk6 = ReadS32AndAdvance(ref addr);
+            obj.Flags = ReadU16AndAdvance(ref addr);			 // 0x000
+            obj.CurrentVel.Width = ReadS32AndAdvance(ref addr);  // 0x002
+            obj.CurrentVel.Height = ReadS32AndAdvance(ref addr); // 0x006
+            obj.unkb0 = ReadByteAndAdvance(ref addr);            // 0x00A
+            obj.unkb1 = ReadByteAndAdvance(ref addr);            // 0x00B
+			obj.unk0 = ReadS32AndAdvance(ref addr);              // 0x00C
+			obj.unk1 = ReadS32AndAdvance(ref addr);              // 0x010
+			obj.unk2 = ReadS32AndAdvance(ref addr);              // 0x014
+			obj.SonarPos.X = ReadS32AndAdvance(ref addr);        // 0x018
+			obj.SonarPos.Y = ReadS32AndAdvance(ref addr);        // 0x01C
+			obj.unkSnr0 = ReadS32AndAdvance(ref addr);           // 0x020
+			obj.unkSnr1 = ReadS32AndAdvance(ref addr);           // 0x024
+			obj.SonarSize.Width = ReadS32AndAdvance(ref addr);   // 0x028
+            obj.SonarSize.Height = ReadS32AndAdvance(ref addr);  // 0x02C
+			obj.SonarVel.Width = ReadS32AndAdvance(ref addr);    // 0x030
+			obj.SonarVel.Height = ReadS32AndAdvance(ref addr);   // 0x034
+			obj.SonarChrgFlag = ReadByteAndAdvance(ref addr);    // 0x038
+			obj.unkSnrb0 = ReadByteAndAdvance(ref addr);         // 0x039
+			obj.unkSnrs0 = ReadS16AndAdvance(ref addr);          // 0x03A
+			obj.SonarAng = ReadS16AndAdvance(ref addr);          // 0x03C
+			obj.Form = ReadS16AndAdvance(ref addr);              // 0x03E
+			obj.SonarFlags = ReadU16AndAdvance(ref addr);        // 0x040
+			obj.HP = ReadS16AndAdvance(ref addr);                // 0x042
+			obj.Air = ReadS16AndAdvance(ref addr);               // 0x044
+			obj.Mid.X = ReadS32AndAdvance(ref addr);             // 0x046
+			obj.Mid.Y = ReadS32AndAdvance(ref addr);             // 0x04A
+			obj.Nose.X = ReadS32AndAdvance(ref addr);            // 0x04E
+			obj.Nose.Y = ReadS32AndAdvance(ref addr);            // 0x052
+			obj.Tail.X = ReadS32AndAdvance(ref addr);            // 0x056
+			obj.Tail.Y = ReadS32AndAdvance(ref addr);            // 0x05A
+			obj.SwimSpeed = ReadS32AndAdvance(ref addr);         // 0x05E
+			obj.SwimVel.Width = ReadS32AndAdvance(ref addr);     // 0x062
+			obj.SwimVel.Height = ReadS32AndAdvance(ref addr);    // 0x066
+			obj.ZipVel.Width = ReadS32AndAdvance(ref addr);      // 0x06A
+			obj.ZipVel.Height = ReadS32AndAdvance(ref addr);     // 0x06E
+			obj.TurnSpeedLoss = ReadS32AndAdvance(ref addr);     // 0x072
+			obj.unk3 = ReadS32AndAdvance(ref addr);              // 0x076
+			obj.unk4 = ReadS32AndAdvance(ref addr);              // 0x07A
+			obj.Angle = ReadS16AndAdvance(ref addr);             // 0x07E
+			obj.RotSpeed = ReadS16AndAdvance(ref addr);          // 0x080
+			obj.FlopSpeed = ReadS32AndAdvance(ref addr);         // 0x082
+			obj.TgtAng = ReadS16AndAdvance(ref addr);            // 0x086
+			obj.Focus.X = ReadS32AndAdvance(ref addr);           // 0x088
+			obj.Focus.Y = ReadS32AndAdvance(ref addr);           // 0x08C
+			obj.unks0 = ReadS16AndAdvance(ref addr);             // 0x08E
+			obj.unks1 = ReadS16AndAdvance(ref addr);             // 0x090
+			obj.unkb2 = ReadByteAndAdvance(ref addr);            // 0x092
+			obj.PrevControls = ReadByteAndAdvance(ref addr);     // 0x093
+			obj.CurControls = ReadByteAndAdvance(ref addr);      // 0x094
+			obj.unkb3 = ReadByteAndAdvance(ref addr);            // 0x095
+			obj.unkb4 = ReadByteAndAdvance(ref addr);            // 0x096
+			obj.DecelTimer = ReadByteAndAdvance(ref addr);       // 0x097
+			obj.AccelTimer = ReadByteAndAdvance(ref addr);       // 0x098
+			obj.unkb5 = ReadByteAndAdvance(ref addr);            // 0x099
+			obj.InvincTimer = ReadByteAndAdvance(ref addr);      // 0x09A
+			obj.AccelState = ReadByteAndAdvance(ref addr);       // 0x09B
+			obj.WaterLevel = ReadS32AndAdvance(ref addr);        // 0x09C
+			obj.PLC = ReadPtrAndAdvance(ref addr);               // 0x0A0
+			obj.unks2 = ReadS16AndAdvance(ref addr);             // 0x0A4
+			obj.Animation = ReadS16AndAdvance(ref addr);         // 0x0A6
+			obj.AnimFrame = ReadS16AndAdvance(ref addr);         // 0x0A8
+			obj.unks3 = ReadS16AndAdvance(ref addr);             // 0x0AA
+			obj.unks4 = ReadS16AndAdvance(ref addr);             // 0x0AE
+			addr += 0xE0;
+            obj.unks5 = ReadS16AndAdvance(ref addr);             // 0x18E
+			obj.unks6 = ReadS16AndAdvance(ref addr);             // 0x190
+			obj.XChunk = ReadS16AndAdvance(ref addr);            // 0x192
+			obj.YChunk = ReadS16AndAdvance(ref addr);            // 0x194
+			obj.unks7 = ReadS16AndAdvance(ref addr);             // 0x196
+			obj.unks8 = ReadS16AndAdvance(ref addr);             // 0x198
+			obj.ChargeCounter = ReadByteAndAdvance(ref addr);    // 0x19A
+			obj.unkb6 = ReadByteAndAdvance(ref addr);            // 0x19B
+			obj.MoveMode = ReadByteAndAdvance(ref addr);         // 0x19C
+			obj.unkb7 = ReadByteAndAdvance(ref addr);            // 0x19D
+			obj.unkb8 = ReadByteAndAdvance(ref addr);            // 0x19E
+			obj.HistIdx = ReadByteAndAdvance(ref addr);          // 0x19F
+			obj.unkb9 = ReadByteAndAdvance(ref addr);            // 0x1A0
+			obj.SonarState = ReadByteAndAdvance(ref addr);       // 0x1A1
+			obj.unks9 = ReadS16AndAdvance(ref addr);             // 0x1A2
+			obj.unkba = ReadByteAndAdvance(ref addr);            // 0x1A4
+			obj.unkbb = ReadByteAndAdvance(ref addr);            // 0x1A5
+			obj.unksa = ReadS16AndAdvance(ref addr);             // 0x1A6
+			obj.PtrCarriedObj = ReadPtrAndAdvance(ref addr);     // 0x1A8
+			obj.unkbc = ReadByteAndAdvance(ref addr);            // 0x1AC
+			obj.unkbd = ReadByteAndAdvance(ref addr);            // 0x1AD
+			obj.unkbe = ReadByteAndAdvance(ref addr);            // 0x1AE
+			obj.unkbf = ReadByteAndAdvance(ref addr);            // 0x1AF
+			obj.unkbg = ReadByteAndAdvance(ref addr);            // 0x1B0
+			obj.unkbh = ReadByteAndAdvance(ref addr);            // 0x1B1
+			obj.unkbi = ReadByteAndAdvance(ref addr);            // 0x1B2
+			obj.unkbj = ReadByteAndAdvance(ref addr);            // 0x1B3
+			obj.GravDir = ReadByteAndAdvance(ref addr);          // 0x1B4
+			obj.unkbk = ReadByteAndAdvance(ref addr);            // 0x1B5
+			obj.Flags2 = ReadU16AndAdvance(ref addr);            // 0x1B6
+			obj.unk5 = ReadS32AndAdvance(ref addr);              // 0x1B8
+			obj.unk6 = ReadS32AndAdvance(ref addr);              // 0x1B8
         }
         private static class Addr2D
         {
@@ -1114,8 +1329,11 @@ namespace BizHawk.Tool.Ecco
                         addr = curObj.PtrSubObj;
                     }
                     break;
+				case GFXFuncType.None:
+					break;
                 default:
-                    break;
+					StatusText($"GFX Func: {Mem.ReadU32(Addr2D.PtrGFXFunc):X5}", Color.Blue);
+					break;
             }
         }
         private void DrawTubes()
@@ -1327,8 +1545,13 @@ namespace BizHawk.Tool.Ecco
                         PutText(addr.ToString("X6"), mid.X, mid.Y + 4, 1, 9, -1, -1, Color.Lime, Color.Blue);
                         break;
                 }
-                DrawStandardCollisionType(topLeft,bottomRight,curObj.Dims,curObj.CollisionType);
-                DrawMotionVector(vecStart, vel);
+				if (_showNumbers)
+				{
+					mid = GetScreenLoc(curObj.Mid);
+					PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", mid.X, mid.Y - 4, 1, 1, -1, -9, Color.Lime, Color.Blue);
+				}
+				DrawStandardCollisionType(topLeft, bottomRight, curObj.Dims, curObj.CollisionType);
+				DrawMotionVector(vecStart, vel);
                 addr = curObj.PtrNext;
             }
         }
@@ -1338,14 +1561,14 @@ namespace BizHawk.Tool.Ecco
             Point bottomRight = new Point();
             Point pos = new Point();
             Size vel = new Size();
-            Point vec = new Point();
             uint addr = ReadPtr(Addr2D.AnimLLHead);
             uint subAddr;
             Obj2D curObj, subObj;
             while (addr != 0)
             {
                 ReadObj2D(addr, out curObj);
-                switch (_2DTypeProvider.GetType(curObj.PtrMainFunc))
+				ObjType o = _2DTypeProvider.GetType(curObj.PtrMainFunc);
+				switch (o)
                 {
                     case ObjType.ChainLinkNoseTail:
                         DrawChainLinks(curObj, ColorMap.Nose, ColorMap.Tail, ColorMap.NoseTail);
@@ -1411,7 +1634,6 @@ namespace BizHawk.Tool.Ecco
                         break;
                     case ObjType.StuckMagicArm:
                         pos = GetScreenLoc(curObj.Mid);
-                        vec = GetScreenLoc(curObj.Mid + curObj.Vel1);
                         DrawOct(pos.X, pos.Y, 26, ColorMap.AnyPoint);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
                         break;
@@ -1763,8 +1985,8 @@ namespace BizHawk.Tool.Ecco
                         DrawMotionVector(curObj.Mid, vel);
                         break;
                     case ObjType.RetractingTurtle:
-                        vel.Width = curObj.Var1X >> 1;
-                        vel.Height = curObj.Var1Y >> 1;
+                        vel.Width = curObj.Var2X >> 1;
+                        vel.Height = curObj.Var2Y >> 1;
                         DrawPushableBounds(curObj);
                         DrawShieldBounds(curObj);
                         StatusText($"Turtle Vel X: {(curObj.Var2X >> 1) / 65536.0,10:0.000000} Y: {(curObj.Var2Y >> 1) / 65536.0,10:0.000000}", Color.Green);
@@ -1886,7 +2108,7 @@ namespace BizHawk.Tool.Ecco
                     case ObjType.GlyphTopBroken:
                         DrawPushableBounds(curObj, ColorMap.Sonar);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
-                        StatusText($"Glyph Vel X: {curObj.Vel1.Width / 65536.0,10:0.000000} Y: {curObj.Vel1.Height / 65536.0,10:0.000000}", Color.Green); Gui.DrawLine(pos.X, pos.Y, vec.X, vec.Y, Color.Orange);
+                        StatusText($"Glyph Vel X: {curObj.Vel1.Width / 65536.0,10:0.000000} Y: {curObj.Vel1.Height / 65536.0,10:0.000000}", Color.Green);
                         break;
                     case ObjType.GlyphTopReparing:
                         {
@@ -2107,17 +2329,26 @@ namespace BizHawk.Tool.Ecco
                             PutText($"{curObj.HP - 1}", pos.X, pos.Y, 1, 1, -1, -9, Color.Blue, Color.Red);
                         }
                         break;
-                    case ObjType.NullFunc:
+					case ObjType.MovingBlock:
+					case ObjType.MovingBlock2:
+						DrawDefaultBounds(curObj, ColorMap.HeadTail);
+						DrawMotionVector(curObj.Mid, curObj.Vel1);
+						break;
+					case ObjType.NullFunc:
                     case ObjType.NoDisplay:
                         break;
                     default:
 						DrawDefaultBounds(curObj, ColorMap.HeadTail);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
 						pos = GetScreenLoc(curObj.Mid);
-						PutText(curObj.PtrMainFunc.ToString("X5"), pos.X, pos.Y + 8, 1, 9, -1, -1, Color.Blue, Color.Red);
+						PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", pos.X, pos.Y - 4, 1, 9, -1, -1, Color.Blue, Color.Red);
                         break;
                 }
-                addr = curObj.PtrNext;
+				if (_showNumbers) {
+					pos = GetScreenLoc(curObj.Mid);
+					PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", pos.X, pos.Y - 4, 1, 9, -1, -1, Color.Blue, Color.Red);
+				}
+				addr = curObj.PtrNext;
             }
         }
         private void DrawEvents()
@@ -2269,7 +2500,12 @@ namespace BizHawk.Tool.Ecco
                         PutText(addr.ToString("X6"), pos.X, pos.Y + 4, 1, 9, -1, -1, ColorMap.AnyPoint, Color.Blue);
                         break;
                 }
-                addr = curObj.PtrNext;
+				if (_showNumbers)
+				{
+					pos = GetScreenLoc(curObj.Mid);
+					PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", pos.X, pos.Y - 4, 1, 1, -1, -9, ColorMap.AnyPoint, Color.Blue);
+				}
+				addr = curObj.PtrNext;
             }
         }
         private void Draw2DHud()
