@@ -88,7 +88,11 @@ namespace BizHawk.Client.EmuHawk
         {
             _tool.SetMapDumping(mapDumpCheckbox.Checked);
         }
-        private void autoFireCheckbox_CheckedChanged(object sender, EventArgs e)
+		private void showNumbers_CheckedChanged(object sender, EventArgs e)
+		{
+			_tool.SetShowNumbers(showNumbersCheckbox.Checked);
+		}
+		private void autoFireCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             _tool.SetAutofire(autoFireCheckbox.Checked);
         }
@@ -212,6 +216,6 @@ namespace BizHawk.Client.EmuHawk
                     break;
             }
         }
-        #endregion BizHawk Required methods
+		#endregion BizHawk Required methods
 	}
 }

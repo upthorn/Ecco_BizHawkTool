@@ -38,6 +38,7 @@ namespace BizHawk.Tool.Ecco
             _top = _bottom = 112;
             _left = _right = 160;
             ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);
+			Addr3D = new Addr3DProvider(r);
             switch (r)
             {
                 case GameRegion.J:
@@ -128,7 +129,7 @@ namespace BizHawk.Tool.Ecco
             }
             uint mode = Mem.ReadByte(AddrGlobal.GameMode);
             _levelTime = Mem.ReadU16(AddrGlobal.LevelFrameCount);
-            ResetStatusLine();
+            ResetStatusLines();
             StatusText($"Frames: {Mem.ReadU32(AddrGlobal.FrameCount),7} Nonlag: {frame,7} Level: {_levelTime,6} GameMode: {mode:X2}");
             switch (mode)
             {

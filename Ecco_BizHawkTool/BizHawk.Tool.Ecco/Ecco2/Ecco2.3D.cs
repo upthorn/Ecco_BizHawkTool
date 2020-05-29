@@ -33,8 +33,22 @@ namespace BizHawk.Tool.Ecco
             private Dictionary<uint, Obj3DType> _typeMap = new Dictionary<uint, Obj3DType>();
 			public J3DProvider()
             {
-            }
-            public override Obj3DType GetType(uint addr)
+				_typeMap = new Dictionary<uint, Obj3DType>();
+				_typeMap[0xD6E92] = Obj3DType.Player;
+				_typeMap[0xD50DE] = Obj3DType.Shell;
+				_typeMap[0xD4DDC] = Obj3DType.PoisonBubble;
+				_typeMap[0xD849E] = Obj3DType.Ring;
+				_typeMap[0xD4CF0] = Obj3DType.Vine;
+/*				_typeMap[0xD3B40] = Obj3DType.JellyFish;
+				_typeMap[0xD3DB2] = Obj3DType.Shark;*/
+				_typeMap[0xD434C] = Obj3DType.Eagle;
+/*				_typeMap[0xD4432] = Obj3DType.SonarBlast;
+				_typeMap[0xD463A] = Obj3DType.HomingBubble;*/
+				_typeMap[0xD3AF2] = Obj3DType.GfxBubble1;
+				_typeMap[0xD4538] = Obj3DType.GfxBubble2;
+				_typeMap[0xD3B2C] = Obj3DType.GfxSplash;
+			}
+			public override Obj3DType GetType(uint addr)
             {
                 if (_typeMap.ContainsKey(addr))
                     return _typeMap[addr];
@@ -176,18 +190,38 @@ namespace BizHawk.Tool.Ecco
             obj.unkb1 = ReadByteAndAdvance(ref addr);
             obj.unkb2 = ReadByteAndAdvance(ref addr);
         }
-        private static class Addr3D
-        {
-            public const uint Level = 0xFFA79E;
-            public const uint PlayerObj = 0xFFB134;
-            public const uint ObjLLHead = 0xFFD4C0;
-            public const uint CamX = 0xFFD5E0;
-            public const uint CamY = 0xFFD5E8;
-            public const uint CamZ = 0xFFD5E4;
-            public const uint CamZ2 = 0xFFD5F0;
-            public const uint RingSpawnX = 0xFFD856;
-            public const uint RingSpawnY = 0xFFD85A;
-        }
+		private class Addr3DProvider
+		{
+			public uint Level = 0xFFA79E;
+			public uint PlayerObj = 0xFFB134;
+			public uint ObjLLHead = 0xFFD4C0;
+			public uint CamX1 = 0xFFD5C8;
+			public uint CamY1 = 0xFFD5D0;
+			public uint CamZ1 = 0xFFD5CC;
+			public uint CamX = 0xFFD5E0;
+			public uint CamY = 0xFFD5E8;
+			public uint CamZ = 0xFFD5E4;
+			public uint CamZ2 = 0xFFD5F0;
+			public uint RingSpawnX = 0xFFD856;
+			public uint RingSpawnY = 0xFFD85A;
+			public uint ControlTableAddr;
+			public uint SinTable = 0x2BC8;
+			public uint CosTable = 0x2CC8;
+			public Addr3DProvider(GameRegion region)
+			{
+				switch (region)
+				{
+					case GameRegion.J:
+						ControlTableAddr = 0x7C14;
+						break;
+					case GameRegion.U:
+					case GameRegion.E:
+						ControlTableAddr = 0x7B54;
+						break;
+				}
+			}
+		}
+		private Addr3DProvider Addr3D;
         private struct Cam3D
         {
             public static int X;
@@ -249,10 +283,10 @@ namespace BizHawk.Tool.Ecco
                         {
                             int Xvel = (curObj.XUnk - curObj.XPos);
                             int Zvel = (curObj.ZUnk - curObj.ZPos);
-                            int dx = Mem.ReadS32(Addr3D.CamX) - Mem.ReadS32(0xFFD5C8) >> 3;
-                            int dy = Mem.ReadS32(Addr3D.CamY) - Mem.ReadS32(0xFFD5D0);
+                            int dx = Mem.ReadS32(Addr3D.CamX) - Mem.ReadS32(Addr3D.CamX1) >> 3;
+                            int dy = Mem.ReadS32(Addr3D.CamY) - Mem.ReadS32(Addr3D.CamY1);
                             dy = (dy >> 4) - (dy >> 6);
-                            int dz = Mem.ReadS32(Addr3D.CamZ) - Mem.ReadS32(0xFFD5CC);
+                            int dz = Mem.ReadS32(Addr3D.CamZ) - Mem.ReadS32(Addr3D.CamZ1);
                             var chargeCount = _player3D.ChargeCtr;
                             if (chargeCount == 0)
                             {
@@ -308,8 +342,8 @@ namespace BizHawk.Tool.Ecco
                                 dx = Xmax - Xcur;
                                 dy = Ymax - Ycur;
                                 short ang = Ecco2Asin(dx,dy);
-                                Xcur += Mem.ReadS8(0x2CC8 + ang) << 6;
-                                Ycur += Mem.ReadS8(0x2BC8 + ang) << 6;
+                                Xcur += Mem.ReadS8(Addr3D.CosTable + ang) << 6;
+                                Ycur += Mem.ReadS8(Addr3D.SinTable + ang) << 6;
                                 int rad = Math.Max(((OctRad(dx, dy) >> 8) + 0x1F) >> 5, 1);
                                 dx /= rad;
                                 dy /= rad;
@@ -384,7 +418,7 @@ namespace BizHawk.Tool.Ecco
             while (!spawn)
             {
                 var temp = (SpawnZ >> 17) & 0xFF;
-                var controlList = Mem.ReadS32(0x7B54 + (levelId << 2));
+                var controlList = Mem.ReadS32(Addr3D.ControlTableAddr + (levelId << 2));
                 temp = Mem.ReadS16(controlList + (temp << 1));
                 var v = temp & 0xFF;
                 var num = (temp >> 8) + v;

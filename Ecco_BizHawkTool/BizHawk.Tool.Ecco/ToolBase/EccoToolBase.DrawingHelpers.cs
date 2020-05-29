@@ -194,11 +194,11 @@ namespace BizHawk.Tool.Ecco
                 Print_Text(message, x + xOffset[i], y + yOffset[i], bg);
             Print_Text(message, x, y, fg);
         }
-        protected void ResetStatusLine()
+        protected void ResetStatusLines()
         {
             while(_statLine < _form.StatusTextBox.Lines.Length)
             {
-                _form.SetStatusLine("", _statLine++, null);
+                _form.SetStatusLine(" ", _statLine++, null);
             }
             _statLine = 0;
         }
