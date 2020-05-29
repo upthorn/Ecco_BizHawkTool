@@ -43,6 +43,7 @@ namespace BizHawk.Tool.Ecco
 			_showNumbers = on;
 		}
         public abstract void PreFrameCallback();
+		public abstract void CheckLag();
         public abstract void PostFrameCallback();
     }
 }

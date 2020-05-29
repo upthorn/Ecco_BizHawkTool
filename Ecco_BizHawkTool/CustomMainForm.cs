@@ -181,7 +181,9 @@ namespace BizHawk.Client.EmuHawk
 		/// when emulator is running in turbo mode
 		/// </summary>
 		public void FastUpdate()
-		{ }
+		{
+			_tool.CheckLag();
+		}
 
         /// <summary>
         /// Restart is called the first time you call the form
