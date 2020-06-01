@@ -39,11 +39,11 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0xD4DDC] = Obj3DType.PoisonBubble;
 				_typeMap[0xD849E] = Obj3DType.Ring;
 				_typeMap[0xD4CF0] = Obj3DType.Vine;
-/*				_typeMap[0xD3B40] = Obj3DType.JellyFish;
-				_typeMap[0xD3DB2] = Obj3DType.Shark;*/
+				_typeMap[0xD3E64] = Obj3DType.JellyFish;
+				_typeMap[0xD40D6] = Obj3DType.Shark;
 				_typeMap[0xD434C] = Obj3DType.Eagle;
-/*				_typeMap[0xD4432] = Obj3DType.SonarBlast;
-				_typeMap[0xD463A] = Obj3DType.HomingBubble;*/
+				_typeMap[0xD4756] = Obj3DType.SonarBlast;
+//				_typeMap[0xD463A] = Obj3DType.HomingBubble;
 				_typeMap[0xD3AF2] = Obj3DType.GfxBubble1;
 				_typeMap[0xD4538] = Obj3DType.GfxBubble2;
 				_typeMap[0xD3B2C] = Obj3DType.GfxSplash;
