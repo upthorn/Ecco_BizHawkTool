@@ -219,48 +219,48 @@ namespace BizHawk.Tool.Ecco
             private Dictionary<uint, GFXFuncType> _GFXMap = new Dictionary<uint, GFXFuncType>();
             private void InitTypeMap()
             {
-				_typeMap[0x0] = ObjType.NoDisplay;
 				_typeMap[0xD8E9C] = ObjType.NoDisplay;
 				_typeMap[0xD8D0A] = ObjType.NoDisplay;
-/*				_typeMap[0x9E3AA] = ObjType.NoDisplay;
-				_typeMap[0x9E5A8] = ObjType.NoDisplay;*/
+				_typeMap[0x9E88A] = ObjType.NoDisplay;
+				_typeMap[0x9EA88] = ObjType.NoDisplay;
 				_typeMap[0x9E786] = ObjType.NoDisplay;
 				_typeMap[0xAD1FE] = ObjType.NoDisplay;
 				_typeMap[0xD9998] = ObjType.NoDisplay;
 				_typeMap[0xD9D5C] = ObjType.NoDisplay;
 				_typeMap[0xD9560] = ObjType.NoDisplay;
 				_typeMap[0x9E6BE] = ObjType.NoDisplay;
-/*				_typeMap[0xDF86A] = ObjType.NoDisplay;
-				_typeMap[0xB159A] = ObjType.NoDisplay;
-				_typeMap[0xDA898] = ObjType.NoDisplay;
-				_typeMap[0xDA720] = ObjType.NoDisplay;
-				_typeMap[0xD9FDC] = ObjType.NoDisplay;
-				_typeMap[0xC0D4E] = ObjType.NoDisplay;
-				_typeMap[0xC0D38] = ObjType.NoDisplay;
-				_typeMap[0xDCDAC] = ObjType.NoDisplay;*/
+				_typeMap[0xDFB9A] = ObjType.NoDisplay;
+				_typeMap[0xB1A7A] = ObjType.NoDisplay;
+				_typeMap[0xDABB8] = ObjType.NoDisplay;
+				_typeMap[0xDAA40] = ObjType.NoDisplay;
+				_typeMap[0xDA2FC] = ObjType.NoDisplay;
+				_typeMap[0xC126A] = ObjType.NoDisplay;
+				_typeMap[0xC1254] = ObjType.NoDisplay;
+				_typeMap[0xDD0CC] = ObjType.NoDisplay;
 				_typeMap[0xC105E] = ObjType.NoDisplay;
-/*				_typeMap[0xE3CD2] = ObjType.NoDisplay;
-				_typeMap[0xE385E] = ObjType.NoDisplay;
-				_typeMap[0xC20E8] = ObjType.NoDisplay;
-				_typeMap[0xC22A6] = ObjType.NoDisplay;
-				_typeMap[0xC31B4] = ObjType.NoDisplay;
-				_typeMap[0xA9EF0] = ObjType.NoDisplay;
-				_typeMap[0xA9D90] = ObjType.NoDisplay;
-				_typeMap[0xC6304] = ObjType.NoDisplay;
-				_typeMap[0xC26E4] = ObjType.NoDisplay;
-				_typeMap[0xAEE68] = ObjType.NoDisplay;*/
+				_typeMap[0xE4002] = ObjType.NoDisplay;
+				_typeMap[0xE3B8E] = ObjType.NoDisplay;
+				_typeMap[0xC2604] = ObjType.NoDisplay;
+				_typeMap[0xC27C2] = ObjType.NoDisplay;
+				_typeMap[0xC36D0] = ObjType.NoDisplay;
+				_typeMap[0xAA3D0] = ObjType.NoDisplay;
+				_typeMap[0xAA270] = ObjType.NoDisplay;
+				_typeMap[0xC6896] = ObjType.NoDisplay;
+				_typeMap[0xC2CD0] = ObjType.NoDisplay;
+				_typeMap[0xAF348] = ObjType.NoDisplay;
 				_typeMap[0xD9E4A] = ObjType.NoDisplay;
 				_typeMap[0xD98CE] = ObjType.NoDisplay;
 				_typeMap[0x9C6DA] = ObjType.NoDisplay;
 				_typeMap[0x9CBB0] = ObjType.NoDisplay;
 				_typeMap[0x9F252] = ObjType.NoDisplay;
-/*				_typeMap[0xA57F2] = ObjType.NoDisplay;
-				_typeMap[0xC3A42] = ObjType.NoDisplay;
-				_typeMap[0xB33D8] = ObjType.NoDisplay;*/
+//				_typeMap[0xA57F2] = ObjType.NoDisplay;
+				_typeMap[0xC3F5E] = ObjType.NoDisplay;
+//				_typeMap[0xB33D8] = ObjType.NoDisplay;
 				_typeMap[0xB356A] = ObjType.NoDisplay;
-/*				_typeMap[0xA1676] = ObjType.NoDisplay;
-				_typeMap[0xB6822] = ObjType.NoDisplay;
-				_typeMap[0xD12E2] = ObjType.NoDisplay;*/
+				_typeMap[0xA1B56] = ObjType.NoDisplay;
+				_typeMap[0x0] = ObjType.NoDisplay;
+				_typeMap[0xB6D02] = ObjType.NoDisplay;
+				_typeMap[0xD15C8] = ObjType.NoDisplay;
 				_typeMap[0xA7AC8] = ObjType.DefaultEnemy;
 				_typeMap[0x9D556] = ObjType.DefaultEnemy;
 				_typeMap[0xA7572] = ObjType.DefaultEnemy;
@@ -269,65 +269,66 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0x9D76C] = ObjType.DefaultEnemy;
 				_typeMap[0xA3222] = ObjType.DefaultEnemy;
 				_typeMap[0xC02C0] = ObjType.DefaultEnemy;
-/*				_typeMap[0xAC736] = ObjType.DefaultEnemy;
-				_typeMap[0xB716E] = ObjType.DefaultEnemy;
-				_typeMap[0x9E546] = ObjType.DefaultEnemy;*/
+				_typeMap[0xACC46] = ObjType.DefaultEnemy;
+				_typeMap[0xB764E] = ObjType.DefaultEnemy;
+				_typeMap[0x9EA26] = ObjType.DefaultEnemy;
 				_typeMap[0xC31D4] = ObjType.DefaultEnemy;
 //				_typeMap[0xA0F04] = ObjType.DefaultEnemy;
 				_typeMap[0xA6FAA] = ObjType.DefaultEnemy;
-//				_typeMap[0xAA12E] = ObjType.DefaultEnemy;
+				_typeMap[0xAA60E] = ObjType.DefaultEnemy;
 				_typeMap[0xA96E2] = ObjType.DefaultEnemy;
 				_typeMap[0xA74BE] = ObjType.DefaultEnemy;
 				_typeMap[0xA7442] = ObjType.DefaultEnemy;
 				_typeMap[0xA793C] = ObjType.DefaultEnemy;
-/*				_typeMap[0xC3EF0] = ObjType.DefaultEnemy;
-				_typeMap[0xC3F90] = ObjType.DefaultEnemy;*/
 				_typeMap[0xC440C] = ObjType.DefaultEnemy;
-/*				_typeMap[0xC3DB8] = ObjType.DefaultEnemy;
-				_typeMap[0xAC766] = ObjType.DefaultEnemy;
-				_typeMap[0xC5F66] = ObjType.DefaultEnemy;
-				_typeMap[0xB0C7E] = ObjType.DefaultEnemy;
-				_typeMap[0xB17F2] = ObjType.DefaultEnemy;
-				_typeMap[0xB0CDC] = ObjType.DefaultEnemy;
-				_typeMap[0xC2106] = ObjType.DefaultEnemy;
-				_typeMap[0xC208C] = ObjType.DefaultEnemy;
-				_typeMap[0xC1EBA] = ObjType.DefaultEnemy;
-				_typeMap[0xC251C] = ObjType.DefaultEnemy;
-				_typeMap[0xC32C8] = ObjType.DefaultEnemy;
-				_typeMap[0xAB5E6] = ObjType.DefaultEnemy;
-				_typeMap[0xAC796] = ObjType.DefaultEnemy;*/
+//				_typeMap[0xC3F90] = ObjType.DefaultEnemy;
+				_typeMap[0xC42D4] = ObjType.DefaultEnemy;
+//				_typeMap[0xC3DB8] = ObjType.DefaultEnemy;
+				_typeMap[0xACC16] = ObjType.DefaultEnemy;
+				_typeMap[0xC64F8] = ObjType.DefaultEnemy;
+				_typeMap[0xB115E] = ObjType.DefaultEnemy;
+				_typeMap[0xB1CD2] = ObjType.DefaultEnemy;
+				_typeMap[0xB11BC] = ObjType.DefaultEnemy;
+				_typeMap[0xC2622] = ObjType.DefaultEnemy;
+				_typeMap[0xC25A8] = ObjType.DefaultEnemy;
+				_typeMap[0xC23D6] = ObjType.DefaultEnemy;
+				_typeMap[0xC2A38] = ObjType.DefaultEnemy;
+				_typeMap[0xC37E4] = ObjType.DefaultEnemy;
+				_typeMap[0xABAC6] = ObjType.DefaultEnemy;
+//				_typeMap[0xAC796] = ObjType.DefaultEnemy;
 				_typeMap[0xA9C3E] = ObjType.ImmobileEnemy;
 				_typeMap[0xA3FF8] = ObjType.TubeWhirlpool;
 				_typeMap[0xA44F8] = ObjType.TubeWhirlpoolInactive;
 				_typeMap[0xC099A] = ObjType.TwoTidesEventStartTrigger;
 				_typeMap[0xC0A8A] = ObjType.TwoTidesEventEndTrigger;
 				_typeMap[0xD9F2E] = ObjType.LevelEndCutsceneTrigger;
-//				_typeMap[0xDA9EA] = ObjType.LevelEndCutsceneTrigger;
+				_typeMap[0xDAD0A] = ObjType.LevelEndCutsceneTrigger;
 				_typeMap[0xBF720] = ObjType.PoisonBubble;
-//				_typeMap[0xDA2C0] = ObjType.LunarBayCutsceneEcco;
+				_typeMap[0xDA5E0] = ObjType.LunarBayCutsceneEcco;
 				_typeMap[0xA82EC] = ObjType.FriendlyDolphin;
 				_typeMap[0xAAAA6] = ObjType.FriendlyDolphin;
 				_typeMap[0xB5614] = ObjType.FriendlyDolphin;
-/*				_typeMap[0xAF960] = ObjType.MirrorDolphinCharging1;
-				_typeMap[0xAF86B] = ObjType.MirrorDolphinCharging2;*/
+				_typeMap[0xAFE40] = ObjType.MirrorDolphinCharging1;
+				_typeMap[0xAFD43] = ObjType.MirrorDolphinCharging2;
 				_typeMap[0xD917C] = ObjType.TrelliaAfterCutscene;
 				_typeMap[0xAD194] = ObjType.MetaSphereInactive;
 				_typeMap[0xAD25E] = ObjType.MetaSphereInactive;
 				_typeMap[0xD90B6] = ObjType.TrelliaDuringCutscene;
 				_typeMap[0xA9A3E] = ObjType.EnemySpawner;
-/*				_typeMap[0xC2684] = ObjType.CreditsDolphin;
-				_typeMap[0xB7DF4] = ObjType.StuckMagicArm;
-				_typeMap[0xE47EE] = ObjType.VortexSunflower;*/
+				_typeMap[0xC0AF8] = ObjType.CreditsDolphin;
+				_typeMap[0xC2BA0] = ObjType.CreditsDolphin;
+//				_typeMap[0xB7DF4] = ObjType.StuckMagicArm;
+				_typeMap[0xE4B1E] = ObjType.VortexSunflower;
 				_typeMap[0xDC184] = ObjType.MedusaBoss;
-/*				_typeMap[0xDCEE0] = ObjType.GlobeHolderBoss;
-				_typeMap[0xE1BA2] = ObjType.VortexQueenBoss;*/
+				_typeMap[0xDD200] = ObjType.GlobeHolderBoss;
+				_typeMap[0xE1ED2] = ObjType.VortexQueenBoss;
 				_typeMap[0xA60B2] = ObjType.FutureDolphin;
 				_typeMap[0x9FA90] = ObjType.PushableRock;
 				_typeMap[0x9F9BC] = ObjType.PushableRock;
 				_typeMap[0x9FB80] = ObjType.PushableShieldingRock;
-/*				_typeMap[0xA091E] = ObjType.BlueWhale;
-				_typeMap[0xE66D8] = ObjType.VortexLarva;
-				_typeMap[0xA997C] = ObjType.VortexSoldier;*/
+				_typeMap[0xA0DFE] = ObjType.BlueWhale;
+				_typeMap[0xE6A08] = ObjType.VortexLarva;
+				_typeMap[0xA9E5C] = ObjType.VortexSoldier;
 				_typeMap[0xA712A] = ObjType.Glyph;
 				_typeMap[0xC48F0] = ObjType.BarrierGlyph;
 				_typeMap[0xB4FAC] = ObjType.CetaceanGuide;
@@ -344,13 +345,13 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0xAC722] = ObjType.GlyphTopReparing;
 				_typeMap[0xBEEE4] = ObjType.GlyphTopBroken;
 				_typeMap[0xAFEAC] = ObjType.MirrorDolphin;
-/*				_typeMap[0xAF43E] = ObjType.VortexLightningTrap;
-				_typeMap[0xA6E24] = ObjType.ForceField;*/
+				_typeMap[0xAF91E] = ObjType.VortexLightningTrap;
+				_typeMap[0xA7304] = ObjType.ForceField;
 				_typeMap[0xC4F60] = ObjType.PulsarPowerUp;
-//				_typeMap[0xAA32C] = ObjType.VortexBulletSpawner;
+				_typeMap[0xAA80C] = ObjType.VortexBulletSpawner;
 				_typeMap[0xC341C] = ObjType.SkyBubbles;
 				_typeMap[0x9FF5E] = ObjType.AirPocket;
-//				_typeMap[0xBFC14] = ObjType.PushableFish;
+				_typeMap[0xC0130] = ObjType.PushableFish;
 				_typeMap[0xBEE98] = ObjType.SlowKelp;
 				_typeMap[0xAD28E] = ObjType.MetaSphere;
 				_typeMap[0xAD022] = ObjType.Turtle;
@@ -358,13 +359,13 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0x9E366] = ObjType.StarWreath;
 				_typeMap[0x9DC54] = ObjType.Fish;
 				_typeMap[0x9DF06] = ObjType.Fish;
-/*				_typeMap[0xAD87C] = ObjType.EnemyDolphin;
-				_typeMap[0xC6128] = ObjType.DroneFightingDolphin;
-				_typeMap[0xC605A] = ObjType.DroneFightingDolphinSonarBlast;
-				_typeMap[0xB1BE0] = ObjType.AsteriteGlobe;
-				_typeMap[0xB1A10] = ObjType.AsteriteGlobeFollowing;
-				_typeMap[0xB1920] = ObjType.AsteriteGlobeOrbiting;
-				_typeMap[0xC28A0] = ObjType.FourIslandsControlPoint;*/
+				_typeMap[0xADD5C] = ObjType.EnemyDolphin;
+				_typeMap[0xC66BA] = ObjType.DroneFightingDolphin;
+				_typeMap[0xC65EC] = ObjType.DroneFightingDolphinSonarBlast;
+				_typeMap[0xB20C0] = ObjType.AsteriteGlobe;
+				_typeMap[0xB1EF0] = ObjType.AsteriteGlobeFollowing;
+				_typeMap[0xB1E00] = ObjType.AsteriteGlobeOrbiting;
+				_typeMap[0xC2DBC] = ObjType.FourIslandsControlPoint;
 				_typeMap[0xC6AB0] = ObjType.MergingGlyphBound;
 				_typeMap[0xC6D76] = ObjType.MergingGlyphFree;
 				_typeMap[0xC6F02] = ObjType.MergingGlyphPulled;
@@ -372,59 +373,59 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0xC713A] = ObjType.MergingGlyphGoal;
 				_typeMap[0xC7514] = ObjType.MergingGlyphMerging1;
 				_typeMap[0xC7030] = ObjType.MergingGylphMerging2;
-/*				_typeMap[0xC152C] = ObjType.VortexCaptureDrone;
-				_typeMap[0xA306E] = ObjType.VortexAmeoboid;
-				_typeMap[0xA35A6] = ObjType.VortexAmeoboid2;
-				_typeMap[0xAC9F2] = ObjType.SwarmSpawner;
-				_typeMap[0xA538A] = ObjType.VortexBomb;*/
+				_typeMap[0xC1A48] = ObjType.VortexCaptureDrone;
+				_typeMap[0xA354E] = ObjType.VortexAmeoboid;
+				_typeMap[0xA3A86] = ObjType.VortexAmeoboid2;
+				_typeMap[0xACED2] = ObjType.SwarmSpawner;
+				_typeMap[0xA538A] = ObjType.VortexBomb;
 				_typeMap[0x9D31A] = ObjType.RemnantStars;
 //				_typeMap[0x9CA10] = ObjType.MovingBlock;
 				_typeMap[0x9D0E6] = ObjType.MovingBlock2;
 				_typeMap[0x9BAB8] = ObjType.NullFunc;
 				_typeMap[0xC5D38] = ObjType.basic;
-/*				_typeMap[0xDEE3C] = ObjType.basic;
-				_typeMap[0xDF8A0] = ObjType.basic;
-				_typeMap[0xDFA98] = ObjType.basic;
-				_typeMap[0xA0BE4] = ObjType.basic;
-				_typeMap[0x9FEB2] = ObjType.basic;
-				_typeMap[0xA5670] = ObjType.basic;*/
+				_typeMap[0xDF16C] = ObjType.basic;
+				_typeMap[0xDFBD0] = ObjType.basic;
+				_typeMap[0xDFDC8] = ObjType.basic;
+				_typeMap[0xA10C4] = ObjType.basic;
+				_typeMap[0xA0392] = ObjType.basic;
+//				_typeMap[0xA5670] = ObjType.basic;
 				_typeMap[0xAF0FA] = ObjType.basic;
-//				_typeMap[0xAB65A] = ObjType.basic;
+				_typeMap[0xABB3A] = ObjType.basic;
 				_typeMap[0x9F7CC] = ObjType.basic;
-/*				_typeMap[0xC0152] = ObjType.VortexGate;
-				_typeMap[0xC3330] = ObjType.AtlantisGateHS;
-				_typeMap[0xC35B0] = ObjType.AtlantisGateHM;
-				_typeMap[0xC343A] = ObjType.AtlantisGateV;
-				_typeMap[0xA579A] = ObjType.AntiGravBall;
-				_typeMap[0xDF4E2] = ObjType.ConchBoss;
-				_typeMap[0xA1FE6] = ObjType.ChainLinkNoseTail;
-				_typeMap[0xA208E] = ObjType.ChainLinkNoseTail;
-				_typeMap[0xA2288] = ObjType.ChainLinkNoseTail;
-				_typeMap[0xA27A4] = ObjType.ChainLinkNoseTail;
-				_typeMap[0xA2BB0] = ObjType.ChainLinkNoseTail;
-				_typeMap[0xA2C50] = ObjType.ChainLinkNoseTail;
-				_typeMap[0xA18E2] = ObjType.ChainLinkAnyPoint;
-				_typeMap[0xB7486] = ObjType.ChainLinkAnyPoint;
-				_typeMap[0xB864E] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xC066E] = ObjType.VortexGate;
+				_typeMap[0xC384C] = ObjType.AtlantisGateHS;
+				_typeMap[0xC3ACC] = ObjType.AtlantisGateHM;
+				_typeMap[0xC3956] = ObjType.AtlantisGateV;
+//				_typeMap[0xA579A] = ObjType.AntiGravBall;
+				_typeMap[0xDF812] = ObjType.ConchBoss;
+				_typeMap[0xA24C6] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA256E] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA2768] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA2C84] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA3090] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA3130] = ObjType.ChainLinkNoseTail;
+				_typeMap[0xA1DC2] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB7966] = ObjType.ChainLinkAnyPoint;
+/*				_typeMap[0xB864E] = ObjType.ChainLinkAnyPoint;
 				_typeMap[0xB8A64] = ObjType.ChainLinkAnyPoint;
-				_typeMap[0xB8C1A] = ObjType.ChainLinkAnyPoint;
-				_typeMap[0xB904A] = ObjType.ChainLinkAnyPoint;
-				_typeMap[0xB9728] = ObjType.ChainLinkAnyPoint;
-				_typeMap[0xB9B6A] = ObjType.ChainLinkAnyPoint;
-				_typeMap[0xE069A] = ObjType.ChainLinkAnyPoint;*/
+				_typeMap[0xB8C1A] = ObjType.ChainLinkAnyPoint;*/
+				_typeMap[0xB952A] = ObjType.ChainLinkAnyPoint;
+/*				_typeMap[0xB9728] = ObjType.ChainLinkAnyPoint;
+				_typeMap[0xB9B6A] = ObjType.ChainLinkAnyPoint;*/
+				_typeMap[0xE09CA] = ObjType.ChainLinkAnyPoint;
 				_typeMap[0xBAB4E] = ObjType.RockWorm;
 				_typeMap[0xBAA0E] = ObjType.RetractedRockWorm;
-/*				_typeMap[0xE0988] = ObjType.AbyssEel;
-				_typeMap[0xC7052] = ObjType.SongEraser;*/
+				_typeMap[0xE0CB8] = ObjType.AbyssEel;
+//				_typeMap[0xC7052] = ObjType.SongEraser;
 				_typeMap[0xA49CE] = ObjType.TeleportRingFixedRad;
 				_typeMap[0xD14F2] = ObjType.TeleportRingFixedRad;
 				_typeMap[0x9F5B0] = ObjType.Current;
-//				_typeMap[0xDEF94] = ObjType.AbyssDeathEel;
+				_typeMap[0xDF2C4] = ObjType.AbyssDeathEel;
 				_typeMap[0xA6A64] = ObjType.Eagle;
 				_typeMap[0x9Bf6A] = ObjType.ScrollController;
-/*				_typeMap[0xE26C2] = ObjType.ScrollController;
-				_typeMap[0xE270E] = ObjType.ScrollController;
-				_typeMap[0xE27D4] = ObjType.ScrollController;*/
+//				_typeMap[0xE26C2] = ObjType.ScrollController;
+				_typeMap[0xE2A3E] = ObjType.ScrollController;
+				_typeMap[0xE2B04] = ObjType.ScrollController;
 				_typeMap[0x9BE28] = ObjType.ScrollWayPoint;
 /*				_typeMap[0xA5448] = ObjType.BombSpawner;
 				_typeMap[0xA529C] = ObjType.Explosion;
@@ -436,7 +437,7 @@ namespace BizHawk.Tool.Ecco
 			private void InitGFXMap()
             {
 				_GFXMap[0x9BAB8] = GFXFuncType.None;
-//				_GFXMap[0xB119A] = GFXFuncType.PartialAsterite;
+				_GFXMap[0xB167A] = GFXFuncType.PartialAsterite;
 				_GFXMap[0xB3198] = GFXFuncType.FullAsterite;
 			}
 			public J2DProvider()
@@ -559,7 +560,8 @@ namespace BizHawk.Tool.Ecco
                 _typeMap[0xACD7E] = ObjType.MetaSphereInactive;
                 _typeMap[0xD8D96] = ObjType.TrelliaDuringCutscene;
                 _typeMap[0xA955E] = ObjType.EnemySpawner;
-                _typeMap[0xC2684] = ObjType.CreditsDolphin;
+				_typeMap[0xC05DC] = ObjType.CreditsDolphin;
+				_typeMap[0xC2684] = ObjType.CreditsDolphin;
                 _typeMap[0xB7DF4] = ObjType.StuckMagicArm;
                 _typeMap[0xE47EE] = ObjType.VortexSunflower;
                 _typeMap[0xDBE64] = ObjType.MedusaBoss;
@@ -679,6 +681,7 @@ namespace BizHawk.Tool.Ecco
 			}
             private void InitGFXMap()
             {
+				_GFXMap[0x9B5D8] = GFXFuncType.None;
                 _GFXMap[0xB119A] = GFXFuncType.PartialAsterite;
                 _GFXMap[0xB2CB8] = GFXFuncType.FullAsterite;
             }
@@ -789,7 +792,7 @@ namespace BizHawk.Tool.Ecco
             public int Vel3X;          // Scratch variable sometimes related to horizontal movement speed
             public int Vel3Y;          // Scratch variable sometimes related to vertical movement speed
             public sbyte TrgAng;       // 8Bit scratch variable often related to movement angle
-            public byte HP;            // Hitpoints remaining. Death usually occurs on 1, not 0.
+            public sbyte HP;            // Hitpoints remaining. Death usually occurs on 1, not 0.
             public byte State;         // Behavior control variable
             public sbyte CurAng;       // 8Bit scratch variable often related to movement angle
             public CollType CollisionType; // Enum id of collision type
@@ -932,7 +935,7 @@ namespace BizHawk.Tool.Ecco
             obj.Vel3X = ReadS32AndAdvance(ref addr);
             obj.Vel3Y = ReadS32AndAdvance(ref addr);
             obj.TrgAng = ReadSByteAndAdvance(ref addr);
-            obj.HP = ReadByteAndAdvance(ref addr);
+            obj.HP = ReadSByteAndAdvance(ref addr);
             obj.State = ReadByteAndAdvance(ref addr);
             obj.CurAng = ReadSByteAndAdvance(ref addr);
             obj.CollisionType = (CollType)(long)ReadByteAndAdvance(ref addr);
@@ -1463,6 +1466,7 @@ namespace BizHawk.Tool.Ecco
                             vel.Width = curObj.Vel2X;
                             vel.Height = 0;
                             mid = GetScreenLoc(vecStart + vel);
+							vecStart = GetScreenLoc(vecStart);
                             if ((curObj.Mode == 1) || (curObj.Mode == 3))
                             {
                                 DrawOct(vecStart.X, vecStart.Y, 128, Color.Orange);
@@ -1476,7 +1480,8 @@ namespace BizHawk.Tool.Ecco
                             vel.Width = 0;
                             vel.Height = curObj.Vel2Y;
                             mid = GetScreenLoc(vecStart + vel);
-                            if ((curObj.Mode == 1) || (curObj.Mode == 3))
+							vecStart = GetScreenLoc(vecStart);
+							if ((curObj.Mode == 1) || (curObj.Mode == 3))
                             {
                                 DrawOct(vecStart.X, vecStart.Y, 128, Color.Orange);
                             }
@@ -1537,10 +1542,13 @@ namespace BizHawk.Tool.Ecco
                         topLeft = GetScreenLoc(curObj.TopLeft);
                         bottomRight = GetScreenLoc(curObj.BottomRight);
                         break;
+					case ObjType.unknown:
+						mid = GetScreenLoc(curObj.Mid);
+						PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", mid.X, mid.Y - 4, 1, 1, -1, -9, Color.Lime, Color.Blue);
+						PutText(addr.ToString("X6"), mid.X, mid.Y + 4, 1, 9, -1, -1, Color.Lime, Color.Blue);
+						break;
                     default:
 						mid = GetScreenLoc(curObj.Mid);
-                        PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", mid.X, mid.Y - 4, 1, 1, -1, -9, Color.Lime, Color.Blue);
-                        PutText(addr.ToString("X6"), mid.X, mid.Y + 4, 1, 9, -1, -1, Color.Lime, Color.Blue);
                         break;
                 }
 				if (_showNumbers)
@@ -2314,7 +2322,8 @@ namespace BizHawk.Tool.Ecco
                         break;
                     case ObjType.ImmobileEnemy:
                         DrawDefaultBounds(curObj, ColorMap.HeadTail, ColorMap.Enemy);
-                        if (curObj.HP > 2)
+						pos = GetScreenLoc(curObj.Mid);
+						if (curObj.HP > 2)
                         {
                             PutText($"{curObj.HP - 1}", pos.X, pos.Y, 1, 1, -1, -9, Color.Blue, Color.Red);
                         }
@@ -2322,7 +2331,8 @@ namespace BizHawk.Tool.Ecco
                     case ObjType.DefaultEnemy:
                         DrawDefaultBounds(curObj, ColorMap.HeadTail, ColorMap.Enemy);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
-                        if (curObj.HP > 2)
+						pos = GetScreenLoc(curObj.Mid);
+						if (curObj.HP > 2)
                         {
                             PutText($"{curObj.HP - 1}", pos.X, pos.Y, 1, 1, -1, -9, Color.Blue, Color.Red);
                         }
@@ -2335,11 +2345,16 @@ namespace BizHawk.Tool.Ecco
 					case ObjType.NullFunc:
                     case ObjType.NoDisplay:
                         break;
-                    default:
+					case ObjType.unknown:
+						DrawDefaultBounds(curObj, ColorMap.HeadTail);
+						DrawMotionVector(curObj.Mid, curObj.Vel1);
+						pos = GetScreenLoc(curObj.Mid);
+						PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", pos.X, pos.Y - 4, 1, 9, -1, -1, Color.Blue, Color.Red);
+						break;
+					default:
 						DrawDefaultBounds(curObj, ColorMap.HeadTail);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
 						pos = GetScreenLoc(curObj.Mid);
-						PutText($"{curObj.PtrMainFunc:X5}:{curObj.ObjDefIndex}", pos.X, pos.Y - 4, 1, 9, -1, -1, Color.Blue, Color.Red);
                         break;
                 }
 				if (_showNumbers) {
