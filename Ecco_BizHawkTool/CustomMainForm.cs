@@ -76,6 +76,7 @@ namespace BizHawk.Client.EmuHawk
 		#endregion
 
 		#region Winform Methods
+		private void mapDumpCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _tool.SetMapDumping(mapDumpCheckbox.Checked);
         }
