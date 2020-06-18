@@ -114,20 +114,6 @@ namespace BizHawk.Client.EmuHawk
         //private void PostFrameCallback()
         #endregion
         #region Tool Methods
-        public void SetStatusLine(string message, int line, Color? fg)
-        {
-			if (WindowState != FormWindowState.Minimized)
-			{
-				while (StatusTextBox.Lines.Length <= line)
-				{
-					StatusTextBox.AppendText(Environment.NewLine);
-				}
-				StatusTextBox.SelectionStart = StatusTextBox.GetFirstCharIndexFromLine(line);
-				StatusTextBox.SelectionLength = StatusTextBox.Lines[line].Length;
-				StatusTextBox.SelectionColor = fg ?? StatusTextBox.ForeColor;
-				StatusTextBox.SelectedText = message;
-			}
-        }
         private void OnStateLoaded(object sender, StateLoadedEventArgs e)
         {
             Gui.DrawNew("emu");
@@ -144,13 +130,22 @@ namespace BizHawk.Client.EmuHawk
             {
                 case "ECCO - The Tides of Time (J) [!]":
                     _tool = new Ecco2Tool(this, GameRegion.J);
+					_tool.SetAutofire(autoFireCheckbox.Checked);
+					_tool.SetShowNumbers(showNumbersCheckbox.Checked);
+					mapDumpCheckbox.Checked = false;
                     break;
                 case "ECCO - The Tides of Time (U) [!]":
                     _tool = new Ecco2Tool(this, GameRegion.U);
-                    break;
+					_tool.SetAutofire(autoFireCheckbox.Checked);
+					_tool.SetShowNumbers(showNumbersCheckbox.Checked);
+					mapDumpCheckbox.Checked = false;
+					break;
                 case "ECCO - The Tides of Time (E) [!]":
                     _tool = new Ecco2Tool(this, GameRegion.E);
-                    break;
+					_tool.SetAutofire(autoFireCheckbox.Checked);
+					_tool.SetShowNumbers(showNumbersCheckbox.Checked);
+					mapDumpCheckbox.Checked = false;
+					break;
                 case "ECCO The Dolphin (J) [!]":
                 case "ECCO The Dolphin (UE) [!]":
                 /*_tool = new EccoTool(this, GameRegion.UE);*/

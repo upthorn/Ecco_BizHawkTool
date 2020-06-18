@@ -27,19 +27,12 @@ namespace BizHawk.Tool.Ecco
         private uint _prevF = 0;
         private uint _levelTime = 0;
         private int _levelID = 0;
-        private int _top = 0;
-        private int _bottom = 0;
-        private int _left = 0;
-        private int _right = 0;
         #endregion
         #region Methods
         #endregion
 
         public Ecco2Tool(CustomMainForm f, GameRegion r) : base(f, r)
         {
-            _top = _bottom = 112;
-            _left = _right = 160;
-            ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);
 			Addr3D = new Addr3DProvider(r);
             switch (r)
             {
@@ -70,7 +63,13 @@ namespace BizHawk.Tool.Ecco
             {
                 // Dialog screen
                 case 0x00:
-                    if (_autofireEnabled)
+					if (_top != 112)
+					{
+						_top = _bottom = 112;
+						_left = _right = 160;
+						ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);
+					}
+					if (_autofireEnabled)
                     {
                         // This doesn't fully work, but gets > 50%
                         if (Mem.ReadS16(AddrGlobal.TextYSpeed) == -3)
@@ -80,19 +79,38 @@ namespace BizHawk.Tool.Ecco
                     }
                     break;
                 case 0xF6:
-                    UpdatePlayer3D();
+					if (_top != 224)
+					{
+						_top = 224;
+						_bottom = 0;
+						_left = _right = 160;
+						ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);
+					}
+					UpdatePlayer3D();
                     if (_autofireEnabled)
                         AutoFire3D();
                     break;
                 case 0x20:
                 case 0x28:
                 case 0xAC:
-                    UpdatePlayer2D();
-                    if (_autofireEnabled)
-                        AutoFire2D();
+					if (_top != 112)
+					{
+						_top = _bottom = 112;
+						_left = _right = 160;
+						ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);
+					}
+					UpdatePlayer2D();
+					if (_autofireEnabled)
+						AutoFire2D();
                     break;
                 default:
-                    break;
+					if (_top != 112)
+					{
+						_top = _bottom = 112;
+						_left = _right = 160;
+						ClientApi.SetGameExtraPadding(_left, _top, _right, _bottom);
+					}
+					break;
             }
             if (!_mapDumpingEnabled || (_mapDumpState == 0))
             {

@@ -26,7 +26,11 @@ namespace BizHawk.Tool.Ecco
         protected bool _autofireEnabled = false;
 		protected bool _showNumbers = false;
 		protected string MapDumpFolder => _form.mapDumpFolder.Text;
-        public EccoToolBase(CustomMainForm f, GameRegion r)
+		protected int _top = 0;
+		protected int _bottom = 0;
+		protected int _left = 0;
+		protected int _right = 0;
+		public EccoToolBase(CustomMainForm f, GameRegion r)
         {
             _form = f;
         }
