@@ -204,6 +204,7 @@ namespace BizHawk.Tool.Ecco
 			public uint CamZ2 = 0xFFD5F0;
 			public uint RingSpawnX = 0xFFD856;
 			public uint RingSpawnY = 0xFFD85A;
+			public uint RingCounter = 0xFFD630;
 			public uint ControlTableAddr;
 			public uint SinTable = 0x2BC8;
 			public uint CosTable = 0x2CC8;
@@ -411,11 +412,23 @@ namespace BizHawk.Tool.Ecco
             var levelId = -1 - Mem.ReadS16(Addr3D.Level);
             bool spawn = false;
             bool firstRand = true;
-            int SpawnX, SpawnY, z;
             Cam3D.X = (Cam3D.X >> 0xC) - _left;
             Cam3D.Y = (Cam3D.Y >> 0xC) + _top;
             Cam3D.Z = (Cam3D.Z >> 0xC) + _top;
-            while (!spawn)
+			int SpawnX = 160 + ((Mem.ReadS32(Addr3D.RingSpawnX) >> 0xC) - Cam3D.X);
+			int SpawnY = 112 - ((Mem.ReadS32(Addr3D.RingSpawnY) >> 0xC) - Cam3D.Y);
+			int z = _top + 112 - ((nextRingZ >> 0xC) - Cam3D.Z);
+			{
+				int depth = 8;
+				if (_player3D.ZVel < 0x1800) depth = 4;
+				int radius = 32;
+				int width = radius;
+				DrawOct(SpawnX, SpawnY, radius, Color.Gray);
+				DrawBoxMWH(SpawnX, z, width, depth, Color.Gray);
+				DrawBoxMWH(SpawnX, SpawnY, 1, 1, Color.Gray, 0);
+				DrawBoxMWH(SpawnX, z, 1, 1, Color.Gray, 0);
+			}
+			while (!spawn)
             {
                 var temp = (SpawnZ >> 17) & 0xFF;
                 var controlList = Mem.ReadS32(Addr3D.ControlTableAddr + (levelId << 2));
@@ -520,7 +533,7 @@ namespace BizHawk.Tool.Ecco
             StatusText($"        Cam X: {Cam3D.X / 4096.0,10:0.000000} Y: {Cam3D.Y / 4096.0,10:0.000000} Z: {Cam3D.Z / 2048.0,10:0.000000}");
             StatusText($" Player Pos X: {_player3D.XPos / 4096.0,10:0.000000} Y: {_player3D.YPos / 4096.0,10:0.000000} Z: {_player3D.ZPos / 2048.0,10:0.000000}");
             StatusText($" Player Vel X: {_player3D.XVel / 4096.0,10:0.000000} Y: {_player3D.YVel / 4096.0,10:0.000000} Z: {_player3D.ZVel / 2048.0,10:0.000000}");
-            StatusText($"Charge Counter: {_player3D.ChargeCtr:D2} State: {_player3D.State:D2} Breach Counter: {_player3D.BreachCtr:D2}");
+            StatusText($"Charge Counter: {_player3D.ChargeCtr:D2} State: {_player3D.State:D2} Jump Counter: {_player3D.BreachCtr:D2} Rings Collected: {Mem.ReadU8(Addr3D.RingCounter)}");
             Ecco3DPredictSpawn();
         }
         private void UpdatePlayer3D()
