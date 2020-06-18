@@ -188,7 +188,9 @@ namespace BizHawk.Tool.Ecco
             xh -= 4 * message.Length;
             x = x - ((5 * (message.Length - 1)) / 2);
             y -= 3;
-            int[] xOffset = { -1, -1, -1, 0, 1, 1, 1, 0 };
+			x = Math.Min(Math.Max(xl, x), xh);
+			y = Math.Min(Math.Max(yl, y), yh);
+			int[] xOffset = { -1, -1, -1, 0, 1, 1, 1, 0 };
             int[] yOffset = { -1, 0, 1, 1, 1, 0, -1, -1 };
             for (int i = 0; i < 8; i++)
                 Print_Text(message, x + xOffset[i], y + yOffset[i], bg);
@@ -196,15 +198,11 @@ namespace BizHawk.Tool.Ecco
         }
         protected void ResetStatusLines()
         {
-            while(_statLine < _form.StatusTextBox.Lines.Length)
-            {
-                _form.SetStatusLine(" ", _statLine++, null);
-            }
             _statLine = 0;
         }
         protected void StatusText(string message, Color? fg = null)
         {
-            _form.SetStatusLine(message, _statLine++, fg);
+			Gui.DrawText(_left, (_statLine << 3)-_statLine++, message, fg, Color.FromArgb(0x40,Color.Black));
         }
         protected Color BackdropColor()
         {

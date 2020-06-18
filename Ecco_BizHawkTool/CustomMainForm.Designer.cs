@@ -35,22 +35,20 @@
 			this.autoFireCheckbox = new System.Windows.Forms.CheckBox();
 			this.mapDumpFolderBrowse = new System.Windows.Forms.Button();
 			this.mapFolderBrowseDialog = new System.Windows.Forms.FolderBrowserDialog();
-			this.StatusLabel = new System.Windows.Forms.Label();
-			this.StatusTextBox = new System.Windows.Forms.RichTextBox();
 			this.showNumbersCheckbox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// mapDumpFolder
 			// 
-			this.mapDumpFolder.Location = new System.Drawing.Point(408, 10);
+			this.mapDumpFolder.Location = new System.Drawing.Point(72, 28);
 			this.mapDumpFolder.Name = "mapDumpFolder";
-			this.mapDumpFolder.Size = new System.Drawing.Size(100, 20);
+			this.mapDumpFolder.Size = new System.Drawing.Size(140, 20);
 			this.mapDumpFolder.TabIndex = 3;
 			// 
 			// mapDumpCheckbox
 			// 
 			this.mapDumpCheckbox.AutoSize = true;
-			this.mapDumpCheckbox.Location = new System.Drawing.Point(218, 10);
+			this.mapDumpCheckbox.Location = new System.Drawing.Point(10, 54);
 			this.mapDumpCheckbox.Name = "mapDumpCheckbox";
 			this.mapDumpCheckbox.Size = new System.Drawing.Size(128, 17);
 			this.mapDumpCheckbox.TabIndex = 1;
@@ -61,7 +59,7 @@
 			// mapDumpFolder_Label
 			// 
 			this.mapDumpFolder_Label.AutoSize = true;
-			this.mapDumpFolder_Label.Location = new System.Drawing.Point(343, 12);
+			this.mapDumpFolder_Label.Location = new System.Drawing.Point(7, 30);
 			this.mapDumpFolder_Label.Name = "mapDumpFolder_Label";
 			this.mapDumpFolder_Label.Size = new System.Drawing.Size(63, 13);
 			this.mapDumpFolder_Label.TabIndex = 2;
@@ -80,7 +78,7 @@
 			// 
 			// mapDumpFolderBrowse
 			// 
-			this.mapDumpFolderBrowse.Location = new System.Drawing.Point(529, 8);
+			this.mapDumpFolderBrowse.Location = new System.Drawing.Point(151, 48);
 			this.mapDumpFolderBrowse.Name = "mapDumpFolderBrowse";
 			this.mapDumpFolderBrowse.Size = new System.Drawing.Size(61, 23);
 			this.mapDumpFolderBrowse.TabIndex = 4;
@@ -88,37 +86,11 @@
 			this.mapDumpFolderBrowse.UseVisualStyleBackColor = true;
 			this.mapDumpFolderBrowse.Click += new System.EventHandler(this.mapDumpFolderBrowse_Click);
 			// 
-			// StatusLabel
-			// 
-			this.StatusLabel.AutoSize = true;
-			this.StatusLabel.Location = new System.Drawing.Point(10, 30);
-			this.StatusLabel.Name = "StatusLabel";
-			this.StatusLabel.Size = new System.Drawing.Size(71, 13);
-			this.StatusLabel.TabIndex = 5;
-			this.StatusLabel.Text = "Game Status:";
-			// 
-			// StatusTextBox
-			// 
-			this.StatusTextBox.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.StatusTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.StatusTextBox.Enabled = false;
-			this.StatusTextBox.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.StatusTextBox.ForeColor = System.Drawing.Color.Black;
-			this.StatusTextBox.Location = new System.Drawing.Point(8, 46);
-			this.StatusTextBox.Name = "StatusTextBox";
-			this.StatusTextBox.ReadOnly = true;
-			this.StatusTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-			this.StatusTextBox.Size = new System.Drawing.Size(640, 480);
-			this.StatusTextBox.TabIndex = 6;
-			this.StatusTextBox.TabStop = false;
-			this.StatusTextBox.Text = "";
-			this.StatusTextBox.WordWrap = false;
-			// 
-			// showNums
+			// showNumbersCheckbox
 			// 
 			this.showNumbersCheckbox.AutoSize = true;
 			this.showNumbersCheckbox.Location = new System.Drawing.Point(114, 10);
-			this.showNumbersCheckbox.Name = "showNums";
+			this.showNumbersCheckbox.Name = "showNumbersCheckbox";
 			this.showNumbersCheckbox.Size = new System.Drawing.Size(98, 17);
 			this.showNumbersCheckbox.TabIndex = 7;
 			this.showNumbersCheckbox.Text = "Show Numbers";
@@ -130,10 +102,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
-			this.ClientSize = new System.Drawing.Size(656, 534);
+			this.ClientSize = new System.Drawing.Size(221, 76);
 			this.Controls.Add(this.showNumbersCheckbox);
-			this.Controls.Add(this.StatusTextBox);
-			this.Controls.Add(this.StatusLabel);
 			this.Controls.Add(this.mapDumpFolderBrowse);
 			this.Controls.Add(this.autoFireCheckbox);
 			this.Controls.Add(this.mapDumpFolder_Label);
@@ -154,8 +124,6 @@
 		private System.Windows.Forms.Button mapDumpFolderBrowse;
 		private System.Windows.Forms.FolderBrowserDialog mapFolderBrowseDialog;
 		public System.Windows.Forms.TextBox mapDumpFolder;
-		private System.Windows.Forms.Label StatusLabel;
-		public System.Windows.Forms.RichTextBox StatusTextBox;
 		private System.Windows.Forms.CheckBox showNumbersCheckbox;
 	}
 }
