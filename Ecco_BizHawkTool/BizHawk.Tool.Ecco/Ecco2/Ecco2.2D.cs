@@ -246,16 +246,16 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0xAA3D0] = ObjType.NoDisplay;
 				_typeMap[0xAA270] = ObjType.NoDisplay;
 				_typeMap[0xC6896] = ObjType.NoDisplay;
-				_typeMap[0xC2CD0] = ObjType.NoDisplay;
+				_typeMap[0xC2C00] = ObjType.NoDisplay;
 				_typeMap[0xAF348] = ObjType.NoDisplay;
 				_typeMap[0xD9E4A] = ObjType.NoDisplay;
 				_typeMap[0xD98CE] = ObjType.NoDisplay;
 				_typeMap[0x9C6DA] = ObjType.NoDisplay;
 				_typeMap[0x9CBB0] = ObjType.NoDisplay;
 				_typeMap[0x9F252] = ObjType.NoDisplay;
-//				_typeMap[0xA57F2] = ObjType.NoDisplay;
+				_typeMap[0xA5CD2] = ObjType.NoDisplay;
 				_typeMap[0xC3F5E] = ObjType.NoDisplay;
-//				_typeMap[0xB33D8] = ObjType.NoDisplay;
+				_typeMap[0xB38B8] = ObjType.NoDisplay;
 				_typeMap[0xB356A] = ObjType.NoDisplay;
 				_typeMap[0xA1B56] = ObjType.NoDisplay;
 				_typeMap[0x0] = ObjType.NoDisplay;
@@ -281,8 +281,8 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0xA7442] = ObjType.DefaultEnemy;
 				_typeMap[0xA793C] = ObjType.DefaultEnemy;
 				_typeMap[0xC440C] = ObjType.DefaultEnemy;
-//				_typeMap[0xC3F90] = ObjType.DefaultEnemy;
 				_typeMap[0xC42D4] = ObjType.DefaultEnemy;
+				_typeMap[0xC4518] = ObjType.DefaultEnemy;
 //				_typeMap[0xC3DB8] = ObjType.DefaultEnemy;
 				_typeMap[0xACC16] = ObjType.DefaultEnemy;
 				_typeMap[0xC64F8] = ObjType.DefaultEnemy;
@@ -309,7 +309,7 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0xAAAA6] = ObjType.FriendlyDolphin;
 				_typeMap[0xB5614] = ObjType.FriendlyDolphin;
 				_typeMap[0xAFE40] = ObjType.MirrorDolphinCharging1;
-				_typeMap[0xAFD43] = ObjType.MirrorDolphinCharging2;
+				_typeMap[0xAFD48] = ObjType.MirrorDolphinCharging2;
 				_typeMap[0xD917C] = ObjType.TrelliaAfterCutscene;
 				_typeMap[0xAD194] = ObjType.MetaSphereInactive;
 				_typeMap[0xAD25E] = ObjType.MetaSphereInactive;
@@ -1232,7 +1232,21 @@ namespace BizHawk.Tool.Ecco
                 DrawMotionVector(subObj.Mid, subObj.Vel1);
                 subAddr = subObj.PtrSubObj;
             }
-            if (curObj.HP > 2)
+			pos = GetScreenLoc(curObj.Mid);
+			if (curObj.Dims.Width == curObj.Dims.Height)
+			{
+				DrawOct(pos.X, pos.Y, curObj.Dims.Width >> 16, ColorMap.Enemy);
+				DrawOct(pos.X, pos.Y, curObj.Dims.Width >> 16, eColor, 0);
+			}
+			else
+			{
+				DrawOct(pos.X, pos.Y, curObj.Dims.Width >> 16, ColorMap.Enemy);
+				DrawOct(pos.X, pos.Y, curObj.Dims.Width >> 16, wColor, 0);
+				DrawOct(pos.X, pos.Y, curObj.Dims.Height >> 16, ColorMap.Enemy);
+				DrawOct(pos.X, pos.Y, curObj.Dims.Height >> 16, hColor, 0);
+			}
+			DrawMotionVector(curObj.Mid, curObj.Vel1);
+			if (curObj.HP > 2)
             {
                 mid = GetScreenLoc(curObj.Mid);
                 PutText($"{curObj.HP - 1}", mid.X, mid.Y, 1, 1, -1, -9, Color.Blue, Color.Red);
@@ -1504,7 +1518,7 @@ namespace BizHawk.Tool.Ecco
                         var Yvel1 = Mem.ReadS32(addr + 0x58) / 65536.0;
                         var Xvel2 = Mem.ReadS32(addr + 0x5C) / 65536.0;
                         var Yvel2 = Mem.ReadS32(addr + 0x60) / 65536.0;
-                        StatusText($"Boss Mode: {curObj.Mode} Mode Counter: {curObj.StateCtr} Height Remaining: {Mem.ReadS16(Addr2D.LevelHeight) - 64 - mid.Y - _camY}", Color.Red);
+                        StatusText($"Boss Mode: {curObj.Mode} Mode Counter: {curObj.StateCtr} Height Remaining: {Mem.ReadS16(Addr2D.LevelHeight) - 64 - (mid.Y >> 16)}", Color.Red);
                         StatusText($"Boss Vel1 X: {vel.Width / 65536.0,10:0.000000} Y: {vel.Height / 65536.0,10:0.000000}", Color.Red);
                         StatusText($"Boss Vel2 X: {vel2.Width / 65536.0,10:0.000000} Y: {vel2.Height / 65536.0,10:0.000000}", Color.Red);
                         vel += vel2;
@@ -1633,7 +1647,7 @@ namespace BizHawk.Tool.Ecco
                     case ObjType.RemnantStars:
                         if ((curObj.AnimFrame <= 7) && (curObj.PtrSubObj == Addr2D.PlayerObj))
                         {
-                            pos = GetScreenLoc(pos);
+                            pos = GetScreenLoc(curObj.Mid);
                             DrawRhomb(pos.X, pos.Y, 96, ColorMap.Mid);
                             PutText($"{((7 - curObj.AnimFrame) * 4) - (int)((_levelTime & 3) - 4)}", pos.X, pos.Y + 4, 1, 1, -1, -1, Color.Blue, Color.Red);
                         }
@@ -1932,7 +1946,7 @@ namespace BizHawk.Tool.Ecco
                         }
                         pos = GetScreenLoc(curObj.Mid);
                         vel = curObj.Vel1 + new Size(curObj.Vel2X, curObj.Vel2Y);
-                        bottomRight = GetScreenLoc(new Point(curObj.Var2X, curObj.Var2Y));
+                        bottomRight = GetScreenLoc(new Point(curObj.Vel3X, curObj.Vel3Y));
                         DrawOct(pos.X, pos.Y, 0xB0, ColorMap.Spine);
                         DrawOct(pos.X, pos.Y, 0xB0, ColorMap.Mid, 0);
                         DrawOct(pos.X, pos.Y, 0x70, ColorMap.Mid);
@@ -1940,7 +1954,7 @@ namespace BizHawk.Tool.Ecco
                         DrawOct(pos.X, pos.Y, 0x38, ColorMap.Mid, 0);
                         DrawOct(pos.X, pos.Y, 48, ColorMap.Sonar, ((curObj.HP > 2) && (curObj.unkb0 != 0)) ? 63 : 0);
                         DrawOct(bottomRight.X, bottomRight.Y, 32, Color.Orange);
-                        DrawMotionVector(pos, vel);
+                        DrawMotionVector(curObj.Mid, vel);
                         Gui.DrawLine(pos.X, pos.Y, bottomRight.X, bottomRight.Y, Color.Orange);
                         StatusText($"Larva  Mode: {curObj.unkb0:X2}  Mode Counter: {curObj.StateCtr:D2}", Color.Red);
                         StatusText($"Larva State: {curObj.State:X2} State Counter: {curObj.XChunk:D3}", Color.Red);
@@ -1949,7 +1963,7 @@ namespace BizHawk.Tool.Ecco
                     case ObjType.FutureDolphin:
                         DrawDefaultBounds(curObj, ColorMap.Mid, ColorMap.Sonar);
                         pos = GetScreenLoc(curObj.Mid);
-                        DrawOct(pos.X, pos.Y, 4, ColorMap.Mid);
+                        DrawOct(pos.X, pos.Y, 4, (curObj.State == 1) ? ColorMap.Mid : Color.Gray);
                         DrawMotionVector(curObj.Mid, curObj.Vel1);
                         break;
                     case ObjType.PushableRock:
@@ -2069,7 +2083,7 @@ namespace BizHawk.Tool.Ecco
                             Gui.DrawLine(pos.X, pos.Y, dest.X, dest.Y, Color.Orange);
                             StatusText($"Guide Pos X: {pos.X} Y: {pos.Y} Angle: {curObj.CurAng} Target Angle: {curObj.TrgAng}", Color.Green);
                             StatusText($"Guide Vel X: {vel.Width / 65536.0,10:0.000000} Y:{vel.Height / 65536.0,10:0.000000}", Color.Green);
-                            StatusText($"Guide Speed: {curObj.Var2X / 65536.0,10:0.000000} Target: {curObj.Var2Y / 65536.0,10:0.000000}", Color.Green);
+                            StatusText($"Guide Speed: {curObj.Vel3X / 65536.0,10:0.000000} Target: {curObj.Vel3Y / 65536.0,10:0.000000}", Color.Green);
                         }
                         break;
                     case ObjType.OrcaLost:
@@ -2462,7 +2476,7 @@ namespace BizHawk.Tool.Ecco
                                 pos = GetScreenLoc(curObj.Mid);
                                 DrawBoxMWH(pos.X, pos.Y, curObj.Dims.Width >> 16, curObj.Dims.Height >> 16, ColorMap.Sonar);
                                 break;
-                            case 107:
+                            case 107: //Guide Waypoint
                                 pos.X = (curObj.XChunk << 7) - _camX + 0x40;
                                 pos.Y = (curObj.YChunk << 7) - _camY + 0x40;
                                 pos2.X = (curObj.ScreenX << 7) - _camX + 0x40;
@@ -2475,15 +2489,14 @@ namespace BizHawk.Tool.Ecco
                             case 110: //Gravity conrol points
                             case 179:
                                 DrawDefaultBounds(curObj, ColorMap.Mid, curObj.Mode == 0 ? Color.Gray : ColorMap.Mid);
-                                int dir = Mem.ReadS8(addr + 0x71) & 7;
+								int dir = curObj.unkb3 & 7;
                                 int[] xtable = { 7, 4, -3, -10, -14, -11, -3, 4 };
                                 int[] ytable = { 11, 4, 7, 4, -3, -11, -14, -11 };
-                                pos.X = Mem.ReadS16(addr + 0x24) - _camX;
-                                pos.Y = Mem.ReadS16(addr + 0x28) - _camY;
+								pos = GetScreenLoc(curObj.Mid);
                                 Gui.DrawImage(".\\ExternalTools\\gravitometer_bg.png", pos.X - 15, pos.Y - 15);
                                 Gui.DrawImage(".\\ExternalTools\\gravitometer_fg.png", pos.X + xtable[dir], pos.Y + ytable[dir]);
                                 break;
-                            case 176:
+                            case 176: //Vortex Larva waypoint
                                 pos.X = (curObj.XChunk << 7) - _camX + 0x40;
                                 pos.Y = (curObj.YChunk << 7) - _camY + 0x40;
                                 pos2.X = (curObj.ScreenX << 7) - _camX + 0x40;
@@ -2602,26 +2615,39 @@ namespace BizHawk.Tool.Ecco
                 {
                     i++; off += 448;
                 }
-                color = Color.FromArgb(j >> 2, j >> 2, j >> 2);
+                color = Color.FromArgb(128, j >> 2, j >> 2, j >> 2);
                 Gui.DrawLine(_left - 32, j - off, _left - 17, j - off, color);
             }
             for (int j = 0; j < HP; j += 8)
             {
-                color = Color.FromArgb(Math.Max(0x38 - (j >> 3), 0), 0, Math.Min(j >> 1, 255));
+                color = Color.FromArgb(128, Math.Max(0x38 - (j >> 3), 0), 0, Math.Min(j >> 1, 255));
                 Gui.DrawRectangle(_left - 16, j, 15, 7, color, color);
             }
         }
         private void Update2DTickers()
         {
             Size totalVel = _player2D.SwimVel + _player2D.CurrentVel + _player2D.ZipVel;
-            StatusText($"           Cam X: {Mem.ReadS16(Addr2D.CamX),4}        Y: {Mem.ReadS16(Addr2D.CamY),4}");
-            StatusText($"    Player Pos X: {_player2D.Mid.X / 65536.0,11:0.000000} Y: {_player2D.Mid.Y / 65536.0,11:0.000000}");
-            StatusText($"    Player Speed: {_player2D.SwimSpeed / 65536.0,10:0.000000} Decel: {_player2D.DecelTimer} Accel: {_player2D.AccelTimer}");
-            StatusText($"Player BaseVel X: {_player2D.SwimVel.Width / 65536.0,10:0.000000} Y: {_player2D.SwimVel.Height / 65536.0,10:0.000000}");
-            StatusText($"Player FlowVel X: {_player2D.CurrentVel.Width / 65536.0,10:0.000000} Y: {_player2D.CurrentVel.Height / 65536.0,10:0.000000}");
-            StatusText($" Player ZipVel X: {_player2D.ZipVel.Width / 65536.0,10:0.000000} Y: {_player2D.ZipVel.Height / 65536.0,10:0.000000}");
-            StatusText($" Player TotVel X: {totalVel.Width / 65536.0,10:0.000000} Y: {totalVel.Height / 65536.0,10:0.000000}");
-            StatusText($"Movement Mode: {_player2D.MoveMode} Charge Counter: {_player2D.ChargeCounter,2} Current Angle: {_player2D.Angle:X4} Target Angle: {_player2D.TgtAng:X4}");
+            StatusText($"       Cam X: {Mem.ReadS16(Addr2D.CamX),4}        Y: {Mem.ReadS16(Addr2D.CamY),4}");
+            StatusText($"Player Pos X: {_player2D.Mid.X / 65536.0,11:0.000000} Y: {_player2D.Mid.Y / 65536.0,11:0.000000}");
+            StatusText($"Player Speed: {_player2D.SwimSpeed / 65536.0,10:0.000000} Decel: {_player2D.DecelTimer} Accel: {_player2D.AccelTimer,2} Mvmt Mode: {_player2D.MoveMode} Chg Timer: {_player2D.ChargeCounter,2} ");
+            StatusText($"     X Total: {totalVel.Width / 65536.0,10:0.000000} Base: {_player2D.SwimVel.Width / 65536.0,10:0.000000} Flow: {_player2D.CurrentVel.Width / 65536.0,10:0.000000} Zip: {_player2D.ZipVel.Width / 65536.0,10:0.000000}");
+            StatusText($"     Y Total: {totalVel.Height / 65536.0,10:0.000000} Base: {_player2D.SwimVel.Height / 65536.0,10:0.000000} Flow: {_player2D.CurrentVel.Height / 65536.0,10:0.000000} Zip: {_player2D.ZipVel.Height / 65536.0,10:0.000000}");
+			string message = $"     Cur Ang: {_player2D.Angle:X4} Tgt Ang: {_player2D.TgtAng:X4} Flop Rot: ";
+			short flop = (short)(_player2D.FlopSpeed >> 8);
+			if (flop < 0)
+			{
+				flop = (short)-flop;
+				message += $"-{flop:X4} Low Flop: ";
+			}
+			else message += $"{flop,5:X4} Low Flop: ";
+			flop = (short)(_player2D.FlopSpeed & 0xFFFF);
+			if (flop < 0)
+			{
+				flop = (short)-flop;
+				message += $"-{flop:X4}";
+			}
+			else message += $"{flop,5:X4}";
+			StatusText(message);
             switch (Mem.ReadU8(AddrGlobal.LevelID))
             {
                 case 1:
