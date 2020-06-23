@@ -188,8 +188,8 @@ namespace BizHawk.Tool.Ecco
             xh -= 4 * message.Length;
             x = x - ((5 * (message.Length - 1)) / 2);
             y -= 3;
-			x = Math.Min(Math.Max(xl, x), xh);
-			y = Math.Min(Math.Max(yl, y), yh);
+//			x = Math.Min(Math.Max(xl, x), xh);
+//			y = Math.Min(Math.Max(yl, y), yh);
 			int[] xOffset = { -1, -1, -1, 0, 1, 1, 1, 0 };
             int[] yOffset = { -1, 0, 1, 1, 1, 0, -1, -1 };
             for (int i = 0; i < 8; i++)
