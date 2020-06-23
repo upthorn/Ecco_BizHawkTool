@@ -192,11 +192,11 @@ namespace BizHawk.Client.EmuHawk
         /// <summary>
         /// New extensible update method
         /// </summary>
-        public void UpdateValues(ToolFormUpdateType type)
+        public void NewUpdate(ToolFormUpdateType type)
         {
             switch (type)
             {
-                case ToolFormUpdateType.General:
+                case ToolFormUpdateType.Reset:
                     Init();
                     break;
                 case ToolFormUpdateType.PreFrame:
@@ -213,6 +213,9 @@ namespace BizHawk.Client.EmuHawk
                     break;
             }
         }
+		public bool UpdateBefore => false;
+		public void UpdateValues()
+		{ }
 		#endregion BizHawk Required methods
 	}
 }
