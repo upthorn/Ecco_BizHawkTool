@@ -396,7 +396,7 @@ namespace BizHawk.Tool.Ecco
 				_typeMap[0xC384C] = ObjType.AtlantisGateHS;
 				_typeMap[0xC3ACC] = ObjType.AtlantisGateHM;
 				_typeMap[0xC3956] = ObjType.AtlantisGateV;
-//				_typeMap[0xA579A] = ObjType.AntiGravBall;
+				_typeMap[0xA5C7A] = ObjType.AntiGravBall;
 				_typeMap[0xDF812] = ObjType.ConchBoss;
 				_typeMap[0xA24C6] = ObjType.ChainLinkNoseTail;
 				_typeMap[0xA256E] = ObjType.ChainLinkNoseTail;
@@ -2486,7 +2486,7 @@ namespace BizHawk.Tool.Ecco
                                 DrawBoxMWH(pos.X, pos.Y, 1, 1, Color.Blue, 0);
                                 Gui.DrawLine(pos.X, pos.Y, pos2.X, pos2.Y, Color.Orange);
                                 break;
-                            case 110: //Gravity conrol points
+                            case 110: //Gravity control areas
                             case 179:
                                 DrawDefaultBounds(curObj, ColorMap.Mid, curObj.Mode == 0 ? Color.Gray : ColorMap.Mid);
 								int dir = curObj.unkb3 & 7;
